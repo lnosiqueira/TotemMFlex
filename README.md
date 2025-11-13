@@ -1,33 +1,25 @@
 # ToteMFlex -- Plataforma Inteligente para Ambientes de Trabalho Humanizados, Inclusivos e Sustentáveis
 
-### Global Solution -- FIAP 2025.2
+### Global Solution - 1º Semestre
 
-### Curso: Inteligência Artificial
+### Curso: Inteligência Artificial - FIAP
 
 ------------------------------------------------------------------------
 
 ## Integrantes do Grupo S
-
-**Leno Siqueira**\
-RM567893
-
-**Fred Villagra**\
-RM567187
-
-**Paulo Benfica**\
-RM567648
-
-**Maria Mendes**\
-RM568563
-
-**Mateus Lima**\
-RM568518
+| Nome | RM |
+|------|----|
+| Leno Siqueira | RM567893 |
+| Fred Villagra | RM567187 |
+| Paulo Benfica | RM567648 |
+| Maria Mendes | RM568563 |
+| Mateus Lima | RM568518 |
 
 ------------------------------------------------------------------------
 
 ## Professores
 
-**Tutor(a):** Sabrina Otoni\
+**Tutor(a):** Sabrina Otoni
 **Coordenador(a):** André Godoi
 
 ------------------------------------------------------------------------
