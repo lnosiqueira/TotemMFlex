@@ -1,13 +1,13 @@
 # 🟧 TotemMFlex — Sprint 1 (Versão 1.0)
 📌 *Arquivo Histórico — Conteúdo completo da primeira entrega (não editar)*
 
+Challenge FlexMedia — FIAP 2025
+Curso: Inteligência Artificial  
+Repositório: https://github.com/lnosiqueira/TotemMFlex - Privado
+
 ---
 
 # ToteMFlex -- Plataforma Inteligente para Ambientes de Trabalho Humanizados, Inclusivos e Sustentáveis
-
-### Global Solution - 1º Semestre
-
-### Curso: Inteligência Artificial - FIAP
 
 ------------------------------------------------------------------------
 
