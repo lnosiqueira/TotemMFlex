@@ -1,187 +1,76 @@
-# ToteMFlex -- Plataforma Inteligente para Ambientes de Trabalho Humanizados, Inclusivos e Sustentáveis
+# 🟦 TotemMFlex — Sprint 2 (Versão 2.0)
 
-### Global Solution - 1º Semestre
+Challenge FlexMedia — FIAP 2025  
+Repositório: https://github.com/lnosiqueira/TotemMFlex - Privado
 
-### Curso: Inteligência Artificial - FIAP
+## 📌 Controle de Versão
 
-------------------------------------------------------------------------
+| Sprint | Versão | Status |
+|--------|---------|--------|
+| Sprint 1 | v1.0 | Finalizada |
+| Sprint 2 | v2.0 | Atual |
 
-## Integrantes do Grupo S
-| Nome | RM |
-|------|----|
-| Leno Siqueira | RM567893 |
-| Fred Villagra | RM567187 |
-| Paulo Benfica | RM567648 |
-| Maria Mendes | RM568563 |
-| Mateus Lima | RM568518 |
+## 1. Introdução — Sprint 2
 
-------------------------------------------------------------------------
+Nesta Sprint, expandimos o ToteMFlex para um sistema funcional com sensores/simulação, banco SQL, análise de dados, dashboard, ML supervisionado, multi-tenancy, white-label, segurança e pipeline de voz.
 
-## Professores
+## 2. Arquitetura v2.0
 
-**Tutor(a):** Sabrina Otoni
+[Sensores/Simulação] → [Coletor Python] → [SQLite] → [ETL/Estatística] → [Dashboard] → [ML]
 
-**Coordenador(a):** André Godoi
+## 3. Multi-Tenancy + White-Label
 
-------------------------------------------------------------------------
+Configuração por tenant via arquivos JSON.
 
-## 1. Introdução
+## 4. Segurança Operacional
 
-O mundo do trabalho passa por transformações profundas impulsionadas por
-Inteligência Artificial, automação, análise de dados e novos modelos
-organizacionais. As empresas buscam ambientes mais humanos, inclusivos e
-sustentáveis, garantindo qualidade de vida e alta performance.
+Segregação de dados, logs, LGPD, rate limiting, validações, gestão de segredos.
 
-O **ToteMFlex** surge como uma plataforma inteligente voltada para o
-bem-estar, engajamento e análise contínua do clima emocional dos
-colaboradores, integrando IA, ML, RN, Banco de Dados, Cloud e R.
+## 5. Pipeline de Voz
 
-------------------------------------------------------------------------
+VAD, Noise Filtering e fallback automático para texto.
 
-## 2. Problema
+## 6. Simulação de Sensores
 
-Empresas enfrentam:
+Código Python completo incluído na Sprint (omitido aqui por brevidade).
 
--   Crescente nível de estresse e burnout\
--   Falta de visibilidade sobre o bem-estar\
--   Baixo engajamento\
--   Ausência de dados estruturados\
--   Falta de suporte tecnológico para decisões humanas\
--   Desafios em acessibilidade e inclusão
+## 7. Dashboard
 
-------------------------------------------------------------------------
+Streamlit com métricas e gráficos interativos.
 
-## 3. Objetivos
+## 8. Machine Learning
 
-### 3.1 Objetivo Geral
+Classificação toque curto/longos usando RandomForest.
 
-Criar uma POC capaz de monitorar, analisar e recomendar ações de
-bem-estar para colaboradores.
+## 9. Métricas MVP
 
-### 3.2 Objetivos Específicos
+Operacionais e ML (acurácia, confusão, recall, precision).
 
--   Implementar IA/ML/RN\
--   Criar API em Python (FastAPI)\
--   Construir estrutura de dados\
--   Gerar análises em R\
--   Implementar princípios de segurança\
--   Preparar ambiente para Azure\
--   Criar MVP para apresentação
+## 10. Estrutura do Repositório
 
-------------------------------------------------------------------------
+TotemMFlex/
+ ├── sensor_simulation/
+ ├── database/
+ ├── analysis/
+ ├── dashboard/
+ ├── ml_model/
+ ├── docs/
+ ├── logs/
+ └── README.md
 
-## 4. Solução Proposta -- ToteMFlex
+## 11. Responsáveis Sprint 2
 
-O sistema inclui:
+| Integrante | RM | Responsabilidade |
+|-----------|-----|------------------|
+| Leno Siqueira | RM567893 | Arquitetura, SQL, Dashboard |
+| Fred Villagra | RM567187 | Sensores / Simulação |
+| Paulo Benfica | RM567648 | ML / Limpeza de dados |
+| Mateus Lima | RM568518 | Vídeo / Integração final |
 
--   Coleta de dados via check-in\
--   Processamento com ML e RN\
--   Regras cognitivas de recomendação\
--   Dashboard e análise com R\
--   Preparação para sensores IoT (opcional)
+## 12. Vídeo Sprint 2
 
-------------------------------------------------------------------------
+Link será adicionado até 27/11.
 
-## 5. Arquitetura da Solução
+## 13. Histórico Sprint 1 — v1.0
 
-### Frontend
-
-Simples, HTML/JS.
-
-### Backend
-
-FastAPI\
-Rotas principais:\
-- `/`\
-- `/checkin`\
-- `/predict` (futuro)
-
-### IA / ML / RN
-
--   Classificação de risco\
--   Rede neural MLP
-
-### Banco de Dados
-
-Tabelas: - colaboradores\
-- checkins_bem_estar\
-- sensores (opcional)\
-- recomendacoes
-
-### Nuvem (Azure)
-
-Deploy App Service
-
-### Segurança
-
--   Validação de inputs\
--   Padrões LGPD\
--   Pronto para JWT
-
-------------------------------------------------------------------------
-
-## 6. Estrutura do Projeto
-
-    backend/
-    data/
-    r_analysis/
-    docs/
-    hardware/
-    README.md
-
-------------------------------------------------------------------------
-
-## 7. Análises com R
-
--   histogramas\
--   evolução temporal\
--   correlação humor x estresse
-
-------------------------------------------------------------------------
-
-## 8. Machine Learning e Redes Neurais
-
--   Modelos supervisionados\
--   Pipeline de treino\
--   Avaliação\
--   Rede MLP
-
-------------------------------------------------------------------------
-
-## 9. Deploy em Azure
-
--   App Service\
--   requirements.txt\
--   Uvicorn\
--   GitHub Actions (futuro)
-
-------------------------------------------------------------------------
-
-## 10. Vídeo -- AI Challenge
-
-Deve conter:
-
--   Apresentação\
--   "QUERO CONCORRER"\
--   MVP\
--   Disciplinas\
--   Conclusão
-
-------------------------------------------------------------------------
-
-## 11. Estrutura do PDF Final
-
--   Capa\
--   Introdução\
--   Desenvolvimento\
--   Arquitetura\
--   Prints\
--   Conclusão\
--   Link vídeo\
--   Link GitHub privado
-
-------------------------------------------------------------------------
-
-## Direitos
-
-Projeto acadêmico desenvolvido para **FIAP -- Global Solution 2025.2**.
+Conteúdo original mantido em docs/ ou arquivo anterior.
