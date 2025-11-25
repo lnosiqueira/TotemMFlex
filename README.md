@@ -1,7 +1,7 @@
 # FIAP - Faculdade de Informática e Administração Paulista
 
 <p align="center">
-<a href="https://www.fiap.com.br/"><img src="assets/logo-fiap.png" alt="FIAP - Faculdade de Informática e Administração Paulista" border="0" width=40% height=40%></a>
+<a href="https://www.fiap.com.br/"><src="assets/logo-fiap.png" alt="FIAP - Faculdade de Informática e Administração Paulista" border="0" width=40% height=40%></a>
 </p>
 
 <br>
@@ -99,4 +99,5 @@ streamlit run src/dashboard/app.py
 <img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1">
 
 Repositório baseado no modelo oficial FIAP, licenciado sob Creative Commons Attribution 4.0 International.
+
 Esse projeto é intectualidade dos Integrantes desse grupo.
