@@ -7,6 +7,9 @@
 <br>
 
 # TotemMFlex – Sistema Inteligente de Engajamento Corporativo
+Challenge FlexMedia — FIAP 2025
+Curso: Inteligência Artificial  
+Repositório: https://github.com/lnosiqueira/TotemMFlex - Privado
 
 ## Grupo S – Turma 55
 
@@ -96,3 +99,4 @@ streamlit run src/dashboard/app.py
 <img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1">
 
 Repositório baseado no modelo oficial FIAP, licenciado sob Creative Commons Attribution 4.0 International.
+Esse projeto é intectualidade dos Integrantes desse grupo.
