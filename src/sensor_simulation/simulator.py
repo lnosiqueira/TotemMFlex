@@ -1,0 +1,1 @@
+print('Simulação de sensores em execução...')

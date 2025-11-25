@@ -1,76 +1,98 @@
-# 🟦 TotemMFlex — Sprint 2 (Versão 2.0)
+# FIAP - Faculdade de Informática e Administração Paulista
 
-Challenge FlexMedia — FIAP 2025  
-Repositório: https://github.com/lnosiqueira/TotemMFlex - Privado
+<p align="center">
+<a href="https://www.fiap.com.br/"><img src="assets/logo-fiap.png" alt="FIAP - Faculdade de Informática e Administração Paulista" border="0" width=40% height=40%></a>
+</p>
 
-## 📌 Controle de Versão
+<br>
 
-| Sprint | Versão | Status |
-|--------|---------|--------|
-| Sprint 1 | v1.0 | Finalizada |
-| Sprint 2 | v2.0 | Atual |
+# TotemMFlex – Sistema Inteligente de Engajamento Corporativo
 
-## 1. Introdução — Sprint 2
+## Grupo S – Turma 55
 
-Nesta Sprint, expandimos o ToteMFlex para um sistema funcional com sensores/simulação, banco SQL, análise de dados, dashboard, ML supervisionado, multi-tenancy, white-label, segurança e pipeline de voz.
+## 👨‍🎓 Integrantes
+- <a href="https://www.linkedin.com/in/leno-siqueira-36789544?utm_source=share_via&utm_content=profile&utm_medium=member_ios">Leno Siqueira</a> — RM: 567893  
+- <a href="https://www.linkedin.com/in/paulo-benfica-76057a7b">Paulo Benfica</a> — RM: 567648  
+- <a href="https://www.linkedin.com/in/federico-villagra-97378838a">Fred Villagra</a> — RM: 567187  
+- <a href="https://www.linkedin.com/in/math-penteado-1b4807200/">Mateus Lima</a> — RM: 568518  
 
-## 2. Arquitetura v2.0
+## 👩‍🏫 Professores
+### Tutor(a)
+- <a href="https://www.linkedin.com/school/fiap/">Professor(a) FIAP</a>
 
-[Sensores/Simulação] → [Coletor Python] → [SQLite] → [ETL/Estatística] → [Dashboard] → [ML]
+### Coordenador(a)
+- <a href="https://www.linkedin.com/school/fiap/">Coordenação FIAP</a>
 
-## 3. Multi-Tenancy + White-Label
+---
 
-Configuração por tenant via arquivos JSON.
+## 📜 Descrição
 
-## 4. Segurança Operacional
+O **TotemMFlex** é um sistema inteligente voltado para ambientes corporativos, integrando IA generativa, sensores/simulações, análise de dados, dashboard gerencial e recursos de segurança corporativa.  
+A solução permite registrar humor, engajamento, solicitações, ocorrências e percepções de colaboradores por meio de um **totem físico** conectado a serviços Azure, banco SQL e dashboards interativos.
 
-Segregação de dados, logs, LGPD, rate limiting, validações, gestão de segredos.
+---
 
-## 5. Pipeline de Voz
+## 📁 Estrutura de Pastas
+- **.github/** — automações  
+- **assets/** — imagens e arquivos estáticos  
+- **config/** — parâmetros do sistema  
+- **document/** — documentos das entregas  
+- **scripts/** — scripts auxiliares  
+- **src/** — código-fonte completo (backend, sensores, ML, dashboard)  
+- **README.md** — documentação principal  
 
-VAD, Noise Filtering e fallback automático para texto.
+---
 
-## 6. Simulação de Sensores
+## 🔧 Como Executar o Código
 
-Código Python completo incluído na Sprint (omitido aqui por brevidade).
+### Pré-requisitos
+- Python 3.10+  
+- FastAPI  
+- Streamlit  
+- SQLite  
+- Azure OpenAI  
+- Scikit-Learn  
 
-## 7. Dashboard
+### Passo a passo
 
-Streamlit com métricas e gráficos interativos.
+#### 1. Clonar o repositório:
+```bash
+git clone https://github.com/lnosiqueira/TotemMFlex
+cd TotemMFlex
+```
 
-## 8. Machine Learning
+#### 2. Instalar dependências:
+```bash
+pip install -r requirements.txt
+```
 
-Classificação toque curto/longos usando RandomForest.
+#### 3. Executar o backend:
+```bash
+uvicorn src.backend.main:app --reload
+```
 
-## 9. Métricas MVP
+#### 4. Executar simulação de sensores:
+```bash
+python src/sensor_simulation/simulator.py
+```
 
-Operacionais e ML (acurácia, confusão, recall, precision).
+#### 5. Executar dashboard:
+```bash
+streamlit run src/dashboard/app.py
+```
 
-## 10. Estrutura do Repositório
+---
 
-TotemMFlex/
- ├── sensor_simulation/
- ├── database/
- ├── analysis/
- ├── dashboard/
- ├── ml_model/
- ├── docs/
- ├── logs/
- └── README.md
+## 🗃 Histórico de Lançamentos
+- **2.0.0 — 27/11/2025**  
+  Sprint 2: ML, simulação, dashboard, pipeline de voz, multi-tenant  
 
-## 11. Responsáveis Sprint 2
+- **1.0.0 — 20/11/2025**  
+  Sprint 1: Arquitetura, fluxo, MVP backend e protótipo  
 
-| Integrante | RM | Responsabilidade |
-|-----------|-----|------------------|
-| Leno Siqueira | RM567893 | Arquitetura, SQL, Dashboard |
-| Fred Villagra | RM567187 | Sensores / Simulação |
-| Paulo Benfica | RM567648 | ML / Limpeza de dados |
-| Mateus Lima | RM568518 | Vídeo / Integração final |
+---
 
-## 12. Vídeo Sprint 2
+## 📋 Licença
+<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1">
 
-Link será adicionado até 27/11.
-
-## 13. Histórico Sprint 1 — v1.0
-
-Conteúdo original mantido em docs/ ou arquivo anterior.
+Repositório baseado no modelo oficial FIAP, licenciado sob Creative Commons Attribution 4.0 International.

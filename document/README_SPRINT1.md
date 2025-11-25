@@ -7,7 +7,7 @@ Repositório: https://github.com/lnosiqueira/TotemMFlex - Privado
 
 ---
 
-# ToteMFlex -- Plataforma Inteligente para Ambientes de Trabalho Humanizados, Inclusivos e Sustentáveis
+# ToteMFlex - Plataforma Inteligente para Ambientes de Trabalho Humanizados, Inclusivos e Sustentáveis
 
 ------------------------------------------------------------------------
 
