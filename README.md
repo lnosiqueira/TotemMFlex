@@ -18,10 +18,10 @@
 
 ## 👩‍🏫 Professores
 ### Tutor(a)
-- <a href="https://www.linkedin.com/school/fiap/">Professor(a) FIAP</a>
+- <a href="https://www.linkedin.com/in/sabrina-otoni-22525519b?utm_source=share_via&utm_content=profile&utm_medium=member_ios">Sabrina Otoni FIAP</a>
 
-### Coordenador(a)
-- <a href="https://www.linkedin.com/school/fiap/">Coordenação FIAP</a>
+### Coordenação
+- <a href="https://www.linkedin.com/company/inova-fusca">André Godoi FIAP</a>
 
 ---
 
