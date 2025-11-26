@@ -175,6 +175,23 @@ Arquivo original:
 
 ---
 
+# ✔️ Entregáveis Técnicos da Sprint 2
+
+A Sprint 2 consolidou a evolução do Totem-IA Educacional para um ambiente corporativo inteligente.  
+Os entregáveis técnicos incluídos foram:
+
+- **Backend FastAPI completo**, com endpoints /status e /predict  
+- **Pipeline de predição (ML simplificado)** para cenários de engajamento  
+- **Banco de dados SQLite**, armazenando interações para análise posterior  
+- **Simulador de sensores** gerando dados em tempo real  
+- **Dashboard Streamlit** com visualização das métricas do sistema  
+- **Estrutura de projeto reorganizada**, modular e escalável  
+- **Diagramas atualizados**: Arquitetura e Fluxo de Dados  
+- **Documentação completa**, integrando Sprint 1 + Sprint 2  
+- **Conjunto completo de prints** demonstrando execução real do sistema
+
+---
+
 # 🏁 Conclusão
 
 A Sprint 2 entregou um MVP completo com backend, ML, dashboard e simulação — uma evolução sólida rumo ao produto final.
