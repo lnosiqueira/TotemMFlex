@@ -1,6 +1,18 @@
 from fastapi import FastAPI
-app = FastAPI()
+from src.backend.routers.predict import router as predict_router
 
-@app.get('/status')
+app = FastAPI(
+    title="TotemMFlex API",
+    version="2.0",
+    description="API do MVP Sprint 2 - TotemMFlex"
+)
+
+app.include_router(predict_router)
+
+@app.get("/status")
 def status():
-    return {'status':'ok'}
+    return {"status": "online", "message": "API TotemMFlex funcionando!"}
+
+
+
+

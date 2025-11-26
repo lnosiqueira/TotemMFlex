@@ -9,6 +9,8 @@
 
 # TotemMFlex – Evolução do Totem‑IA Educacional  
 ### *Sprint 2 – Sistema Inteligente de Engajamento Corporativo*
+Challenge FlexMedia — FIAP 2025  
+Repositório: https://github.com/lnosiqueira/TotemMFlex
 
 > **Observação:**  
 > O TotemMFlex é a **evolução direta** do projeto **Totem‑IA Educacional**, entregue na Sprint 1.  
@@ -29,10 +31,10 @@
 ## 👩‍🏫 Professores Responsáveis
 
 ### Tutor(a)
-- Sabrina Otoni – FIAP
+- Sabrina Otoni
 
 ### Coordenação
-- André Godoi – FIAP
+- André Godoi
 
 ---
 

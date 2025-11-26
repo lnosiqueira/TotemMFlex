@@ -1,5 +1,13 @@
 fastapi
 uvicorn
+fastapi
+uvicorn
+requests
 streamlit
 scikit-learn
-sqlite3
+pandas
+matplotlib
+reportlab
+
+
+
