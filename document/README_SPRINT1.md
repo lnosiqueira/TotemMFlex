@@ -236,6 +236,7 @@ Projetado para Secretarias de Educação, redes públicas/privadas e empresas de
 
 Este repositório consolida código, protótipos, diagramas e relatórios do projeto.
 Commits e PRs documentam a colaboração entre os integrantes.
+https://github.com/lnosiqueira/Totem-IA-Educacional
 
 ---
 
