@@ -1,3 +1,4 @@
+
 # FIAP - Faculdade de Informática e Administração Paulista
 
 <p align="center">
@@ -6,100 +7,174 @@
   </a>
 </p>
 
-<br>
+# TotemMFlex – Evolução do Totem‑IA Educacional  
+### *Sprint 2 – Sistema Inteligente de Engajamento Corporativo*
 
-# TotemMFlex – Sistema Inteligente de Engajamento Corporativo
-Challenge FlexMedia — FIAP 2025
-Curso: Inteligência Artificial  
-Repositório: https://github.com/lnosiqueira/TotemMFlex - Privado
+> **Observação:**  
+> O TotemMFlex é a **evolução direta** do projeto **Totem‑IA Educacional**, entregue na Sprint 1.  
+> O arquivo oficial da Sprint 1 (**README_SPRINT1.md**) encontra‑se em:  
+> `document/README_SPRINT1.md`
 
-## Grupo S – Turma 55
+---
 
-## 👨‍🎓 Integrantes
-- <a href="https://www.linkedin.com/in/leno-siqueira-36789544?utm_source=share_via&utm_content=profile&utm_medium=member_ios">Leno Siqueira</a> — RM: 567893  
-- <a href="https://www.linkedin.com/in/paulo-benfica-76057a7b">Paulo Benfica</a> — RM: 567648  
-- <a href="https://www.linkedin.com/in/federico-villagra-97378838a">Fred Villagra</a> — RM: 567187  
-- <a href="https://www.linkedin.com/in/math-penteado-1b4807200/">Mateus Lima</a> — RM: 568518  
+## 👨‍🎓 Integrantes — Grupo S (Turma 55)
 
-## 👩‍🏫 Professores
+- Leno Siqueira — RM: 567893  
+- Paulo Benfica — RM: 567648  
+- Fred Villagra — RM: 567187  
+- Mateus Lima — RM: 568518  
+
+---
+
+## 👩‍🏫 Professores Responsáveis
+
 ### Tutor(a)
-- <a href="https://www.linkedin.com/in/sabrina-otoni-22525519b?utm_source=share_via&utm_content=profile&utm_medium=member_ios">Sabrina Otoni FIAP</a>
+- Sabrina Otoni – FIAP
 
 ### Coordenação
-- <a href="https://www.linkedin.com/company/inova-fusca">André Godoi FIAP</a>
+- André Godoi – FIAP
 
 ---
 
-## 📜 Descrição
+# 📜 Descrição Geral
 
-O **TotemMFlex** é um sistema inteligente voltado para ambientes corporativos, integrando IA generativa, sensores/simulações, análise de dados, dashboard gerencial e recursos de segurança corporativa.  
-A solução permite registrar humor, engajamento, solicitações, ocorrências e percepções de colaboradores por meio de um **totem físico** conectado a serviços Azure, banco SQL e dashboards interativos.
+O **TotemMFlex** representa a **segunda fase** do projeto iniciado na Sprint 1.  
+Se antes o Totem‑IA Educacional tinha foco acadêmico, agora o TotemMFlex evolui para um **ecossistema corporativo inteligente**, incluindo:
 
----
-
-## 📁 Estrutura de Pastas
-- **.github/** — automações  
-- **assets/** — imagens e arquivos estáticos  
-- **config/** — parâmetros do sistema  
-- **document/** — documentos das entregas  
-- **scripts/** — scripts auxiliares  
-- **src/** — código-fonte completo (backend, sensores, ML, dashboard)  
-- **README.md** — documentação principal  
+- Backend FastAPI  
+- Pipeline de predição (ML simplificado)  
+- Simulação de sensores em tempo real  
+- Banco SQLite persistindo interações  
+- Dashboard Streamlit monitorando métricas  
+- Arquitetura modular  
+- Preparação para integração futura com Azure e serviços corporativos  
 
 ---
 
-## 🔧 Como Executar o Código
+# 🧱 Arquitetura – Sprint 2
 
-### Pré-requisitos
-- Python 3.10+  
-- FastAPI  
-- Streamlit  
-- SQLite  
-- Azure OpenAI  
-- Scikit-Learn  
+![Arquitetura](diagrams/arquitetura.png)
 
-### Passo a passo
+---
 
-#### 1. Clonar o repositório:
-```bash
-git clone https://github.com/lnosiqueira/TotemMFlex
-cd TotemMFlex
+# 🔄 Fluxo de Dados
+
+![Fluxo de Dados](diagrams/fluxo_de_dados.png)
+
+---
+
+# 📁 Estrutura Atualizada do Projeto
+
+```
+src/
+ ├── assets/
+ │    ├── logo-fiap.png
+ │    └── prints/
+ │         ├── api_backend_logs.png
+ │         ├── api_status.png
+ │         ├── dashboard_main.png
+ │         ├── database_select.png
+ │         ├── project_structure.png
+ │         ├── simulator_running.png
+ │         ├── swagger_predict_curto.png
+ │         └── swagger_predict_longo.png
+ │
+ ├── backend/
+ │    ├── main.py
+ │    ├── routers/predict.py
+ │    └── services/
+ │         ├── database.py
+ │         └── model.py
+ │
+ ├── dashboard/app.py
+ ├── sensor_simulation/simulator.py
+ ├── database/totem.db
+ └── ml_model/model.py
 ```
 
-#### 2. Instalar dependências:
-```bash
+---
+
+# 🚀 Backend – FastAPI
+
+Logs da inicialização da API:
+
+![API Backend Logs](src/assets/prints/api_backend_logs.png)
+
+---
+
+## 🔎 Endpoint `/status`
+
+![API Status](src/assets/prints/api_status.png)
+
+---
+
+## 🔮 Endpoint `/predict`
+
+### Predição — exemplo 1  
+![Swagger Predição Longo](src/assets/prints/swagger_predict_longo.png)
+
+### Predição — exemplo 2  
+![Swagger Predição Curto](src/assets/prints/swagger_predict_curto.png)
+
+---
+
+# 🗃 Banco de Dados (SQLite)
+
+Consulta a registros armazenados:
+
+![Database Select](src/assets/prints/database_select.png)
+
+---
+
+# 📡 Simulador de Sensores
+
+![Simulador Rodando](src/assets/prints/simulator_running.png)
+
+---
+
+# 📊 Dashboard – Streamlit
+
+![Dashboard](src/assets/prints/dashboard_main.png)
+
+---
+
+# ▶️ Como Executar o Projeto
+
+1. Ativar venv  
+```
+venv\Scripts\activate
+```
+
+2. Instalar dependências  
+```
 pip install -r requirements.txt
 ```
 
-#### 3. Executar o backend:
-```bash
+3. Rodar API  
+```
 uvicorn src.backend.main:app --reload
 ```
 
-#### 4. Executar simulação de sensores:
-```bash
+4. Rodar simulador  
+```
 python src/sensor_simulation/simulator.py
 ```
 
-#### 5. Executar dashboard:
-```bash
+5. Rodar dashboard  
+```
 streamlit run src/dashboard/app.py
 ```
 
 ---
 
-## 🗃 Histórico de Lançamentos
-- **2.0.0 — 27/11/2025**  
-  Sprint 2: ML, simulação, dashboard, pipeline de voz, multi-tenant  
+# 📘 Referência da Sprint 1
 
-- **1.0.0 — 20/11/2025**  
-  Sprint 1: Arquitetura, fluxo, MVP backend e protótipo  
+Arquivo original:  
+`document/README_SPRINT1.md`
 
 ---
 
-## 📋 Licença
-<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1">
+# 🏁 Conclusão
 
-Repositório baseado no modelo oficial FIAP, licenciado sob Creative Commons Attribution 4.0 International.
+A Sprint 2 entregou um MVP completo com backend, ML, dashboard e simulação — uma evolução sólida rumo ao produto final.
 
-Esse projeto é intectualidade dos Integrantes desse grupo.
