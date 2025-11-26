@@ -30,11 +30,10 @@ Repositório: https://github.com/lnosiqueira/TotemMFlex
 
 ## 👩‍🏫 Professores Responsáveis
 
-### Tutor(a)
-- **Sabrina Otoni** – [LinkedIn](https://www.linkedin.com/in/sabrina-otoni-22525519b?utm_source=share_via&utm_content=profile&utm_medium=member_ios/)
-
-### Coordenação
-- **André Godoi** – [LinkedIn](https://www.linkedin.com/company/inova-fusca/)
+### Tutor(a) 
+- <a href="https://www.linkedin.com/in/sabrina-otoni-22525519b?utm_source=share_via&utm_content=profile&utm_medium=member_ios/">Sabrina Otoni FIAP</a>
+### Coordenador(a)
+- <a href="https://www.linkedin.com/company/inova-fusca/">André Godoi FIAP</a>
 
 ---
 
