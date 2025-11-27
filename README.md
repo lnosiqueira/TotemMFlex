@@ -190,6 +190,9 @@ Os entregáveis técnicos incluídos foram:
 - **Documentação completa**, integrando Sprint 1 + Sprint 2  
 - **Conjunto completo de prints** demonstrando execução real do sistema
 
+> O arquivo entrega Sprint 2 (**ENTREGA_SPRINT2.md**) encontra‑se em:  
+> `document/ENTREGA_SPRINT2.md`
+
 ---
 
 # 🏁 Conclusão
