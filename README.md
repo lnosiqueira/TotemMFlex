@@ -1,115 +1,106 @@
-# 🎓 FIAP -- Global Solution • TotemMFlex
+# 🟦 TotemMFlex -- MVP Sprint 2 (FIAP + FlexMídia)
 
-## Sprint 2 -- Backend FastAPI + Execução em Nuvem (AWS EC2)
-
-**Versão atualizada --- Janeiro/2025**
-
-------------------------------------------------------------------------
-
-## 👨‍🎓 Integrantes — Grupo S (Turma 55)
-
-- <a href="https://www.linkedin.com/in/leno-siqueira-36789544?utm_source=share_via&utm_content=profile&utm_medium=member_ios">Leno Siqueira</a> — RM: 567893  
-- <a href="https://www.linkedin.com/in/paulo-benfica-76057a7b">Paulo Benfica</a> — RM: 567648  
-- <a href="https://www.linkedin.com/in/federico-villagra-97378838a">Fred Villagra</a> — RM: 567187  
-- <a href="https://www.linkedin.com/in/math-penteado-1b4807200/">Mateus Lima</a> — RM: 568518  
+Sistema de predição e monitoramento com FastAPI, Streamlit e execução em
+nuvem AWS EC2.
 
 ------------------------------------------------------------------------
 
-## 👩‍🏫 Professores Responsáveis
+# 🧠 Visão Geral
 
-### Tutor(a) 
-- <a href="https://www.linkedin.com/in/sabrina-otoni-22525519b?utm_source=share_via&utm_content=profile&utm_medium=member_ios/">Sabrina Otoni FIAP</a>
-### Coordenador(a)
-- <a href="https://www.linkedin.com/company/inova-fusca/">André Godoi FIAP</a>
+O TotemMFlex evoluiu do ambiente local para um ambiente profissional em
+nuvem, mantendo arquitetura limpa e modular.
 
 ------------------------------------------------------------------------
 
-## 🧠 Visão Geral
+# 🏗️ Arquitetura do Projeto -- Ambiente Local
 
-O TotemMFlex é a evolução do Totem-IA Educacional, agora como solução
-corporativa inteligente executando em nuvem.
-
-------------------------------------------------------------------------
-
-## ☁️ Execução em Nuvem -- AWS EC2
-
--   Windows Server 2025
--   Python 3.11
--   FastAPI + Uvicorn
--   Execução automática via Task Scheduler
--   Porta 8000 liberada
--   IP Público: **18.191.224.166**
-
-### URLs públicas:
-
--   http://18.191.224.166:8000
--   http://18.191.224.166:8000/docs
--   http://18.191.224.166:8000/status
+    TotemMFlex/
+    ├── data/
+    ├── diagrams/
+    ├── document/
+    ├── hardware/
+    ├── r_analysis/
+    ├── src/backend/
+    │   ├── routers/
+    │   ├── services/
+    │   ├── main.py
+    │   └── __init__.py
+    ├── application.py
+    ├── requirements.txt
+    └── venv/
 
 ------------------------------------------------------------------------
 
-## 🔧 Arquitetura (Sprint 2 + Cloud)
-
-    EC2 Windows → FastAPI/Uvicorn → Rotas → Swagger
-
-------------------------------------------------------------------------
-
-## 📁 Estrutura do Projeto
+# ☁️ Arquitetura do Projeto -- AWS EC2
 
     TotemMFlex-Cloud/
     ├── src/backend/
-    │   ├── main.py
     │   ├── routers/
-    │   └── services/
-    ├── .venv/
+    │   ├── services/
+    │   ├── main.py
+    │   └── __init__.py
     ├── requirements.txt
-    └── run_api.bat
+    ├── application.py
+    └── .venv/
 
 ------------------------------------------------------------------------
 
-## 🟧 Entregáveis Sprint 2
+# 🌎 API Rodando na Nuvem -- AWS
 
--   Backend modular
--   Rotas: predict, sensor, voice, health, status
--   Simuladores
--   API online 24/7
--   Documentação completa
--   Execução automática
+## Instância EC2 Ativa
 
-------------------------------------------------------------------------
+![EC2](/mnt/data/aws_instancia_totemmflexcloud.PNG)
 
-## 🧪 Status On-line
+## Serviço Automático
 
-    {"status":"online","message":"API TotemMFlex funcionando!"}
+![Service](/mnt/data/serviceauto_totemmflexcloud.PNG)
 
-------------------------------------------------------------------------
+## Estrutura na Nuvem
 
-## ⚙ Como Rodar Localmente
+![Estrutura](/mnt/data/estrutura_totemmflexcloud.PNG)
 
-    python -m venv .venv
-    .\.venv\Scriptsctivate
-    pip install -r requirements.txt
-    uvicorn src.backend.main:app --reload
+## Swagger Público
+
+![Swagger](/mnt/data/http_swagger_totemmflexcloud.png)
 
 ------------------------------------------------------------------------
 
-## 🧭 Próximos Passos (Sprint 3)
+# 📊 Dashboard (Execução Local)
 
--   Modelo real de ML
--   Dashboard
--   ESP32 integrado
--   Autenticação JWT
--   HTTPS com Nginx
+![Dashboard](/mnt/data/dashboard_totemmflexcloud.PNG)
 
 ------------------------------------------------------------------------
 
-## 🏆 Conclusão
+# 📡 Endpoints
 
-A migração para a nuvem elevou o TotemMFlex ao nível corporativo,
-tornando a API escalável, acessível e robusta.
+  Método   Rota       Função
+  -------- ---------- -----------------------------
+  GET      /status    Status da API
+  GET      /health    Health check
+  GET      /predict   Predição
+  GET      /sensor    Dados dos sensores
+  GET      /voice     Simulação de comando de voz
+  GET      /docs      Swagger
 
 ------------------------------------------------------------------------
 
-### 💜 Desenvolvido pela equipe TotemMFlex -- FIAP 2025
+# 👥 Equipe
 
-Com apoio do LA (ChatGPT)
+-   **Leno Siqueira** -- https://www.linkedin.com/in/leno-siqueira/
+-   (Adicionar os demais)
+
+------------------------------------------------------------------------
+
+# 👨‍🏫 Professores
+
+-   (Adicionar conforme lista original)
+
+------------------------------------------------------------------------
+
+# 🏁 Conclusão
+
+Entrega Sprint 2 completa: ✔ Ambiente local\
+✔ Ambiente em nuvem\
+✔ API com serviço automático\
+✔ Arquitetura organizada\
+✔ Dashboard funcional
