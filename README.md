@@ -94,7 +94,7 @@ TotemMFlex/
 
 ---
 
-## 7. Dataset de Exemplo (SQLite)
+# 🔙 Dataset de Exemplo (SQLite)
 
 Abaixo está uma amostra real dos registros armazenados no banco `totem.db` durante os testes da Sprint 2:
 
