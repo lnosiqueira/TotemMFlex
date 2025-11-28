@@ -112,7 +112,7 @@ Abaixo está uma amostra real dos registros armazenados no banco `totem.db` dura
 
 ---
 
-## Arquitetura – Sprint 2
+# 🔄 **Arquitetura – Sprint 2**
 
 ![Arquitetura](diagrams/arquitetura.png)
 
