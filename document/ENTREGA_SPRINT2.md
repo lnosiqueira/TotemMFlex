@@ -147,13 +147,13 @@ streamlit run src/dashboard/app.py
 1. Conectar via RDP  
 2. Acessar pasta do projeto  
 3. Ativar venv  
-4. A API inicia automaticamente pelo serviço: NSSM 2.24 
+4. A API inicia automaticamente pelo serviço:  
    **TotemMFlex API Service**  
 5. Acessar:
 ```
-http://IP_PUBLICO:8000/status
-http://IP_PUBLICO:8000/docs
-http://IP_PUBLICO:8501
+http://18.191.224.166:8000/status
+http://18.192.224.166:8000/docs
+http://18.191.224.166:8501
 ```
 
 ---
