@@ -237,9 +237,15 @@ http://18.191.224.166:8000/docs
 
 ---
 
+## 📚 Documentação Técnica e Complementar
+
+- 📘 [Documentação Técnica (PDF)](document/DOCUMENTACAO_TECNICA_SPRINT2.pdf)
+- 📝 [Entrega Sprint 2 (MD)](document/ENTREGA_SPRINT2.md)
+- 🏗️ [Arquitetura e Fluxos](diagrams/)
+
+---
+
 # 🏁 **Conclusão**
 
 A Sprint 2 consolidou o TotemMFlex como um MVP **real**, funcional, modular e pronto para expansão.  
 O sistema opera em ambiente local e em nuvem, inclui ML, API, dashboard, banco e simulador — tudo validado e documentado.
-
-> 🔥 **Este README é a versão final para entrega na FIAP e para uso no GitHub.**
