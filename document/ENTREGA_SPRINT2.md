@@ -1,119 +1,180 @@
-# 📄 ENTREGA OFICIAL – SPRINT 2  
-### TotemMFlex – Sistema Inteligente de Engajamento Corporativo  
-**Challenge FlexMedia – FIAP 2025**
+# 📘 ENTREGA – SPRINT 2  
+## TotemMFlex – FIAP + FlexMídia  
+### Modelo Híbrido (FIAP + Técnico Profissional)
 
 ---
 
-## 📌 Resumo Executivo
-A Sprint 2 evoluiu o protótipo inicial da Sprint 1, consolidando o **MVP funcional do TotemMFlex**, uma solução corporativa para monitoramento, engajamento e análise inteligente.
+# 🟦 1. Identificação do Projeto
 
-Nesta entrega foram desenvolvidos o **Core API**, predição (ML), simulador, banco de dados e dashboard analítico – todos integrados e documentados.
+**Projeto:** TotemMFlex – Evolução do Totem IA Educacional  
+**Sprint:** 2  
+**Disciplina:** Challenge FlexMídia + AI Systems  
+**Instituição:** FIAP  
+**Turma:** 55 – Grupo S  
 
----
-
-# 🎯 Objetivo da Sprint 2
-Desenvolver a base funcional do sistema através de:
-
-- API REST estruturada (FastAPI)
-- Pipeline de predição integrado
-- Coleta e simulação de dados
-- Persistência em banco SQLite
-- Dashboard analítico (Streamlit)
-- Documentação e diagramas atualizados
+**Integrantes:**
+- Leno Siqueira  
+- Paulo Benfica  
+- Fred Villagra  
+- Mateus Lima  
 
 ---
 
-# ✔️ Entregáveis da Sprint 2
+# 🟩 2. Objetivo da Sprint 2
 
-## 🔹 1. Backend – FastAPI
-- API REST em Python
-- Rotas `/status` e `/predict`
-- Arquitetura modular (routers/services)
-- Documentação automática (Swagger)
-- Prints de execução anexados
+A Sprint 2 teve como objetivo transformar o protótipo inicial Totem-IA Educacional em uma solução técnica completa, modular e escalável: **TotemMFlex**.
 
----
+Nesta sprint, implementamos:
 
-## 🔹 2. Pipeline de Predição (ML)
-- Modelo de Machine Learning implementado
-- Serviço de predição integrado ao backend
-- Testes de inferência validados
-
----
-
-## 🔹 3. Banco de Dados – SQLite
-- Banco `totem.db` configurado
-- Persistência de interações
-- Consultas exibidas durante execução
+- Arquitetura local 100% funcional  
+- Deploy completo na AWS EC2 (Cloud)  
+- API em FastAPI com múltiplos endpoints  
+- ML básico de predição (toque curto/long)  
+- Dashboard monitorável (Streamlit)  
+- Banco de dados SQLite integrado  
+- Simulador de sensores em tempo real  
+- Execução da API como serviço automático no Windows Server  
+- Documentação completa + prints + diagramas  
 
 ---
 
-## 🔹 4. Simulador de Sensores
-- Geração de dados (simulados)
-- Envio automático para a API
-- Suporte para testes de carga
-- Print do simulador anexado
+# 🧱 3. Arquitetura – Ambiente Local
+
+![Arquitetura Local](../src/assets/prints/01_project_structure.png)
 
 ---
 
-## 🔹 5. Dashboard – Streamlit
-- Interface analítica em tempo real
-- Previsões, dados e histórico
-- Prints oficiais anexados
+# 🔄 4. Fluxo de Dados (Sprint 2)
+
+![Fluxo de Dados](../diagrams/fluxo_de_dados.png)
 
 ---
 
-## 🔹 6. Arquitetura e Fluxo de Dados
-- Diagrama atualizado da arquitetura
-- Representação visual do ciclo:
-  sensores → API → ML → DB → dashboard
+# 🌐 5. API Backend – FastAPI
+
+A API fornece endpoints para:
+
+| Endpoint | Método | Função |
+|---------|--------|--------|
+| `/status` | GET | Status geral da API |
+| `/health` | GET | Health-check |
+| `/predict` | POST | Predição do tipo de toque |
+| `/sensor` | GET | Últimas leituras |
+| `/voice` | GET | Simulação de status de voz |
+
+### 🟦 Logs da API (Local)  
+![API Logs](../src/assets/prints/03_api_backend_logs.png)
+
+### 🟦 Status  
+![API Status](../src/assets/prints/04_api_status.png)
+
+### 🟦 Predição – Toque Curto  
+![Predição Curto](../src/assets/prints/05_swagger_predict_curto.png)
+
+### 🟦 Predição – Toque Longo  
+![Predição Longo](../src/assets/prints/06_swagger_predict_longo.png)
 
 ---
 
-## 🔹 7. Documentação Oficial
-- README.md completo e organizado
-- Referência à Sprint 1 preservada
-- Prints organizados em `src/assets/prints/`
-- Guia de execução (API, simulador, dashboard)
+# 📡 6. Simulador de Sensores
+
+![Simulador](../src/assets/prints/07_simulator_running.png)
 
 ---
 
-# 🧪 Validação do MVP
-O sistema foi executado de ponta a ponta:
+# 🗃 7. Banco de Dados (SQLite)
 
-- API operando corretamente  
-- Predições funcionando  
-- Dados simulados fluindo  
-- Registros persistidos  
-- Dashboard exibindo informações  
-- Evidências anexadas no repositório  
-
-Tudo validado com prints e logs.
+![Banco SQLite](../src/assets/prints/08_database_select.png)
 
 ---
 
-# 📁 Artefatos Entregues
-- API FastAPI  
-- Modelo de Machine Learning  
-- Banco SQLite  
-- Simulador Python  
-- Dashboard Streamlit  
-- Diagramas  
-- Documentação (Sprint 1 + Sprint 2)  
-- Prints oficiais  
-- Estrutura de código padronizada  
+# 📊 8. Dashboard – Monitoramento Local
+
+![Dashboard Local](../src/assets/prints/09_dashboard_main.png)
 
 ---
 
-# 🏁 Conclusão
-A Sprint 2 foi entregue com **100% de conformidade**, apresentando um MVP funcional, modular e bem documentado. Abre caminho para integração com Azure, NLU, voz e expansão corporativa.
+# ☁️ 9. Arquitetura Cloud – AWS EC2
+
+## 9.1 Instância Ativa  
+![AWS EC2](../src/assets/prints/10_aws_EC2_instance.png)
+
+## 9.2 API Como Serviço Automático (Windows Server)  
+![Service Auto](../src/assets/prints/11_aws_service_auto.png)
+
+## 9.3 Estrutura do Projeto na Nuvem  
+![Estrutura Cloud](../src/assets/prints/12_aws_estrutura_cloud.png)
+
+## 9.4 Swagger – Cloud  
+![Swagger Cloud](../src/assets/prints/13_swagger_cloud.png)
+
+## 9.5 Dashboard – Cloud  
+![Dashboard Cloud](../src/assets/prints/14_dashboard_cloud.png)
 
 ---
 
-# 🚀 Roadmap Futuro (Sprint 3+)
-- Deploy no Azure  
-- NLU / OpenAI  
-- STT/TTS  
-- Dashboard avançado  
-- Banco corporativo (PostgreSQL/CosmosDB)  
-- Totem físico integrado  
+# ⚙️ 10. Como Executar – Ambiente Local
+
+### 1. Ativar ambiente virtual
+```
+venv/Scripts/activate
+```
+
+### 2. Instalar dependências
+```
+pip install -r requirements.txt
+```
+
+### 3. Iniciar API
+```
+uvicorn src.backend.main:app --reload
+```
+
+### 4. Rodar simulador
+```
+python src/sensor_simulation/simulator.py
+```
+
+### 5. Abrir dashboard
+```
+streamlit run src/dashboard/app.py
+```
+
+---
+
+# ☁️ 11. Como Executar – Cloud (AWS)
+
+1. Conectar via RDP  
+2. Acessar pasta do projeto  
+3. Ativar venv  
+4. A API inicia automaticamente pelo serviço: NSSM 2.24 
+   **TotemMFlex API Service**  
+5. Acessar:
+```
+http://IP_PUBLICO:8000/status
+http://IP_PUBLICO:8000/docs
+http://IP_PUBLICO:8501
+```
+
+---
+
+# 🏁 12. Conclusão
+
+A Sprint 2 consolidou o TotemMFlex como um MVP real, robusto e escalável.
+
+Com a união de:
+
+- API  
+- ML básico  
+- Banco  
+- Simulador  
+- Dashboard  
+- Arquitetura Local  
+- Arquitetura Cloud  
+
+O sistema está pronto para expansão, integração com hardware real e evolução futura nas próximas sprints.
+
+---
+
+# ✔ Arquivo gerado automaticamente por LA + Grupo S  
+FIAP – Challenge FlexMídia 2025  
