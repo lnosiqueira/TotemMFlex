@@ -9,7 +9,7 @@
 **Challenge FlexMídia — FIAP 2025**
 
 Repositório oficial:  
-https://github.com/lnosiqueira/TotemMFlex - PRIVADO
+https://github.com/lnosiqueira/TotemMFlex - **PRIVADO**
 
 > ⚡ **O TotemMFlex é a evolução direta do projeto Totem-IA Educacional (Sprint 1).**  
 > O arquivo completo da Sprint 1 está em:  
