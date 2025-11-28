@@ -108,8 +108,13 @@ Abaixo está uma amostra real dos registros armazenados no banco `totem.db` dura
 
 # 🔄 **Fluxo de Dados – Sprint 2**
 
-![Fluxo de Dados](arquitetura/arquitetura.png)
 ![Fluxo de Dados](diagrams/fluxo_de_dados.png)
+
+---
+
+# 🔄 **Arquitetura – Sprint 2**
+
+![Arquitetura](arquitetura/arquitetura.png)
 
 ---
 
