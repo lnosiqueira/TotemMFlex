@@ -1,8 +1,3 @@
-<!-- Banner (substitua o caminho pelo seu arquivo) -->
-<p align="center">
-  <img src="assets/banner-totem-ia.png" alt="Totem IA – Educacional" width="100%">
-</p>
-
 <h1 align="center">🧠 TOTEM IA – Educacional (FIAP + FlexMidia)</h1>
 
 <p align="center">
