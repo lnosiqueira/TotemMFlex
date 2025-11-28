@@ -260,8 +260,6 @@ http://18.191.224.166:8000/docs
 
 ## 📹 Demonstração em Vídeo – Sprint 2
 
-
-
 ---
 
 # 🏁 **Conclusão**
