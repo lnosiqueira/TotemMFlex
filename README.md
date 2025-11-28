@@ -106,12 +106,6 @@ Abaixo está uma amostra real dos registros armazenados no banco `totem.db` dura
 
 ---
 
-# 🧱 **Arquitetura – Ambiente Local**
-
-![Arquitetura Local](src/assets/prints/01_project_structure.png)
-
----
-
 # 🔄 **Fluxo de Dados – Sprint 2**
 
 ![Fluxo de Dados](diagrams/fluxo_de_dados.png)
@@ -149,6 +143,7 @@ Abaixo está uma amostra real dos registros armazenados no banco `totem.db` dura
 # 📡 **Simulador de Sensores**
 
 ![Simulador](src/assets/prints/07_simulator_running.png)
+![Simulador](src/assets/prints/01_project_structure.png)
 
 ---
 
