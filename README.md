@@ -53,18 +53,6 @@ A Sprint 2 entregou:
 
 ---
 
-# 🧱 **Arquitetura – Ambiente Local**
-
-![Arquitetura Local](src/assets/prints/01_project_structure.png)
-
----
-
-# 🔄 **Fluxo de Dados – Sprint 2**
-
-![Fluxo de Dados](diagrams/fluxo_de_dados.png)
-
----
-
 # 📁 **Estrutura Oficial do Projeto**
 
 ```
@@ -103,6 +91,30 @@ TotemMFlex/
     ├── database/
     └── ml_model/
 ```
+
+---
+
+## 7. Dataset de Exemplo (SQLite)
+
+Abaixo está uma amostra real dos registros armazenados no banco `totem.db` durante os testes da Sprint 2:
+
+| id | valor | pred  | timestamp          |
+|----|-------|-------|---------------------|
+| 1  | 0.23  | curto | 2025-11-29 10:23    |
+| 2  | 0.82  | longo | 2025-11-29 10:24    |
+| 3  | 0.15  | curto | 2025-11-29 10:25    |
+
+---
+
+# 🧱 **Arquitetura – Ambiente Local**
+
+![Arquitetura Local](src/assets/prints/01_project_structure.png)
+
+---
+
+# 🔄 **Fluxo de Dados – Sprint 2**
+
+![Fluxo de Dados](diagrams/fluxo_de_dados.png)
 
 ---
 
