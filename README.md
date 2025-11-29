@@ -91,6 +91,34 @@ TotemMFlex/
     ├── database/
     └── ml_model/
 ```
+```
+☁️ Estrutura do Ambiente Cloud – TotemMFlex (AWS EC2)
+TotemMFlex-Cloud/
+├── src/
+│   ├── backend/
+│   │   ├── routers/
+│   │   │   ├── health_router.py
+│   │   │   ├── predict_router.py
+│   │   │   ├── sensor_router.py
+│   │   │   ├── status_router.py
+│   │   │   └── voice_router.py
+│   │   │
+│   │   ├── services/
+│   │   │   ├── data_service.py
+│   │   │   ├── ml_service.py
+│   │   │   ├── nlp_service.py   (se aplicável)
+│   │   │   └── predict_service.py
+│   │   │
+│   │   ├── main.py
+│   │   └── __init__.py
+│   │
+│   ├── __pycache__/
+│   └── venv/
+│
+├── requirements.txt
+├── application.py  (ou script usado no serviço)
+└── (Serviço registrado no Windows como "TotemMFlex API Service")
+```
 
 ---
 
