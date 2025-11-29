@@ -91,8 +91,10 @@ TotemMFlex/
     ├── database/
     └── ml_model/
 ```
+
+# ☁️ Estrutura do Ambiente Cloud – TotemMFlex (AWS EC2)
+
 ```
-☁️ Estrutura do Ambiente Cloud – TotemMFlex (AWS EC2)
 TotemMFlex-Cloud/
 ├── src/
 │   ├── backend/
