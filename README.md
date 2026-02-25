@@ -1,12 +1,8 @@
 # 🟦 FIAP - Faculdade de Informática e Administração Paulista
 
-```{=html}
 <p align="center">
-```
-`<img src="src/assets/logo-fiap.png" width="40%" alt="FIAP">`{=html}
-```{=html}
+  <img src="src/assets/logo-fiap.png" width="40%" alt="FIAP">
 </p>
-```
 # 🟩 TotemMFlex -- Sistema Inteligente de Engajamento Corporativo
 
 **Challenge FlexMídia --- FIAP 2025**
