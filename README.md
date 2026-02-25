@@ -15,17 +15,20 @@ https://github.com/lnosiqueira/TotemMFlex
 
 ## 👨‍🎓 Integrantes — Grupo S (Turma 55)
 
-- Leno Siqueira — RM: 567893  
-- Paulo Benfica — RM: 567648  
-- Fred Villagra — RM: 567187  
-- Mateus Lima — RM: 568518  
+- <a href="https://www.linkedin.com/in/leno-siqueira-36789544?utm_source=share_via&utm_content=profile&utm_medium=member_ios">Leno Siqueira</a> — RM: 567893  
+- <a href="https://www.linkedin.com/in/paulo-benfica-76057a7b">Paulo Benfica</a> — RM: 567648  
+- <a href="https://www.linkedin.com/in/federico-villagra-97378838a">Fred Villagra</a> — RM: 567187  
+- <a href="https://www.linkedin.com/in/math-penteado-1b4807200/">Mateus Lima</a> — RM: 568518  
 
 ---
 
 ## 👩‍🏫 Professores Responsáveis
 
-Tutor(a): Sabrina Otoni  
-Coordenador(a): André Godoi  
+### Tutor(a)
+- <a href="https://www.linkedin.com/in/sabrina-otoni-22525519b?utm_source=share_via&utm_content=profile&utm_medium=member_ios/">Sabrina Otoni FIAP</a>
+
+### Coordenador(a)
+- <a href="https://www.linkedin.com/company/inova-fusca/">André Godoi FIAP</a>
 
 ---
 
