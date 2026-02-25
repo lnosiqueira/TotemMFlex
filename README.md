@@ -54,7 +54,41 @@ funcional.
 Simulador → Banco de Dados → Modelo ML → API → Dashboard → Score
 Operacional
 
+<<<<<<< HEAD
 Integração superior a 60% dos módulos exigidos pela Sprint 3.
+=======
+# ☁️ Estrutura do Ambiente Cloud – TotemMFlex (AWS EC2)
+
+```
+TotemMFlex-Cloud/
+├── src/
+│   ├── backend/
+│   │   ├── routers/
+│   │   │   ├── health_router.py
+│   │   │   ├── predict_router.py
+│   │   │   ├── sensor_router.py
+│   │   │   ├── status_router.py
+│   │   │   └── voice_router.py
+│   │   │
+│   │   ├── services/
+│   │   │   ├── data_service.py
+│   │   │   ├── ml_service.py
+│   │   │   ├── nlp_service.py   (se aplicável)
+│   │   │   └── predict_service.py
+│   │   │
+│   │   ├── main.py
+│   │   └── __init__.py
+│   │
+│   ├── __pycache__/
+│   └── venv/
+│
+├── requirements.txt
+├── application.py  (ou script usado no serviço)
+└── (Serviço registrado no Windows como "TotemMFlex API Service")
+```
+
+---
+>>>>>>> 4dad630eea77e447866e3c3468b07800c0a9a27d
 
 ------------------------------------------------------------------------
 
@@ -91,5 +125,20 @@ https://youtu.be/6F5Htntr5j8
 
 # 🏁 Conclusão
 
+<<<<<<< HEAD
 Sistema integrado validado localmente e em nuvem, com modelo preditivo,
 análise estatística e score operacional aplicado.
+=======
+---
+
+## 📹 Demonstração em Vídeo – Sprint 2
+
+https://youtu.be/6F5Htntr5j8
+
+---
+
+# 🏁 **Conclusão**
+
+A Sprint 2 consolidou o TotemMFlex como um MVP **real**, funcional, modular e pronto para expansão.  
+O sistema opera em ambiente local e em nuvem, inclui ML, API, dashboard, banco e simulador — tudo validado e documentado.
+>>>>>>> 4dad630eea77e447866e3c3468b07800c0a9a27d
