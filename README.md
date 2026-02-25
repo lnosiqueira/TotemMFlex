@@ -112,9 +112,9 @@ streamlit run src/dashboard/app.py
 
 # 📘 Histórico de Evolução por Sprints
 
-- Sprint 1 → document/README_SPRINT1.md  
-- Sprint 2 → document/README_SPRINT2.md  
-- Sprint 3 → document/README_SPRINT3.md  
+- [Sprint 1](https://github.com/lnosiqueira/TotemMFlex/blob/main/document/README_SPRINT1.md)
+- [Sprint 2](https://github.com/lnosiqueira/TotemMFlex/blob/main/document/README_SPRINT2.md)
+- [Sprint 3](https://github.com/lnosiqueira/TotemMFlex/blob/main/document/README_SPRINT3.md) 
 
 ---
 
