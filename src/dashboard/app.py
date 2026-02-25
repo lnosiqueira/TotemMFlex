@@ -1,26 +1,13 @@
-import sqlite3
-import pandas as pd
 import streamlit as st
 
-DB_PATH = "src/database/totem.db"
+st.set_page_config(
+    page_title="TotemMFlex Intelligence",
+    layout="wide"
+)
 
-def load():
-    conn = sqlite3.connect(DB_PATH)
-    df = pd.read_sql_query("SELECT * FROM interactions", conn)
-    conn.close()
-    return df
+st.title("TotemMFlex Intelligence")
+st.markdown("""
+### Plataforma de Inteligência Comportamental para Interfaces Físicas
 
-st.title("Dashboard – TotemMFlex Sprint 2")
-
-df = load()
-
-st.subheader("📌 Últimas Interações")
-st.dataframe(df)
-
-st.subheader("📊 Métricas")
-if len(df) > 0:
-    st.write("Total registros:", len(df))
-    st.write("Toque curto:", len(df[df.prediction == "toque_curto"]))
-    st.write("Toque longo:", len(df[df.prediction == "toque_longo"]))
-else:
-    st.info("Execute o simulador para gerar dados.")
+Use o menu lateral para navegar entre os módulos da plataforma.
+""")
