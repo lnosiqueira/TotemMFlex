@@ -34,18 +34,21 @@ Coordenador(a): André Godoi
 
 # 🧠 Visão Geral
 
-O TotemMFlex evolui o Totem-IA Educacional para um sistema corporativo
-completo, integrando:
+O TotemMFlex representa a evolução do Totem-IA Educacional para um
+ecossistema corporativo inteligente, integrando coleta de dados,
+processamento analítico e visualização estratégica em tempo real.
+
+O sistema consolida:
 
 -   📡 Simulação de sensores\
 -   🗃 Banco de dados estruturado (SQLite)\
 -   🤖 Modelo de Machine Learning (RandomForest)\
--   🌐 API em FastAPI\
+-   🌐 API REST desenvolvida em FastAPI\
 -   📊 Dashboard interativo em Streamlit\
--   ☁ Deploy em ambiente Cloud (AWS EC2)
+-   ☁ Deploy validado em ambiente Cloud (AWS EC2)
 
-O sistema consolida coleta, análise e visualização em um pipeline único
-funcional.
+A arquitetura integra coleta, processamento e análise em um pipeline
+único e funcional.
 
 ------------------------------------------------------------------------
 
@@ -58,28 +61,63 @@ Integração superior a 60% dos módulos exigidos pela Sprint 3.
 
 ------------------------------------------------------------------------
 
+# ☁ Arquitetura em Nuvem (AWS EC2)
+
+O sistema foi validado em ambiente Cloud utilizando AWS EC2, simulando
+um cenário corporativo real de deploy e operação contínua.
+
+A aplicação executa:
+
+-   API em serviço ativo\
+-   Banco de dados integrado\
+-   Modelo preditivo carregado em runtime\
+-   Comunicação entre backend e dashboard
+
+------------------------------------------------------------------------
+
 # 🏗 Estrutura do Projeto
 
-TotemMFlex/ ├── data/ ├── diagrams/ ├── document/ ├── hardware/ └── src/
-├── backend/ ├── dashboard/ ├── sensor_simulation/ ├── database/ └──
-ml_model/
+    TotemMFlex/
+    │
+    ├── data/
+    ├── diagrams/
+    ├── document/
+    ├── hardware/
+    └── src/
+        ├── backend/
+        ├── dashboard/
+        ├── sensor_simulation/
+        ├── database/
+        └── ml_model/
 
 ------------------------------------------------------------------------
 
-# ▶ Como Executar -- Local
+# ▶ Como Executar -- Ambiente Local
 
-venv`\Scripts`{=tex}`\activate  `{=tex} pip install -r requirements.txt\
-uvicorn src.backend.main:app --reload\
-python src/sensor_simulation/simulator.py\
+``` bash
+# Ativar ambiente virtual (Windows)
+venv\Scripts\activate
+
+# Instalar dependências
+pip install -r requirements.txt
+
+# Subir API
+uvicorn src/backend/main:app --reload
+
+# Rodar simulador
+python src/sensor_simulation/simulator.py
+
+# Rodar dashboard
 streamlit run src/dashboard/app.py
+```
 
 ------------------------------------------------------------------------
 
-# 📘 Evolução por Sprints
+# 📘 Histórico de Evolução por Sprints
 
--   Sprint 1 --- document/README_SPRINT1.md\
--   Sprint 2 --- document/README_SPRINT2.md\
--   Sprint 3 --- document/README_SPRINT3.md
+-   Sprint 1 → document/README_SPRINT1.md\
+-   Sprint 2 → document/README_SPRINT2.md\
+-   Sprint 3 → document/README_SPRINT3.md
 
 ------------------------------------------------------------------------
 
@@ -93,3 +131,7 @@ https://youtu.be/6F5Htntr5j8
 
 Sistema integrado validado localmente e em nuvem, com modelo preditivo,
 análise estatística e score operacional aplicado.
+
+O TotemMFlex consolida conceitos de engenharia de software, ciência de
+dados e arquitetura em nuvem, demonstrando aplicabilidade prática em
+ambiente corporativo.
