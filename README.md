@@ -32,99 +32,142 @@ https://github.com/lnosiqueira/TotemMFlex
 
 ---
 
-# 🧠 Visão Geral
+## Visão Geral
 
-O TotemMFlex representa a evolução do Totem-IA Educacional para um ecossistema corporativo inteligente, integrando coleta de dados, processamento analítico e visualização estratégica em tempo real.
+O TotemMFlex é um sistema inteligente que coleta interações simuladas de sensores, processa os dados utilizando Machine Learning e disponibiliza os resultados através de uma API REST.
 
-O sistema consolida:
+O sistema integra:
 
-- 📡 Simulação de sensores  
-- 🗃 Banco de dados estruturado (SQLite)  
-- 🤖 Modelo de Machine Learning (RandomForest)  
-- 🌐 API REST desenvolvida em FastAPI  
-- 📊 Dashboard interativo em Streamlit  
-- ☁ Deploy validado em ambiente Cloud (AWS EC2)  
-
-A arquitetura integra coleta, processamento e análise em um pipeline único e funcional.
+- Simulação de sensores
+- Persistência em banco SQLite
+- Machine Learning com Scikit‑Learn
+- API REST com FastAPI
+- Dashboard de visualização
 
 ---
 
-# 🔄 Pipeline Integrado
+## Pipeline
 
-Simulador → Banco de Dados → Modelo ML → API → Dashboard → Score Operacional
-
-Integração superior a 60% dos módulos exigidos pela Sprint 3.
+Sensor → API → Machine Learning → Banco de Dados → Histórico → Dashboard
 
 ---
 
-# ☁ Arquitetura em Nuvem (AWS EC2)
+## Estrutura do Projeto
 
-O sistema foi validado em ambiente Cloud utilizando AWS EC2, simulando um cenário corporativo real de deploy e operação contínua.
-
-A aplicação executa:
-
-- API em serviço ativo  
-- Banco de dados integrado  
-- Modelo preditivo carregado em runtime  
-- Comunicação entre backend e dashboard  
-
----
-
-# 🏗 Estrutura do Projeto
-
-```text
 TotemMFlex/
-│
-├── data/
-├── diagrams/
-├── document/
-├── hardware/
-└── src/
-    ├── backend/
-    ├── dashboard/
-    ├── sensor_simulation/
-    ├── database/
-    └── ml_model/
-```
+
+src/
+backend/
+routers/
+services/
+main.py
+
+database/
+create_db.py
+totem.db
+
+ml_model/
+train_model.py
+evaluate_model.py
+predict_model.py
+model.pkl
+
+sensor_simulation/
+simulator.py
+
+dashboard/
 
 ---
 
-# ▶ Como Executar – Ambiente Local
+## Tecnologias
 
-```bash
-# Ativar ambiente virtual (Windows)
+Python  
+FastAPI  
+SQLite  
+Scikit‑Learn  
+Streamlit  
+Uvicorn  
+Pandas
+
+---
+
+## Como Executar
+
+### Ativar ambiente virtual
+
 venv\Scripts\activate
 
-# Instalar dependências
+### Instalar dependências
+
 pip install -r requirements.txt
 
-# Subir API
+### Executar API
+
 uvicorn src.backend.main:app --reload
 
-# Rodar simulador
+API:
+
+http://127.0.0.1:8000
+
+Swagger:
+
+http://127.0.0.1:8000/docs
+
+---
+
+### Executar simulador
+
 python src/sensor_simulation/simulator.py
 
-# Rodar dashboard
-streamlit run src/dashboard/app.py
-```
+---
+
+### Treinar modelo
+
+python src/ml_model/train_model.py
 
 ---
 
-# 📘 Histórico de Evolução por Sprints
+## Evidências Sprint 3
 
-- [Sprint 1](document/README_SPRINT1.md)
-- [Sprint 2](document/README_SPRINT2.md)
-- [Sprint 3](document/README_SPRINT3.md) 
+API Status  
+document/sprint3/evidencias/00_swagger_status.png
+
+Predict Endpoint  
+document/sprint3/evidencias/01_swagger_predict.png
+
+Predict Response  
+document/sprint3/evidencias/02_swagger_predict_response.png
+
+Interactions  
+document/sprint3/evidencias/03_swagger_interactions.png
+
+Training  
+document/sprint3/evidencias/04_model_training.png
+
+Model Comparison  
+document/sprint3/evidencias/05_model_comparison.png
+
+SQLite Database  
+document/sprint3/evidencias/06_sqlite_data.png
+
+Project Structure  
+document/sprint3/evidencias/07_project_structure.png
 
 ---
 
-# 📹 Demonstração em Vídeo
+## Evolução
 
-https://youtu.be/6F5Htntr5j8
+Sprint 1 – Arquitetura inicial  
+Sprint 2 – API + banco de dados  
+Sprint 3 – Machine Learning integrado
 
 ---
 
-# 🏁 Conclusão
+## Conclusão
+
+O projeto demonstra um pipeline completo de dados:
+
+coleta → processamento → classificação → armazenamento → visualização
 
 Sistema integrado validado localmente e em nuvem, com modelo preditivo, análise estatística e score operacional aplicado.
 
