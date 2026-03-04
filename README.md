@@ -127,31 +127,53 @@ python src/ml_model/train_model.py
 
 ---
 
-## Evidências Sprint 3
+# 📊 Evidências da Sprint 3
 
-API Status  
-document/sprint3/evidencias/00_swagger_status.png
+## API em execução
 
-Predict Endpoint  
-document/sprint3/evidencias/01_swagger_predict.png
+![API Status](document/sprint3/evidencias/00_swagger_status.png)
 
-Predict Response  
-document/sprint3/evidencias/02_swagger_predict_response.png
+---
 
-Interactions  
-document/sprint3/evidencias/03_swagger_interactions.png
+## Endpoint de Predição
 
-Training  
-document/sprint3/evidencias/04_model_training.png
+![Predict](document/sprint3/evidencias/01_swagger_predict.png)
 
-Model Comparison  
-document/sprint3/evidencias/05_model_comparison.png
+---
 
-SQLite Database  
-document/sprint3/evidencias/06_sqlite_data.png
+## Resposta da Predição
 
-Project Structure  
-document/sprint3/evidencias/07_project_structure.png
+![Predict Response](document/sprint3/evidencias/02_swagger_predict_response.png)
+
+---
+
+## Histórico de Interações
+
+![Interactions](document/sprint3/evidencias/03_swagger_interactions.png)
+
+---
+
+## Treinamento do Modelo
+
+![Training](document/sprint3/evidencias/04_model_training.png)
+
+---
+
+## Comparação de Modelos
+
+![Model Comparison](document/sprint3/evidencias/05_model_comparison.png)
+
+---
+
+## Banco de Dados SQLite
+
+![Database](document/sprint3/evidencias/06_sqlite_data.png)
+
+---
+
+## Estrutura do Projeto
+
+![Project Structure](document/sprint3/evidencias/07_project_structure.png)
 
 ---
 

@@ -21,7 +21,8 @@ if df.empty:
     st.warning("Nenhum dado disponível.")
     st.stop()
 
-df["created_at"] = pd.to_datetime(df["created_at"])
+df["created_at"] = pd.to_datetime(df["created_at"], format="mixed", errors="coerce")
+df = df.dropna(subset=["created_at"])
 
 # =========================
 # COMPARATIVO (simples)

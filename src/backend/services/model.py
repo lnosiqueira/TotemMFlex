@@ -1,16 +1,18 @@
 import pickle
-import os
+import numpy as np
+from sklearn.base import BaseEstimator
 
 MODEL_PATH = "src/ml_model/model.pkl"
 
-def load_model():
-    if os.path.exists(MODEL_PATH):
-        return pickle.load(open(MODEL_PATH, "rb"))
-    return None
 
-def predict_value(model, value: float):
-    if model is None:
-        return "toque_longo" if value > 0.7 else "toque_curto"
-    return model.predict([[value]])[0]
+def load_model() -> BaseEstimator:
+    with open(MODEL_PATH, "rb") as f:
+        return pickle.load(f)
+
+
+def predict_value(model: BaseEstimator, valor: float) -> str:
+    x = np.array([[float(valor)]])
+    pred = model.predict(x)[0]
+    return str(pred)
 
 
