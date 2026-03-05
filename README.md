@@ -8,7 +8,13 @@
 
 Sistema experimental de totem inteligente com sensores, API REST e classificação de interações utilizando Machine Learning.
 
----
+## 🧠 Arquitetura do Sistema
+
+O diagrama abaixo apresenta a arquitetura e o fluxo de funcionamento do sistema **TotemMFlex**, desde a simulação do sensor até o armazenamento das interações e disponibilização via API.
+
+Sensor → API → Machine Learning → Banco de Dados → Consulta de Interações
+
+![Arquitetura do Sistema TotemMFlex](document/diagrams/arquitetura_totemflex.png)
 
 ## 📘 Documentação Técnica Completa
 
