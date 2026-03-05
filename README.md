@@ -183,6 +183,9 @@ python src/ml_model/train_model.py
 
 ## 📚 Histórico de Evolução por Sprints
 
+As sprints anteriores estão disponíveis nos documentos abaixo.
+Algumas evidências visuais podem não aparecer devido à reorganização da estrutura do projeto durante a evolução do sistema.
+
 | Sprint | Descrição | Documento |
 |------|------|------|
 | Sprint 1 | Arquitetura inicial do sistema | [Ver Sprint](document/sprint1/ENTREGA_SPRINT1.md) |
