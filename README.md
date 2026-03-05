@@ -169,6 +169,18 @@ python src/ml_model/train_model.py
 
 ---
 
+# 📊 Avaliação do Modelo
+
+## Matriz de Confusão
+
+![Matriz](document/sprint3/matriz_confusao_sprint3.png)
+
+## Comparação de Modelos
+
+![Comparação](document/sprint3/modelo_de_comparacao.png)
+
+---
+
 ## Evolução
 
 Sprint 1 – Arquitetura inicial  
