@@ -130,28 +130,6 @@ python src/ml_model/train_model.py
 # 📊 Evidências da Sprint 3
 
 ## API em execução
-![API Status](document/sprint3/evidencias/00_swagger_status)
-
----
-
-## Endpoint de Predição
-![Predict](document/sprint3/evidencias/01_swagger_predict)
-
----
-
-## Resposta da Predição
-![Predict Response](document/sprint3/evidencias/02_swagger_predict_response)
-
----
-
-## Histórico de Interações
-![Interactions](document/sprint3/evidencias/03_swagger_interactions)
-
----
-
-# 📊 Evidências da Sprint 3
-
-## API em execução
 ![API Status](document/sprint3/evidencias/00_swagger_status.png)
 
 ---
