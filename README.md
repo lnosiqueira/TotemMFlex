@@ -135,37 +135,37 @@ python src/ml_model/train_model.py
 ---
 
 ## Endpoint de Predição
-![Predict](document/sprint3/evidencias/01_swagger_predict.png)
+![Predict](document/sprint3/evidencias/01_swagger_predict.PNG)
 
 ---
 
 ## Resposta da Predição
-![Predict Response](document/sprint3/evidencias/02_swagger_predict_response.png)
+![Predict Response](document/sprint3/evidencias/02_swagger_predict_response.PNG)
 
 ---
 
 ## Histórico de Interações
-![Interactions](document/sprint3/evidencias/03_swagger_interactions.png)
+![Interactions](document/sprint3/evidencias/03_swagger_interactions.PNG)
 
 ---
 
 ## Treinamento do Modelo
-![Training](document/sprint3/evidencias/04_model_training.png)
+![Training](document/sprint3/evidencias/04_model_training.PNG)
 
 ---
 
 ## Comparação de Modelos
-![Model Comparison](document/sprint3/evidencias/05_model_comparison.png)
+![Model Comparison](document/sprint3/evidencias/05_model_comparison.PNG)
 
 ---
 
 ## Banco SQLite
-![Database](document/sprint3/evidencias/06_sqlite_data.png)
+![Database](document/sprint3/evidencias/06_sqlite_data.PNG)
 
 ---
 
 ## Estrutura do Projeto
-![Project Structure](document/sprint3/evidencias/07_project_structure.png)
+![Project Structure](document/sprint3/evidencias/07_project_structure.PNG)
 
 ---
 
