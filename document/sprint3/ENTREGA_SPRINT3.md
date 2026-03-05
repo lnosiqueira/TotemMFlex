@@ -187,7 +187,7 @@ python src/ml_model/train_model.py
 |------|------|------|
 | Sprint 1 | Arquitetura inicial do sistema | [Ver Sprint](document/sprint1/ENTREGA_SPRINT1.md) |
 | Sprint 2 | API + banco de dados | [Ver Sprint](document/sprint2/ENTREGA_SPRINT2.md) |
-| Sprint 3 | Machine Learning integrado | [Ver Sprint](document/sprint3/ENTREGA_SPRINT3.md) |
+| Sprint 3 | Machine Learning integrado | [Ver Sprint](document/sprint3/README_SPRINT3.md) |
 
 ---
 
