@@ -10,6 +10,27 @@ Sistema experimental de totem inteligente com sensores, API REST e classificaç�
 
 ---
 
+## 🧠 Arquitetura do Sistema
+
+O diagrama abaixo representa o fluxo completo do sistema **TotemMFlex**, desde a simulação do sensor até o armazenamento das interações e disponibilização via API.
+
+```mermaid
+flowchart LR
+
+A[Sensor Simulado] --> B[API FastAPI]
+
+B --> C[Modelo de Machine Learning]
+
+C --> D[Classificação da Interação]
+
+D --> E[Registro no Banco SQLite]
+
+E --> F[Endpoint /interactions]
+
+F --> G[Swagger / Consulta de Dados]
+
+---
+
 ## 📘 Documentação Técnica Completa
 
 A documentação técnica detalhada da Sprint 3, incluindo arquitetura, Machine Learning, API, banco de dados e manual de execução do projeto, está disponível abaixo:
