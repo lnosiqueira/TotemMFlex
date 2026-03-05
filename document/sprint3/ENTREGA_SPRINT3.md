@@ -4,7 +4,19 @@
   <img src="src/assets/logo-fiap.png" width="40%" alt="FIAP">
 </p>
 
-# 🟩 TotemMFlex – Sistema Inteligente de Engajamento Corporativo
+# TotemMFlex
+
+Sistema experimental de totem inteligente com sensores, API REST e classificação de interações utilizando Machine Learning.
+
+---
+
+## 📘 Documentação Técnica Completa
+
+A documentação técnica detalhada da Sprint 3, incluindo arquitetura, Machine Learning, API, banco de dados e manual de execução do projeto, está disponível abaixo:
+
+👉 **[Abrir Documentação Técnica do Projeto](document/sprint3/DOCUMENTACAO_TECNICA_TOTEMFLEX_SPRINT3.md)**
+
+---
 
 **Challenge FlexMídia — FIAP 2025**
 
@@ -183,11 +195,14 @@ python src/ml_model/train_model.py
 
 ## 📚 Histórico de Evolução por Sprints
 
+As sprints anteriores estão disponíveis nos documentos abaixo.
+Algumas evidências visuais podem não aparecer devido à reorganização da estrutura do projeto durante a evolução do sistema.
+
 | Sprint | Descrição | Documento |
 |------|------|------|
 | Sprint 1 | Arquitetura inicial do sistema | [Ver Sprint](document/sprint1/ENTREGA_SPRINT1.md) |
 | Sprint 2 | API + banco de dados | [Ver Sprint](document/sprint2/ENTREGA_SPRINT2.md) |
-| Sprint 3 | Machine Learning integrado | [Ver Sprint](document/sprint3/README_SPRINT3.md) |
+| Sprint 3 | Machine Learning integrado + Documentação Técnica | [Ver Sprint](document/sprint3/ENTREGA_SPRINT3.md) |
 
 ---
 
