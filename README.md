@@ -1,7 +1,7 @@
 # 🟦 FIAP - Faculdade de Informática e Administração Paulista
 
 <p align="center">
-  <img src="src/assets/logo-fiap.png" width="100%" alt="FIAP">
+  <img src="src/assets/logo-fiap.png" width="80%" alt="FIAP">
 </p>
 
 # TotemMFlex
