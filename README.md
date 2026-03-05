@@ -177,7 +177,7 @@ python src/ml_model/train_model.py
 
 ## Comparação de Modelos
 
-![Comparação](document/sprint3/modelo_de_comparacao.png)
+![Comparação](document/sprint3/modelo_de_comparacao.PNG)
 
 ---
 
