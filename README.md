@@ -181,11 +181,13 @@ python src/ml_model/train_model.py
 
 ---
 
-# 📘 Histórico de Evolução por Sprints
+## 📚 Histórico de Evolução por Sprints
 
-- [Sprint 1](document/sprint1/README_SPRINT1.md)
-- [Sprint 2](document/sprint2/README_SPRINT2.md)
-- [Sprint 3](document/sprint3/README_SPRINT3.md)
+| Sprint | Descrição | Documento |
+|------|------|------|
+| Sprint 1 | Arquitetura inicial do sistema | [Ver Sprint](document/sprint1/ENTREGA_SPRINT1.md) |
+| Sprint 2 | API + banco de dados | [Ver Sprint](document/sprint2/ENTREGA_SPRINT2.md) |
+| Sprint 3 | Machine Learning integrado | [Ver Sprint](document/sprint3/README_SPRINT3.md) |
 
 ---
 
@@ -198,3 +200,5 @@ coleta → processamento → classificação → armazenamento → visualizaçã
 Sistema integrado validado localmente e em nuvem, com modelo preditivo, análise estatística e score operacional aplicado.
 
 O TotemMFlex consolida conceitos de engenharia de software, ciência de dados e arquitetura em nuvem, demonstrando aplicabilidade prática em ambiente corporativo.
+
+Projeto desenvolvido no Challenge FIAP em parceria com a FlexMídia, demonstrando a construção de um pipeline completo de coleta, processamento e análise de dados com Machine Learning.
