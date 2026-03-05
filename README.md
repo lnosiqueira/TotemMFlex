@@ -184,8 +184,8 @@ python src/ml_model/train_model.py
 # 📘 Histórico de Evolução por Sprints
 
 - [Sprint 1](document/sprint1/README_SPRINT1.md)
-- [Sprint 2](document/README_SPRINT2.md)
-- [Sprint 3](document/README_SPRINT3.md)
+- [Sprint 2](document/sprint2/README_SPRINT2.md)
+- [Sprint 3](document/sprint3/README_SPRINT3.md)
 
 ---
 
