@@ -10,6 +10,14 @@ Sistema experimental de totem inteligente com sensores, API REST e classificaç�
 
 ---
 
+## 🎥 Vídeo de Apresentação (Sprint 3)
+
+Assista ao vídeo demonstrativo com a execução ponta a ponta do projeto, incluindo o setup do ambiente, treinamento do modelo de Machine Learning e o teste de persistência no banco de dados via API:
+
+👉 **[Assistir à Demonstração do TotemMFlex](https://youtu.be/yAjF-71j8UA)**
+
+---
+
 ## Estrutura do Projeto
 
 A organização deste repositório segue uma estrutura própria desenvolvida para o projeto TotemMFlex, mantendo separação entre código-fonte, documentação e evidências das sprints.
