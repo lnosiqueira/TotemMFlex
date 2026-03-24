@@ -12,6 +12,10 @@ init_db()
 def status():
     return {"status": "ok", "service": "TotemMFlex API", "version": "3.0"}
 
+@app.get("/")
+def root():
+    return {"message": "TotemMFlex API is running 🚀"}
+
 app.include_router(predict_router)
 app.include_router(interactions_router)
 
