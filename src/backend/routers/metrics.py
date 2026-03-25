@@ -8,21 +8,24 @@ def get_metrics():
     conn = get_db_connection()
     cursor = conn.cursor()
 
+    # total de interações
     cursor.execute("SELECT COUNT(*) FROM interactions")
     total = cursor.fetchone()[0]
 
-    cursor.execute("SELECT AVG(valor) FROM interactions")
+    # média dos valores
+    cursor.execute("SELECT AVG(value) FROM interactions")
     media = cursor.fetchone()[0] or 0
 
+    # classificação mais comum (CORRIGIDO AQUI 👇)
     cursor.execute("""
-        SELECT classificacao, COUNT(*) as count 
-        FROM interactions 
-        GROUP BY classificacao 
-        ORDER BY count DESC 
+        SELECT prediction, COUNT(*) as count
+        FROM interactions
+        GROUP BY prediction
+        ORDER BY count DESC
         LIMIT 1
     """)
-    result = cursor.fetchone()
 
+    result = cursor.fetchone()
     mais_comum = result[0] if result else "N/A"
 
     conn.close()
