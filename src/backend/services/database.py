@@ -42,3 +42,30 @@ def save_interaction(valor: float, pred: str, sensor_type: str = "sensor_simulad
 
     conn.commit()
     conn.close()
+
+
+def get_interactions():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    SELECT id, sensor_type, value, prediction, created_at
+    FROM interactions
+    ORDER BY created_at DESC
+    """)
+
+    rows = cursor.fetchall()
+
+    interactions = []
+    for row in rows:
+        interactions.append({
+            "id": row[0],
+            "sensor_type": row[1],
+            "valor": row[2],
+            "classificacao": row[3],
+            "data": row[4]
+        })
+
+    conn.close()
+
+    return interactions
