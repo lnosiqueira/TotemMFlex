@@ -5,15 +5,16 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import time
 
-if st.toggle("🔄 Atualização automática"):
-    time.sleep(3)
-    st.rerun()
-
 # CONFIGURAÇÃO (SEMPRE PRIMEIRO)
 st.set_page_config(page_title="TotemMFlex Dashboard", layout="wide")
 
 # URL da API
 API_URL = "https://totemmflex.onrender.com"
+
+# AUTO REFRESH GLOBAL
+if st.toggle("🔄 Atualização automática"):
+    time.sleep(3)
+    st.rerun()
 
 st.title("📊 TotemMFlex - Dashboard Inteligente")
 
@@ -35,21 +36,20 @@ if col1.button("🚀 Gerar nova interação"):
         )
 
         if response.status_code == 200:
-    st.success(f"Interação gerada com valor {valor}")
-    st.rerun()
-else:
-    st.error("Erro ao enviar para API")
+            st.success(f"Interação gerada com valor {valor}")
+            st.rerun()
+        else:
+            st.error("Erro ao enviar para API")
 
     except Exception as e:
         st.error(f"Erro: {e}")
 
-# AUTO SIMULAÇÃO CONTROLADA
+# AUTO SIMULAÇÃO
 auto = col2.toggle("🔁 Simulação automática")
 
 if auto:
     valor = round(random.uniform(0, 100), 2)
     requests.post(f"{API_URL}/predict", json={"valor": valor})
-    
     time.sleep(2)
     st.rerun()
 
@@ -77,29 +77,27 @@ try:
     col3.metric("Mais Comum", metrics.get("mais_comum", "N/A"))
 
     # =========================
-    # INSIGHTS AUTOMÁTICOS
+    # INSIGHTS
     # =========================
     st.subheader("🧠 Insights Inteligentes")
 
-if not df.empty:
+    if not df.empty:
+        media = df["valor"].mean()
+        mais_comum = df["classificacao"].value_counts().idxmax()
 
-    media = df["valor"].mean()
-    mais_comum = df["classificacao"].value_counts().idxmax()
+        if media < 0.4:
+            st.warning("⚠️ Baixo engajamento detectado")
+        elif media < 0.7:
+            st.info("ℹ️ Engajamento moderado")
+        else:
+            st.success("🚀 Alto nível de interação")
 
-    if media < 0.4:
-        st.warning("⚠️ Baixo engajamento detectado")
-    elif media < 0.7:
-        st.info("ℹ️ Engajamento moderado")
-    else:
-        st.success("🚀 Alto nível de interação")
+        st.write(f"🔥 Padrão dominante: {mais_comum}")
 
-    st.write(f"🔥 Padrão dominante: {mais_comum}")
+        df["hora"] = pd.to_datetime(df["data"]).dt.hour
+        pico = df["hora"].value_counts().idxmax()
 
-    # horário mais ativo
-    df["hora"] = pd.to_datetime(df["data"]).dt.hour
-    pico = df["hora"].value_counts().idxmax()
-
-    st.write(f"⏰ Horário de maior atividade: {pico}h")
+        st.write(f"⏰ Horário de maior atividade: {pico}h")
 
     # =========================
     # TABELA
