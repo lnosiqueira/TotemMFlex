@@ -1,7 +1,9 @@
 import sqlite3
 from datetime import datetime
 
-DB_PATH = "totem.db"
+import os
+
+DB_PATH = os.path.join(os.getcwd(), "totem.db")
 
 
 def get_db_connection():
@@ -13,6 +15,8 @@ def get_db_connection():
 def init_db():
     conn = get_db_connection()
     cursor = conn.cursor()
+
+    print("🔥 Inicializando banco...")
 
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS interactions (
@@ -26,6 +30,8 @@ def init_db():
 
     conn.commit()
     conn.close()
+
+    print("✅ Banco pronto")
 
 
 # 🔥 ESSA FUNÇÃO ESTAVA FALTANDO
