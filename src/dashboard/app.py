@@ -12,9 +12,7 @@ st.set_page_config(page_title="TotemMFlex Dashboard", layout="wide")
 API_URL = "https://totemmflex.onrender.com"
 
 # AUTO REFRESH GLOBAL
-if st.toggle("🔄 Atualização automática"):
-    time.sleep(3)
-    st.rerun()
+auto = col2.toggle("🔁 Simulação automática")
 
 st.title("📊 TotemMFlex - Dashboard Inteligente")
 
@@ -60,8 +58,17 @@ try:
     metrics_response = requests.get(f"{API_URL}/metrics")
     interactions_response = requests.get(f"{API_URL}/interactions")
 
+    if metrics_response.status_code == 200:
     metrics = metrics_response.json()
+else:
+    st.error("Erro ao buscar métricas da API")
+    st.stop()
+
+if interactions_response.status_code == 200:
     data = interactions_response.json()
+else:
+    st.error("Erro ao buscar interações da API")
+    st.stop()
 
     df = pd.DataFrame(data)
 
