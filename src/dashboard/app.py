@@ -38,7 +38,7 @@ if col1.button("🚀 Gerar nova interação"):
     st.success(f"Interação gerada com valor {valor}")
     st.rerun()
 else:
-    st.error(f"Erro {response.status_code}: {response.text}")
+    st.error("Erro ao enviar para API")
 
     except Exception as e:
         st.error(f"Erro: {e}")
