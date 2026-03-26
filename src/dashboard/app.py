@@ -77,6 +77,31 @@ try:
     col3.metric("Mais Comum", metrics.get("mais_comum", "N/A"))
 
     # =========================
+    # INSIGHTS AUTOMÁTICOS
+    # =========================
+    st.subheader("🧠 Insights Inteligentes")
+
+if not df.empty:
+
+    media = df["valor"].mean()
+    mais_comum = df["classificacao"].value_counts().idxmax()
+
+    if media < 0.4:
+        st.warning("⚠️ Baixo engajamento detectado")
+    elif media < 0.7:
+        st.info("ℹ️ Engajamento moderado")
+    else:
+        st.success("🚀 Alto nível de interação")
+
+    st.write(f"🔥 Padrão dominante: {mais_comum}")
+
+    # horário mais ativo
+    df["hora"] = pd.to_datetime(df["data"]).dt.hour
+    pico = df["hora"].value_counts().idxmax()
+
+    st.write(f"⏰ Horário de maior atividade: {pico}h")
+
+    # =========================
     # TABELA
     # =========================
     if df.empty:
