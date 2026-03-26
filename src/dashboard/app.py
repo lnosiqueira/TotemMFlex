@@ -97,8 +97,8 @@ try:
 
         st.write(f"🔥 Padrão dominante: {mais_comum}")
 
-        df["hora"] = pd.to_datetime(df["data"]).dt.hour
-        pico = df["hora"].value_counts().idxmax()
+        df["data"] = pd.to_datetime(df["data"], errors="coerce")
+        df["hora"] = df["data"].dt.hour
 
         st.write(f"⏰ Horário de maior atividade: {pico}h")
 
