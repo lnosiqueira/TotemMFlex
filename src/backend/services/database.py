@@ -1,22 +1,16 @@
 import sqlite3
-from datetime import datetime
 
-import os
-
-DB_PATH = os.path.join(os.getcwd(), "totem.db")
-
+DB_PATH = "database/totemflex.db"
 
 def get_db_connection():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
 
-
 def init_db():
+    print("🔥 Inicializando banco...")
     conn = get_db_connection()
     cursor = conn.cursor()
-
-    print("🔥 Inicializando banco...")
 
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS interactions (
@@ -30,11 +24,8 @@ def init_db():
 
     conn.commit()
     conn.close()
-
     print("✅ Banco pronto")
 
-
-# 🔥 ESSA FUNÇÃO ESTAVA FALTANDO
 def insert_interaction(data):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -52,15 +43,13 @@ def insert_interaction(data):
     conn.commit()
     conn.close()
 
-# 🔥 OPCIONAL MAS IMPORTANTE
-def insert_interaction(sensor_type, valor, classificacao):
+def get_interactions():
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    cursor.execute("""
-        INSERT INTO interactions (sensor_type, valor, classificacao, data)
-        VALUES (?, ?, ?, ?)
-    """, (sensor_type, valor, classificacao, datetime.now().isoformat()))
+    cursor.execute("SELECT * FROM interactions")
+    rows = cursor.fetchall()
 
-    conn.commit()
     conn.close()
+
+    return [dict(row) for row in rows]
