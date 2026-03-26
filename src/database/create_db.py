@@ -1,1 +1,0 @@
-print('Criação do banco placeholder')
