@@ -1,8 +1,9 @@
 import os
 import sqlite3
 
+# caminho absoluto garantido
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.path.join(BASE_DIR, "../../../database/totemflex.db")
+DB_PATH = os.path.join(BASE_DIR, "totemflex.db")  # 🔥 AGORA FICA NO MESMO LUGAR DO SCRIPT
 
 def get_db_connection():
     conn = sqlite3.connect(DB_PATH)
@@ -11,6 +12,7 @@ def get_db_connection():
 
 def init_db():
     print("🔥 Inicializando banco...")
+
     conn = get_db_connection()
     cursor = conn.cursor()
 
@@ -26,7 +28,8 @@ def init_db():
 
     conn.commit()
     conn.close()
-    print("✅ Banco pronto")
+
+    print("✅ Banco criado automaticamente")
 
 def insert_interaction(data):
     conn = get_db_connection()
