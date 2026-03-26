@@ -5,26 +5,30 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import time
 
+# =========================
 # CONFIGURAÇÃO (SEMPRE PRIMEIRO)
+# =========================
 st.set_page_config(page_title="TotemMFlex Dashboard", layout="wide")
 
-# URL da API
 API_URL = "https://totemmflex.onrender.com"
-
-# AUTO REFRESH GLOBAL
-auto = col2.toggle("🔁 Simulação automática")
 
 st.title("📊 TotemMFlex - Dashboard Inteligente")
 
 # =========================
-# SIMULAÇÃO
+# ATUALIZAÇÃO AUTOMÁTICA (ÚNICO TOGGLE)
+# =========================
+auto_refresh = st.toggle("🔄 Atualização automática")
+
+if auto_refresh:
+    time.sleep(3)
+    st.rerun()
+
+# =========================
+# SIMULAÇÃO MANUAL
 # =========================
 st.subheader("🎮 Simulação em Tempo Real")
 
-col1, col2 = st.columns(2)
-
-# BOTÃO MANUAL
-if col1.button("🚀 Gerar nova interação"):
+if st.button("🚀 Gerar nova interação"):
     valor = round(random.uniform(0, 100), 2)
 
     try:
@@ -35,6 +39,7 @@ if col1.button("🚀 Gerar nova interação"):
 
         if response.status_code == 200:
             st.success(f"Interação gerada com valor {valor}")
+            time.sleep(1)
             st.rerun()
         else:
             st.error("Erro ao enviar para API")
@@ -42,33 +47,24 @@ if col1.button("🚀 Gerar nova interação"):
     except Exception as e:
         st.error(f"Erro: {e}")
 
-# AUTO SIMULAÇÃO
-auto = col2.toggle("🔁 Simulação automática")
-
-if auto:
-    valor = round(random.uniform(0, 100), 2)
-    requests.post(f"{API_URL}/predict", json={"valor": valor})
-    time.sleep(2)
-    st.rerun()
-
 # =========================
-# BUSCAR DADOS
+# BUSCAR DADOS DA API
 # =========================
 try:
     metrics_response = requests.get(f"{API_URL}/metrics")
     interactions_response = requests.get(f"{API_URL}/interactions")
 
-    if metrics_response.status_code == 200:
-    metrics = metrics_response.json()
-else:
-    st.error("Erro ao buscar métricas da API")
-    st.stop()
+    # validação API
+    if metrics_response.status_code != 200:
+        st.error("Erro ao buscar métricas")
+        st.stop()
 
-if interactions_response.status_code == 200:
+    if interactions_response.status_code != 200:
+        st.error("Erro ao buscar interações")
+        st.stop()
+
+    metrics = metrics_response.json()
     data = interactions_response.json()
-else:
-    st.error("Erro ao buscar interações da API")
-    st.stop()
 
     df = pd.DataFrame(data)
 
@@ -86,9 +82,9 @@ else:
     # =========================
     # INSIGHTS
     # =========================
-    st.subheader("🧠 Insights Inteligentes")
-
     if not df.empty:
+        st.subheader("🧠 Insights Inteligentes")
+
         media = df["valor"].mean()
         mais_comum = df["classificacao"].value_counts().idxmax()
 
