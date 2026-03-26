@@ -1,37 +1,50 @@
 from fastapi import APIRouter
-from src.backend.services.database import get_db_connection
+import sqlite3
 
 router = APIRouter()
 
+DB_PATH = "totem.db"
+
+
 @router.get("/metrics")
 def get_metrics():
-    conn = get_db_connection()
-    cursor = conn.cursor()
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
 
-    # total de interações
-    cursor.execute("SELECT COUNT(*) FROM interactions")
-    total = cursor.fetchone()[0]
+        # total
+        cursor.execute("SELECT COUNT(*) FROM interactions")
+        total = cursor.fetchone()[0]
 
-    # média dos valores
-    cursor.execute('SELECT AVG(valor) FROM interactions')
-    media = cursor.fetchone()[0] or 0
+        # agrupado
+        cursor.execute("""
+            SELECT classificacao, COUNT(*) 
+            FROM interactions 
+            GROUP BY classificacao
+        """)
+        rows = cursor.fetchall()
 
-    # classificação mais comum (CORRIGIDO AQUI 👇)
-    cursor.execute("""
-    SELECT classificacao, COUNT(*) as count
-    FROM interactions
-    GROUP BY classificacao
-    ORDER BY count DESC
-    LIMIT 1
-""")
+        conn.close()
 
-    result = cursor.fetchone()
-    mais_comum = result[0] if result else "N/A"
+        classificacoes = {
+            "toque_curto": 0,
+            "toque_longo": 0
+        }
 
-    conn.close()
+        for row in rows:
+            classificacoes[row[0]] = row[1]
 
-    return {
-        "total_interacoes": total,
-        "media_valor": round(media, 2),
-        "mais_comum": mais_comum
-    }
+        return {
+            "total_interacoes": total,
+            "toque_curto": classificacoes["toque_curto"],
+            "toque_longo": classificacoes["toque_longo"]
+        }
+
+    except Exception as e:
+        # 🔥 NUNCA MAIS QUEBRA
+        return {
+            "total_interacoes": 0,
+            "toque_curto": 0,
+            "toque_longo": 0,
+            "error": str(e)
+        }
