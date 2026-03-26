@@ -5,6 +5,10 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import time
 
+if st.toggle("🔄 Atualização automática"):
+    time.sleep(3)
+    st.rerun()
+
 # CONFIGURAÇÃO (SEMPRE PRIMEIRO)
 st.set_page_config(page_title="TotemMFlex Dashboard", layout="wide")
 
@@ -31,10 +35,10 @@ if col1.button("🚀 Gerar nova interação"):
         )
 
         if response.status_code == 200:
-            st.success(f"Interação gerada: {valor}")
-            st.rerun()
-        else:
-            st.error("Erro ao enviar para API")
+    st.success(f"Interação gerada com valor {valor}")
+    st.rerun()
+else:
+    st.error(f"Erro {response.status_code}: {response.text}")
 
     except Exception as e:
         st.error(f"Erro: {e}")
