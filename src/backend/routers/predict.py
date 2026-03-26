@@ -1,59 +1,35 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-import sqlite3
+import random
 from datetime import datetime
+from src.backend.services.database import insert_interaction
 
-router = APIRouter()
+router = APIRouter(prefix="/predict", tags=["Predict"])
 
-# =========================
-# MODELO DE ENTRADA
-# =========================
 class InputData(BaseModel):
     valor: float
 
-
-# =========================
-# FUNÇÃO PARA SALVAR NO BANCO
-# =========================
-def salvar_interacao(valor, classificacao):
-    conn = sqlite3.connect("src/database/totem.db")
-    cursor = conn.cursor()
-
-    cursor.execute("""
-        INSERT INTO interactions (sensor_type, valor, classificacao, data)
-        VALUES (?, ?, ?, ?)
-    """, ("sensor_simulado", valor, classificacao, datetime.now()))
-
-    conn.commit()
-    conn.close()
-
-
-# =========================
-# ENDPOINT PRINCIPAL
-# =========================
-@router.post("/predict")
+@router.post("/")
 def predict(data: InputData):
+
     valor = data.valor
 
-    # =========================
-    # CLASSIFICAÇÃO
-    # =========================
-    if valor < 30:
+    if valor < 0.5:
         classificacao = "toque_curto"
-    elif valor < 70:
-        classificacao = "toque_medio"
     else:
         classificacao = "toque_longo"
 
-    # =========================
-    # SALVAR NO BANCO 🔥
-    # =========================
-    salvar_interacao(valor, classificacao)
+    nova_interacao = {
+        "sensor_type": "api",
+        "valor": valor,
+        "classificacao": classificacao,
+        "data": datetime.now().isoformat()
+    }
 
-    # =========================
-    # RETORNO
-    # =========================
+    insert_interaction(nova_interacao)
+
     return {
-        "valor_sensor": valor,
-        "classificacao": classificacao
+        "status": "ok",
+        "classificacao": classificacao,
+        "valor": valor
     }

@@ -35,17 +35,22 @@ def init_db():
 
 
 # 🔥 ESSA FUNÇÃO ESTAVA FALTANDO
-def get_interactions():
+def insert_interaction(data):
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT * FROM interactions ORDER BY id DESC")
-    rows = cursor.fetchall()
+    cursor.execute("""
+        INSERT INTO interactions (sensor_type, valor, classificacao, data)
+        VALUES (?, ?, ?, ?)
+    """, (
+        data["sensor_type"],
+        data["valor"],
+        data["classificacao"],
+        data["data"]
+    ))
 
+    conn.commit()
     conn.close()
-
-    return [dict(row) for row in rows]
-
 
 # 🔥 OPCIONAL MAS IMPORTANTE
 def insert_interaction(sensor_type, valor, classificacao):
