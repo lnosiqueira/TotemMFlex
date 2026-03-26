@@ -32,17 +32,37 @@ if st.button("🚀 Gerar nova interação"):
     valor = round(random.uniform(0, 100), 2)
 
     try:
+        # 1️⃣ chama a IA
         response = requests.post(
             f"{API_URL}/predict",
             json={"valor": valor}
         )
 
         if response.status_code == 200:
-            st.success(f"Interação gerada com valor {valor}")
-            time.sleep(1)
-            st.rerun()
+            result = response.json()
+
+            classificacao = result.get("classificacao")
+
+            # 2️⃣ salva no banco
+            save_response = requests.post(
+                f"{API_URL}/interactions",
+                json={
+                    "sensor_type": "dashboard",
+                    "valor": valor,
+                    "classificacao": classificacao,
+                    "data": pd.Timestamp.now().isoformat()
+                }
+            )
+
+            if save_response.status_code == 200:
+                st.success(f"Interação registrada! ({classificacao})")
+                time.sleep(1)
+                st.rerun()
+            else:
+                st.error("Erro ao salvar interação")
+
         else:
-            st.error("Erro ao enviar para API")
+            st.error("Erro ao processar previsão")
 
     except Exception as e:
         st.error(f"Erro: {e}")
