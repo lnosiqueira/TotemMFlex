@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 import pandas as pd
 import plotly.express as px
-from streamlit_autorefresh import st_autorefresh
+import time
 
 # =========================
 # CONFIG
@@ -12,11 +12,8 @@ st.set_page_config(
     layout="wide"
 )
 
-# Auto-refresh a cada 5 segundos
-st_autorefresh(interval=5000, key="refresh")
-
 # =========================
-# CSS (AJUSTADO PARA HIERARQUIA VISUAL)
+# CSS (LAYOUT MELHORADO)
 # =========================
 st.markdown("""
 <style>
@@ -82,7 +79,7 @@ if st.button("⚡ Gerar interação"):
     st.success("Interação enviada!")
 
 # =========================
-# CACHE DA API
+# CACHE DA API (SEGURO NO CLOUD)
 # =========================
 @st.cache_data(ttl=5)
 def load_data():
@@ -95,7 +92,8 @@ df = pd.DataFrame(data)
 
 if df.empty:
     st.warning("Sem dados ainda")
-    st.stop()
+    time.sleep(5)
+    st.experimental_rerun()
 
 df["data"] = pd.to_datetime(df["data"])
 
@@ -159,7 +157,7 @@ fig.update_layout(
 st.plotly_chart(fig, use_container_width=True)
 
 # =========================
-# DASHBOARD INTELIGENTE (INSIGHTS AUTOMÁTICOS)
+# DASHBOARD INTELIGENTE
 # =========================
 hora_pico = graf.sort_values("qtd", ascending=False).iloc[0]["hora"]
 
@@ -176,7 +174,7 @@ else:
     st.warning("⚠ Engajamento BAIXO — revisar posicionamento ou interface do totem.")
 
 # =========================
-# DISTRIBUIÇÃO DE INTERAÇÕES
+# DISTRIBUIÇÃO
 # =========================
 st.markdown("## 📊 Tipos de Interação")
 
@@ -197,3 +195,9 @@ fig2.update_layout(
 )
 
 st.plotly_chart(fig2, use_container_width=True)
+
+# =========================
+# AUTO-REFRESH (STREAMLIT PURO)
+# =========================
+time.sleep(5)
+st.experimental_rerun()
