@@ -2,7 +2,6 @@ import streamlit as st
 import requests
 import pandas as pd
 import plotly.express as px
-import time
 
 # =========================
 # CONFIG
@@ -16,59 +15,55 @@ API_URL = "https://totemmflex.onrender.com/interactions/"
 PREDICT_URL = "https://totemmflex.onrender.com/predict/"
 
 # =========================
-# CSS PREMIUM
+# CSS GLOBAL (LIGHT + DARK OK)
 # =========================
 st.markdown("""
 <style>
-body {
-    background-color: #0b1120;
-    color: white;
+
+/* RESET VISUAL */
+html, body, [class*="css"]  {
+    font-family: 'Segoe UI', sans-serif;
 }
 
-.block-container {
-    padding-top: 2rem;
-}
-
-/* TITULO */
+/* HEADER */
 .title {
     font-size: 48px;
-    font-weight: bold;
-    background: linear-gradient(90deg, #38bdf8, #6366f1);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    font-weight: 800;
 }
 
-/* CARD */
+/* CARD BASE */
 .card {
-    background: linear-gradient(135deg, #111827, #1e293b);
-    padding: 20px;
+    padding: 25px;
     border-radius: 20px;
-    box-shadow: 0 0 25px rgba(59,130,246,0.2);
-    transition: 0.3s;
+    color: white;
+    background: linear-gradient(135deg, #6366f1, #38bdf8);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 }
 
-.card:hover {
-    transform: scale(1.02);
-    box-shadow: 0 0 40px rgba(59,130,246,0.4);
-}
-
-/* KPI GRANDE */
+/* KPI */
 .kpi-main {
-    font-size: 50px;
+    font-size: 40px;
     font-weight: bold;
 }
 
 .kpi-label {
-    opacity: 0.7;
+    opacity: 0.8;
 }
 
 /* BOTÃO */
 .stButton>button {
-    background: linear-gradient(90deg, #38bdf8, #6366f1);
+    background: linear-gradient(90deg, #6366f1, #38bdf8);
     color: white;
     border-radius: 12px;
     padding: 10px 20px;
     border: none;
+}
+
+/* GARANTE VISUAL EM LIGHT MODE */
+@media (prefers-color-scheme: light) {
+    .card {
+        color: white !important;
+    }
 }
 
 </style>
@@ -77,38 +72,53 @@ body {
 # =========================
 # HEADER
 # =========================
-st.markdown('<div class="title">🚀 TotemMFlex Dashboard</div>', unsafe_allow_html=True)
+st.markdown("""
+<h1 class='title'>
+🚀 TotemMFlex <span style='color:#38bdf8;'>Analytics</span>
+</h1>
+""", unsafe_allow_html=True)
+
 st.caption("Monitoramento inteligente em tempo real")
 
 # =========================
-# BOTÃO DE INTERAÇÃO
+# LOAD DATA (SEM BUG)
 # =========================
-col_btn, col_status = st.columns([1, 3])
+@st.cache_data(ttl=2)
+def load_data():
+    try:
+        return requests.get(API_URL).json()
+    except:
+        return []
+
+# =========================
+# BOTÃO INTERAÇÃO
+# =========================
+col_btn, col_msg = st.columns([1,3])
 
 with col_btn:
     if st.button("⚡ Gerar interação"):
-        res = requests.post(
-            PREDICT_URL,
-            json={
-                "sensor_type": "toque",
-                "valor": 0.5,
-                "data": pd.Timestamp.now().isoformat()
-            }
-        )
-        st.success("Interação enviada!")
+        try:
+            res = requests.post(
+                PREDICT_URL,
+                json={
+                    "sensor_type": "toque",
+                    "valor": 0.5,
+                    "data": pd.Timestamp.now().isoformat()
+                }
+            )
+            st.success("Interação enviada com sucesso!")
+            st.cache_data.clear()
+        except:
+            st.error("Erro ao enviar interação")
 
 # =========================
-# LOAD DATA
+# DATAFRAME
 # =========================
-@st.cache_data(ttl=5)
-def load_data():
-    return requests.get(API_URL).json()
-
 data = load_data()
 df = pd.DataFrame(data)
 
 if df.empty:
-    st.warning("Sem dados ainda...")
+    st.warning("⚠ Nenhuma interação ainda")
     st.stop()
 
 df["data"] = pd.to_datetime(df["data"])
@@ -121,8 +131,7 @@ total = len(df)
 media = df["valor"].mean()
 pct_curto = (df["classificacao"] == "toque_curto").mean() * 100
 
-# GRID KPI
-col1, col2, col3 = st.columns([2,1,1])
+col1, col2, col3 = st.columns(3)
 
 with col1:
     st.markdown(f"""
@@ -155,7 +164,6 @@ st.markdown("## 📊 Visão Analítica")
 
 col_g1, col_g2 = st.columns(2)
 
-# Linha por hora
 graf = df.groupby("hora").size().reset_index(name="qtd")
 
 fig1 = px.line(
@@ -166,19 +174,19 @@ fig1 = px.line(
 )
 
 fig1.update_traces(
-    line=dict(color="#38bdf8", width=4),
+    line=dict(width=4),
     marker=dict(size=10)
 )
 
 fig1.update_layout(
     template="plotly_dark",
-    title="Interações por Hora"
+    title="Interações por Hora",
+    transition_duration=500
 )
 
 with col_g1:
     st.plotly_chart(fig1, use_container_width=True)
 
-# Barras
 bar = df["classificacao"].value_counts().reset_index()
 bar.columns = ["Tipo", "Quantidade"]
 
@@ -198,7 +206,7 @@ with col_g2:
     st.plotly_chart(fig2, use_container_width=True)
 
 # =========================
-# INSIGHT INTELIGENTE
+# INSIGHT
 # =========================
 st.markdown("## 🧠 Insight Inteligente")
 
@@ -212,9 +220,3 @@ elif pct_curto > 40:
     st.warning("⚠ Engajamento MÉDIO")
 else:
     st.error("🚨 Engajamento BAIXO")
-
-# =========================
-# AUTO REFRESH
-# =========================
-time.sleep(5)
-st.experimental_rerun()
