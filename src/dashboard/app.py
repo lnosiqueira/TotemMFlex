@@ -29,7 +29,7 @@ if auto_refresh:
 st.subheader("🎮 Simulação em Tempo Real")
 
 if st.button("🚀 Gerar nova interação"):
-    valor = round(random.uniform(0, 100), 2)
+    st.write("🔥 BOTÃO FOI CLICADO")
 
     try:
         # 1️⃣ chama a IA
