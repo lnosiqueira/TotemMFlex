@@ -3,83 +3,48 @@ import requests
 import pandas as pd
 import plotly.express as px
 
-# =========================
-# CONFIG
-# =========================
-st.set_page_config(
-    page_title="TotemMFlex",
-    layout="wide"
-)
+st.set_page_config(layout="wide")
 
 API_URL = "https://totemmflex.onrender.com/interactions/"
 PREDICT_URL = "https://totemmflex.onrender.com/predict/"
 
 # =========================
-# FONT + CSS (APPLE STYLE)
+# CSS FORTE (FUNCIONA MESMO)
 # =========================
 st.markdown("""
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
-
 <style>
 
-/* GLOBAL */
-html, body, [class*="css"] {
-    font-family: 'Inter', sans-serif;
-    background-color: #f8fafc;
+/* REMOVE PADDING DEFAULT */
+.block-container {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }
 
-/* HEADER */
+/* BACKGROUND */
+body {
+    background-color: #0f172a;
+}
+
+/* TITLE */
 .title {
-    font-size: 48px;
-    font-weight: 900;
-    letter-spacing: -1px;
-}
-
-/* SIDEBAR */
-section[data-testid="stSidebar"] {
-    background: #0f172a;
-    padding-top: 30px;
-}
-
-section[data-testid="stSidebar"] * {
-    color: #e2e8f0 !important;
-}
-
-/* MENU */
-.menu-title {
-    font-size: 14px;
-    text-transform: uppercase;
-    opacity: 0.5;
-    margin-bottom: 10px;
-}
-
-.menu-item {
-    padding: 10px 15px;
-    border-radius: 10px;
-    margin-bottom: 5px;
-    cursor: pointer;
-}
-
-.menu-item:hover {
-    background: rgba(255,255,255,0.1);
-}
-
-.active {
-    background: linear-gradient(90deg, #6366f1, #38bdf8);
+    font-size: 42px;
+    font-weight: 800;
+    color: #38bdf8;
 }
 
 /* CARDS */
 .card {
+    background: linear-gradient(145deg, #0f172a, #1e293b);
     padding: 25px;
-    border-radius: 20px;
-    background: white;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    border-radius: 16px;
+    color: white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
 }
 
 /* KPI */
 .kpi {
-    font-size: 36px;
-    font-weight: 800;
+    font-size: 38px;
+    font-weight: 900;
 }
 
 /* BOTÃO */
@@ -87,26 +52,13 @@ section[data-testid="stSidebar"] * {
     background: linear-gradient(90deg, #6366f1, #38bdf8);
     color: white;
     border-radius: 12px;
-    padding: 10px 20px;
+    padding: 12px 20px;
     border: none;
-    font-weight: 600;
-}
-
-/* TITULOS */
-h1, h2, h3 {
-    font-weight: 800;
+    font-weight: bold;
 }
 
 </style>
 """, unsafe_allow_html=True)
-
-# =========================
-# MENU (CUSTOM)
-# =========================
-menu = st.sidebar.radio(
-    "",
-    ["🚀 Dashboard", "📊 Visão Geral"]
-)
 
 # =========================
 # LOAD DATA
@@ -128,121 +80,88 @@ if not df.empty:
 # =========================
 # HEADER
 # =========================
-st.markdown("""
-<h1 class='title'>
-TotemMFlex <span style='color:#38bdf8;'>Analytics</span>
-</h1>
-""", unsafe_allow_html=True)
-
-st.caption("Monitoramento inteligente em tempo real")
+st.markdown("<div class='title'>🚀 TotemMFlex Analytics</div>", unsafe_allow_html=True)
 
 # =========================
-# BOTÃO INTERAÇÃO
+# BOTÃO
 # =========================
 if st.button("⚡ Gerar interação"):
-    try:
-        requests.post(
-            PREDICT_URL,
-            json={
-                "sensor_type": "toque",
-                "valor": 0.5,
-                "data": pd.Timestamp.now().isoformat()
-            }
-        )
-        st.success("Interação registrada!")
-        st.cache_data.clear()
-    except:
-        st.error("Erro ao enviar")
+    requests.post(PREDICT_URL, json={
+        "sensor_type": "toque",
+        "valor": 0.5,
+        "data": pd.Timestamp.now().isoformat()
+    })
+    st.success("Interação enviada!")
+    st.cache_data.clear()
 
 # =========================
-# DASHBOARD
+# SEM DADOS
 # =========================
-if menu == "🚀 Dashboard":
-
-    if df.empty:
-        st.warning("Sem dados ainda")
-        st.stop()
-
-    total = len(df)
-    media = df["valor"].mean()
-    pct_curto = (df["classificacao"] == "toque_curto").mean() * 100
-
-    col1, col2, col3 = st.columns(3)
-
-    with col1:
-        st.markdown(f"""
-        <div class="card">
-            <div>Total de Interações</div>
-            <div class="kpi">{total}</div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    with col2:
-        st.markdown(f"""
-        <div class="card">
-            <div>Média</div>
-            <div class="kpi">{media:.2f}</div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    with col3:
-        st.markdown(f"""
-        <div class="card">
-            <div>Toques Curtos</div>
-            <div class="kpi">{pct_curto:.1f}%</div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.markdown("## 📈 Tendência")
-
-    graf = df.groupby("hora").size().reset_index(name="qtd")
-
-    fig = px.line(graf, x="hora", y="qtd", markers=True)
-    fig.update_layout(template="simple_white")
-
-    st.plotly_chart(fig, use_container_width=True)
+if df.empty:
+    st.warning("Sem dados ainda")
+    st.stop()
 
 # =========================
-# VISÃO GERAL
+# KPIs
 # =========================
-elif menu == "📊 Visão Geral":
+total = len(df)
+media = df["valor"].mean()
+pct = (df["classificacao"] == "toque_curto").mean() * 100
 
-    if df.empty:
-        st.warning("Sem dados ainda")
-        st.stop()
+col1, col2, col3 = st.columns(3)
 
-    st.markdown("## 📊 Análise Completa")
+with col1:
+    st.markdown(f"""
+    <div class="card">
+        Total de Interações
+        <div class="kpi">{total}</div>
+    </div>
+    """, unsafe_allow_html=True)
 
-    col1, col2 = st.columns(2)
+with col2:
+    st.markdown(f"""
+    <div class="card">
+        Média
+        <div class="kpi">{media:.2f}</div>
+    </div>
+    """, unsafe_allow_html=True)
 
-    # BAR
-    bar = df["classificacao"].value_counts().reset_index()
-    bar.columns = ["Tipo", "Quantidade"]
+with col3:
+    st.markdown(f"""
+    <div class="card">
+        Toques Curtos
+        <div class="kpi">{pct:.1f}%</div>
+    </div>
+    """, unsafe_allow_html=True)
 
-    fig1 = px.bar(bar, x="Tipo", y="Quantidade")
-    fig1.update_layout(template="simple_white")
+st.markdown("## 📈 Tendência")
 
-    with col1:
-        st.plotly_chart(fig1, use_container_width=True)
+graf = df.groupby("hora").size().reset_index(name="qtd")
 
-    # PIE
-    fig2 = px.pie(bar, names="Tipo", values="Quantidade")
+fig = px.line(graf, x="hora", y="qtd", markers=True)
+fig.update_layout(
+    plot_bgcolor='#0f172a',
+    paper_bgcolor='#0f172a',
+    font_color='white'
+)
 
-    with col2:
-        st.plotly_chart(fig2, use_container_width=True)
+st.plotly_chart(fig, use_container_width=True)
 
-    # INSIGHT
-    st.markdown("## 🧠 Insight")
+st.markdown("## 📊 Distribuição")
 
-    hora_pico = df["hora"].value_counts().idxmax()
+fig2 = px.pie(df, names="classificacao")
+fig2.update_layout(
+    plot_bgcolor='#0f172a',
+    paper_bgcolor='#0f172a',
+    font_color='white'
+)
 
-    st.info(f"Pico de uso às {hora_pico}h")
+st.plotly_chart(fig2, use_container_width=True)
 
-    pct_curto = (df["classificacao"] == "toque_curto").mean() * 100
+# =========================
+# INSIGHT
+# =========================
+st.markdown("## 🧠 Insight")
 
-    if pct_curto > 70:
-        st.success("Engajamento alto")
-    elif pct_curto > 40:
-        st.warning("Engajamento médio")
-    else:
-        st.error("Engajamento baixo")
+hora = df["hora"].value_counts().idxmax()
+st.info(f"Pico de uso às {hora}h")
