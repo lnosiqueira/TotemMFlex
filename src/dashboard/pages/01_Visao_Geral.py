@@ -1,156 +1,110 @@
 import streamlit as st
 import pandas as pd
 import requests
-import plotly.graph_objects as go
-from datetime import timedelta
+import plotly.express as px
 
 st.set_page_config(layout="wide")
 
-API_URL = "https://totemmflex.onrender.com"
+st.title("📊 TotemMFlex - Dashboard Inteligente")
 
-st.title("📊 Visão Geral")
-st.markdown("Painel executivo consolidado do comportamento do Totem.")
+API_URL = "https://totemmflex.onrender.com/interactions/"
 
-# =========================
-# BUSCAR DADOS DA API
-# =========================
+# =============================
+# BUSCAR DADOS
+# =============================
 try:
-    response = requests.get(f"{API_URL}/interactions")
+    response = requests.get(API_URL)
     data = response.json()
-
     df = pd.DataFrame(data)
 
 except Exception as e:
-    st.error(f"Erro ao carregar dados: {e}")
+    st.error(f"Erro ao buscar dados: {e}")
     st.stop()
 
+# =============================
+# SEM DADOS
+# =============================
 if df.empty:
-    st.warning("Nenhum dado disponível.")
+    st.warning("Nenhum dado disponível ainda.")
     st.stop()
 
-# =========================
+# =============================
 # TRATAMENTO
-# =========================
+# =============================
 df["data"] = pd.to_datetime(df["data"], errors="coerce")
-df = df.dropna(subset=["data"])
 
-df["hora"] = df["data"].dt.hour
+# =============================
+# KPIs
+# =============================
+col1, col2, col3 = st.columns(3)
 
-# =========================
-# COMPARATIVO
-# =========================
-agora = df["data"].max()
-inicio_24h = agora - timedelta(hours=24)
+total = len(df)
+media = df["valor"].mean()
+toque_curto = (df["classificacao"] == "toque_curto").mean() * 100
 
-df_ultimas_24h = df[df["data"] >= inicio_24h]
-df_anteriores = df[df["data"] < inicio_24h]
+col1.metric("Total de Interações", total)
+col2.metric("Média dos Valores", f"{media:.2f}")
+col3.metric("% Toque Curto", f"{toque_curto:.1f}%")
 
-total_atual = len(df_ultimas_24h)
-total_anterior = len(df_anteriores)
+# =============================
+# GRÁFICO DE LINHA
+# =============================
+st.subheader("📈 Tendência de Interações")
 
-variacao = ((total_atual - total_anterior) / total_anterior * 100) if total_anterior > 0 else 0
+df_time = df.copy()
+df_time["hora"] = df_time["data"].dt.hour
 
-# =========================
-# HERO CHART
-# =========================
-st.markdown("## 📈 Tendência de Interações (24h)")
+grafico_linha = df_time.groupby("hora").size().reset_index(name="quantidade")
 
-uso_hora = df.groupby("hora").size().reset_index(name="Interações")
-
-fig = go.Figure()
-
-fig.add_trace(go.Scatter(
-    x=uso_hora["hora"],
-    y=uso_hora["Interações"],
-    mode="lines+markers",
-    fill="tozeroy"
-))
-
-fig.update_layout(
-    height=400,
-    xaxis_title="Hora",
-    yaxis_title="Interações"
+fig1 = px.line(
+    grafico_linha,
+    x="hora",
+    y="quantidade",
+    markers=True,
+    title="Interações por Hora"
 )
 
-st.plotly_chart(fig, use_container_width=True)
+st.plotly_chart(fig1, use_container_width=True)
 
-st.markdown("---")
+# =============================
+# GRÁFICO DE BARRAS
+# =============================
+st.subheader("📊 Distribuição de Interações")
 
-# =========================
-# KPIs
-# =========================
-col1, col2, col3, col4 = st.columns(4)
+grafico_barra = df["classificacao"].value_counts().reset_index()
+grafico_barra.columns = ["classificacao", "quantidade"]
 
-media = df["valor"].mean()
-predominancia = (df["classificacao"] == "toque_curto").mean() * 100
-hora_pico = uso_hora.loc[uso_hora["Interações"].idxmax(), "hora"]
+fig2 = px.bar(
+    grafico_barra,
+    x="classificacao",
+    y="quantidade",
+    color="classificacao",
+    title="Tipos de Interação"
+)
 
-col1.metric("Total 24h", total_atual, f"{variacao:.1f}%")
-col2.metric("Média Valor", f"{media:.2f}")
-col3.metric("Toque Curto (%)", f"{predominancia:.1f}%")
-col4.metric("Pico", f"{hora_pico}:00")
+st.plotly_chart(fig2, use_container_width=True)
 
-st.markdown("---")
+# =============================
+# GRÁFICO DE PIZZA
+# =============================
+st.subheader("🥧 Proporção de Comportamento")
 
-# =========================
-# SCORE
-# =========================
-score = 0
+fig3 = px.pie(
+    df,
+    names="classificacao",
+    title="Distribuição (%)"
+)
 
-if predominancia >= 60:
-    score += 40
-elif predominancia >= 40:
-    score += 25
+st.plotly_chart(fig3, use_container_width=True)
+
+# =============================
+# INSIGHT AUTOMÁTICO
+# =============================
+st.subheader("🧠 Insight Inteligente")
+
+if toque_curto > 70:
+    st.success("Usuários estão interagindo rapidamente 🚀")
+elif toque_curto > 40:
+    st.info("Engajamento moderado 🤔")
 else:
-    score += 10
-
-desvio = df.groupby("hora").size().std()
-media_hora = df.groupby("hora").size().mean()
-
-if desvio < media_hora * 0.5:
-    score += 30
-elif desvio < media_hora:
-    score += 20
-else:
-    score += 10
-
-media_valor = df["valor"].mean()
-if 0.3 <= media_valor <= 0.8:
-    score += 30
-else:
-    score += 15
-
-# =========================
-# EXIBIÇÃO
-# =========================
-st.markdown("## 🧠 Score")
-
-colA, colB = st.columns([1,2])
-
-with colA:
-    st.markdown(f"<h1>{score}/100</h1>", unsafe_allow_html=True)
-
-with colB:
-    st.progress(score / 100)
-
-if score >= 80:
-    st.success("🟢 Operação saudável")
-elif score >= 60:
-    st.warning("🟡 Monitorar")
-else:
-    st.error("🔴 Atenção")
-
-st.markdown("---")
-
-# =========================
-# INSIGHT
-# =========================
-st.markdown("## 🔍 Insight")
-
-st.write(f"""
-Foram registradas **{total_atual} interações nas últimas 24h**  
-Variação de **{variacao:.1f}%**  
-
-Pico às **{hora_pico}:00h**  
-Predominância: **{predominancia:.1f}% toque curto**
-""")
+    st.warning("Usuários estão demorando mais nas interações ⏳")
