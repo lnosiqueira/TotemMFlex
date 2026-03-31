@@ -1,19 +1,8 @@
-import os
 import sqlite3
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-# 🔥 cria uma pasta garantida
-DB_FOLDER = os.path.join(BASE_DIR, "db")
-
-# 🔥 garante que a pasta existe (ESSA LINHA É O OURO)
-os.makedirs(DB_FOLDER, exist_ok=True)
-
-DB_PATH = os.path.join(DB_FOLDER, "totemflex.db")
 
 
 def get_db_connection():
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect("totemflex.db")
     conn.row_factory = sqlite3.Row
     return conn
 
