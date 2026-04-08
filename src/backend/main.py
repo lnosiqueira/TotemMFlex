@@ -6,8 +6,10 @@ from src.backend.services.database import init_db
 
 app = FastAPI(title="TotemMFlex API", version="3.0")
 
-# garante banco pronto ao subir a API
-init_db()
+@app.on_event("startup")
+def startup():
+    print("🚀 Inicializando aplicação...")
+    init_db()
 
 @app.get("/status")
 def status():
