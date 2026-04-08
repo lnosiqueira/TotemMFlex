@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from datetime import datetime
 import time
 
-from src.backend.database import insert_interaction
+from src.backend.services.database import insert_interaction
 
 router = APIRouter()
 
