@@ -44,3 +44,8 @@ def predict(data: dict):
         "valor": valor,
         "tempo_resposta": tempo_resposta
     }
+
+    return {
+    "status": "ok",
+    "versao": "TOTEM_V2_DEPLOY_TESTE",
+}
