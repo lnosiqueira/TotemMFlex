@@ -11,12 +11,17 @@ def predict(data: dict):
 
     pergunta = data.get("pergunta", "").strip()
 
+    # 🚨 BLOQUEIA INPUT VAZIO (ANTI-LIXO)
+    if not pergunta:
+        return {
+            "status": "erro",
+            "mensagem": "Pergunta obrigatória"
+        }
+
     start = time.time()
 
     # 🧠 LÓGICA DE RESPOSTA (simples, mas inteligente)
-    if not pergunta:
-        resposta = "Você não enviou nenhuma pergunta."
-    elif "ia" in pergunta.lower():
+    if "ia" in pergunta.lower():
         resposta = "IA é a simulação da inteligência humana por máquinas."
     elif "totem" in pergunta.lower():
         resposta = "O TotemMFlex é um assistente inteligente interativo."
@@ -29,9 +34,7 @@ def predict(data: dict):
     # 📊 SCORE INTELIGENTE
     tamanho = len(pergunta)
 
-    if tamanho == 0:
-        valor = 0.0
-    elif tamanho < 20:
+    if tamanho < 20:
         valor = 0.3
     elif tamanho < 50:
         valor = 0.6
@@ -43,7 +46,7 @@ def predict(data: dict):
 
     data_registro = datetime.now().isoformat()
 
-    # 💾 SALVA NO BANCO
+    # 💾 SALVA NO BANCO (AGORA SÓ DADOS VÁLIDOS)
     insert_interaction({
         "sensor_type": "api",
         "pergunta": pergunta,
