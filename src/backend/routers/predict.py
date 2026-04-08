@@ -1,31 +1,46 @@
 from fastapi import APIRouter
 from datetime import datetime
-import random
+import time
 
 from src.backend.database import insert_interaction
 
 router = APIRouter()
 
 @router.post("/predict")
-def predict():
+def predict(data: dict):
 
-    # simulação de valor
-    valor = round(random.uniform(0.1, 1.0), 2)
+    pergunta = data.get("pergunta", "")
+
+    start = time.time()
+
+    # Simulação básica de resposta (depois plugamos IA real)
+    resposta = f"Resposta para: {pergunta}"
+
+    end = time.time()
+    tempo_resposta = round(end - start, 2)
+
+    # Score baseado no tamanho da pergunta (simples, mas REAL)
+    valor = round(min(len(pergunta) / 100, 1), 2)
 
     classificacao = "toque_curto" if valor < 0.4 else "toque_longo"
 
-    data = datetime.now().isoformat()
+    data_registro = datetime.now().isoformat()
 
     # 🔥 SALVA NO BANCO
     insert_interaction({
         "sensor_type": "api",
+        "pergunta": pergunta,
+        "resposta": resposta,
+        "tempo_resposta": tempo_resposta,
         "valor": valor,
         "classificacao": classificacao,
-        "data": data
+        "data": data_registro
     })
 
     return {
         "status": "ok",
+        "resposta": resposta,
         "classificacao": classificacao,
-        "valor": valor
+        "valor": valor,
+        "tempo_resposta": tempo_resposta
     }
