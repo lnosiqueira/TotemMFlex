@@ -1,50 +1,27 @@
 from fastapi import APIRouter
-import sqlite3
+from src.backend.services.database import get_interactions
 
 router = APIRouter()
 
-DB_PATH = "totem.db"
-
-
 @router.get("/metrics")
 def get_metrics():
-    try:
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
+    data = get_interactions()
 
-        # total
-        cursor.execute("SELECT COUNT(*) FROM interactions")
-        total = cursor.fetchone()[0]
+    if not data:
+        return {"msg": "Sem dados ainda"}
 
-        # agrupado
-        cursor.execute("""
-            SELECT classificacao, COUNT(*) 
-            FROM interactions 
-            GROUP BY classificacao
-        """)
-        rows = cursor.fetchall()
+    total = len(data)
 
-        conn.close()
+    media_valor = round(sum(d["valor"] for d in data) / total, 2)
+    media_tempo = round(sum(d["tempo_resposta"] for d in data) / total, 3)
 
-        classificacoes = {
-            "toque_curto": 0,
-            "toque_longo": 0
-        }
+    toques_curto = sum(1 for d in data if d["classificacao"] == "toque_curto")
+    toques_longo = sum(1 for d in data if d["classificacao"] == "toque_longo")
 
-        for row in rows:
-            classificacoes[row[0]] = row[1]
-
-        return {
-            "total_interacoes": total,
-            "toque_curto": classificacoes["toque_curto"],
-            "toque_longo": classificacoes["toque_longo"]
-        }
-
-    except Exception as e:
-        # 🔥 NUNCA MAIS QUEBRA
-        return {
-            "total_interacoes": 0,
-            "toque_curto": 0,
-            "toque_longo": 0,
-            "error": str(e)
-        }
+    return {
+        "total_interacoes": total,
+        "media_valor": media_valor,
+        "media_tempo": media_tempo,
+        "toque_curto": toques_curto,
+        "toque_longo": toques_longo
+    }
