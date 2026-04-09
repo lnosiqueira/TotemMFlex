@@ -3,135 +3,130 @@ import pandas as pd
 import requests
 import plotly.express as px
 
-# =============================
-# CONFIGURAÇÃO DA PÁGINA
-# =============================
-st.set_page_config(
-    page_title="TotemmFlex Analytics",
-    layout="wide"
-)
+st.set_page_config(layout="wide")
 
 # =============================
-# 🎨 CSS – FUNDO + CARDS PREMIUM
+# 🎨 CSS PREMIUM (LIGHT SaaS)
 # =============================
 st.markdown("""
 <style>
-.stApp {
-    background: linear-gradient(
-        rgba(255,255,255,0.92),
-        rgba(255,255,255,0.92)
-    ),
-    url("https://i.imgur.com/6YQZB7Z.png"); /* troque pela URL do seu logo/fundo */
-    background-size: 520px;
-    background-position: top center;
-    background-repeat: no-repeat;
+
+/* FUNDO */
+body {
+    background-color: #f5f7fb;
 }
 
-.kpi-card {
+/* HERO */
+.hero {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+/* LOGO */
+.logo {
+    width: 280px;
+}
+
+/* SUBTITLE */
+.subtitle {
+    color: #6b7280;
+    font-size: 18px;
+}
+
+/* CARDS */
+.card {
     background: white;
     padding: 25px;
     border-radius: 18px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-    text-align: center;
+    transition: 0.3s;
 }
 
-.kpi-title {
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* TEXTOS */
+.card-title {
     font-size: 14px;
     color: #6b7280;
-    font-weight: 600;
 }
 
-.kpi-value {
-    font-size: 36px;
-    font-weight: 800;
-    color: #0A66C2;
+.card-value {
+    font-size: 32px;
+    font-weight: bold;
+    color: #111827;
 }
 
-.header-title {
-    font-size: 38px;
-    font-weight: 900;
-    color: #0A66C2;
-}
-
-.header-sub {
-    font-size: 16px;
-    color: #374151;
-}
 </style>
 """, unsafe_allow_html=True)
 
 # =============================
-# 🚀 HEADER
+# 🚀 HEADER (LOGO GRANDE)
 # =============================
 st.markdown("""
-<div style="text-align:center; margin-top:120px;">
-    <div class="header-title">TotemmFlex Analytics</div>
-    <div class="header-sub">Inteligência comportamental em tempo real</div>
+<div class="hero">
+    <img src="src/assets/logo_totemmflex.png" class="logo"/>
+    <div class="subtitle">
+        Inteligência comportamental em tempo real
+    </div>
 </div>
 """, unsafe_allow_html=True)
 
-st.markdown("<br>", unsafe_allow_html=True)
-
-# =============================
-# API
-# =============================
 API_URL = "https://totemmflex.onrender.com/interactions/"
 
+# =============================
+# BUSCAR DADOS
+# =============================
 try:
     response = requests.get(API_URL)
     data = response.json()
     df = pd.DataFrame(data)
+
 except Exception as e:
     st.error(f"Erro ao buscar dados: {e}")
     st.stop()
 
+# =============================
+# SEM DADOS
+# =============================
 if df.empty:
     st.warning("Nenhum dado disponível ainda.")
     st.stop()
 
 # =============================
-# TRATAMENTO DE DADOS
+# TRATAMENTO
 # =============================
 df["data"] = pd.to_datetime(df["data"], errors="coerce")
 
+# =============================
+# KPIs (AGORA CORRETOS)
+# =============================
 total = len(df)
-media = df.groupby("classificacao").size().mean()
+media = df["valor"].mean()
+toque_curto = (df["classificacao"] == "toque_curto").mean() * 100
+
+col1, col2 = st.columns(2)
+
+col1.markdown(f"""
+<div class="card">
+    <div class="card-title">INTERAÇÕES</div>
+    <div class="card-value">{total}</div>
+</div>
+""", unsafe_allow_html=True)
+
+col2.markdown(f"""
+<div class="card">
+    <div class="card-title">ENGAJAMENTO MÉDIO</div>
+    <div class="card-value">{media:.2f}</div>
+</div>
+""", unsafe_allow_html=True)
 
 # =============================
-# KPIs
+# GRÁFICO LINHA
 # =============================
-col1, col2, col3 = st.columns(3)
-
-with col1:
-    st.markdown(f"""
-    <div class="kpi-card">
-        <div class="kpi-title">VISITANTES</div>
-        <div class="kpi-value">{total}</div>
-    </div>
-    """, unsafe_allow_html=True)
-
-with col2:
-    st.markdown(f"""
-    <div class="kpi-card">
-        <div class="kpi-title">MÉDIA DE INTERAÇÃO</div>
-        <div class="kpi-value">{media:.2f}</div>
-    </div>
-    """, unsafe_allow_html=True)
-
-with col3:
-    st.markdown(f"""
-    <div class="kpi-card">
-        <div class="kpi-title">TEMPO MÉDIO</div>
-        <div class="kpi-value">0.0</div>
-    </div>
-    """, unsafe_allow_html=True)
-
-st.markdown("<br>", unsafe_allow_html=True)
-
-# =============================
-# 📈 TENDÊNCIA
-# =============================
-st.subheader("📈 Tendência de Interações")
+st.subheader("📈 Tendência")
 
 df_time = df.copy()
 df_time["hora"] = df_time["data"].dt.hour
@@ -142,16 +137,17 @@ fig1 = px.line(
     grafico_linha,
     x="hora",
     y="quantidade",
-    markers=True,
-    template="simple_white"
+    markers=True
 )
+
+fig1.update_layout(template="simple_white")
 
 st.plotly_chart(fig1, use_container_width=True)
 
 # =============================
-# 📊 DISTRIBUIÇÃO
+# GRÁFICO BARRA
 # =============================
-st.subheader("📊 Distribuição de Interações")
+st.subheader("📊 Distribuição")
 
 grafico_barra = df["classificacao"].value_counts().reset_index()
 grafico_barra.columns = ["classificacao", "quantidade"]
@@ -160,26 +156,35 @@ fig2 = px.bar(
     grafico_barra,
     x="classificacao",
     y="quantidade",
-    color="classificacao",
-    template="simple_white"
+    color="classificacao"
 )
+
+fig2.update_layout(template="simple_white")
 
 st.plotly_chart(fig2, use_container_width=True)
 
 # =============================
-# 🧠 INSIGHT
+# GRÁFICO PIZZA
+# =============================
+st.subheader("🥧 Comportamento")
+
+fig3 = px.pie(
+    df,
+    names="classificacao"
+)
+
+fig3.update_layout(template="simple_white")
+
+st.plotly_chart(fig3, use_container_width=True)
+
+# =============================
+# INSIGHT
 # =============================
 st.subheader("🧠 Insight Inteligente")
 
-toque_curto = (
-    grafico_barra
-    .loc[grafico_barra["classificacao"] == "toque_curto", "quantidade"]
-    .sum()
-)
-
-if toque_curto > total * 0.7:
+if toque_curto > 70:
     st.success("Interações rápidas predominam ⚡")
-elif toque_curto > total * 0.4:
+elif toque_curto > 40:
     st.info("Comportamento equilibrado 🤝")
 else:
-    st.warning("Usuários realizam interações mais longas 🧠")
+    st.warning("Usuários estão mais analíticos 🧠")
