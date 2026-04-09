@@ -1,3 +1,6 @@
+st.markdown('<div class="title">🚀 TotemMFlex Analytics</div>', unsafe_allow_html=True)
+st.caption("Sistema inteligente que analisa comportamento em tempo real")
+
 import streamlit as st
 import requests
 import pandas as pd
