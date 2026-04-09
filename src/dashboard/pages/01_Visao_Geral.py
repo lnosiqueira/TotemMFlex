@@ -6,55 +6,75 @@ import plotly.express as px
 st.set_page_config(layout="wide")
 
 # =============================
-# 🎨 CSS PREMIUM (LIGHT SaaS)
+# 🎨 RESET TOTAL STREAMLIT
 # =============================
 st.markdown("""
 <style>
 
-/* FUNDO */
-body {
+/* REMOVE MENU E SIDEBAR VISUAL */
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+header {visibility: hidden;}
+
+/* FUNDO TOTAL */
+html, body, [class*="css"]  {
     background-color: #f5f7fb;
+}
+
+/* CENTRALIZA CONTEÚDO */
+.block-container {
+    padding-top: 0rem;
+    padding-bottom: 2rem;
+    max-width: 1200px;
 }
 
 /* HERO */
 .hero {
     text-align: center;
-    margin-top: 20px;
-    margin-bottom: 40px;
+    margin-top: 30px;
+    margin-bottom: 50px;
 }
 
 /* LOGO */
 .logo {
-    width: 280px;
+    width: 320px;
 }
 
 /* SUBTITLE */
 .subtitle {
     color: #6b7280;
     font-size: 18px;
+    margin-top: 10px;
 }
 
-/* CARDS */
+/* GRID */
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* CARD */
 .card {
     background: white;
-    padding: 25px;
-    border-radius: 18px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.08);
     transition: 0.3s;
 }
 
 .card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-6px);
 }
 
-/* TEXTOS */
-.card-title {
+/* TEXTO */
+.title {
     font-size: 14px;
     color: #6b7280;
 }
 
-.card-value {
-    font-size: 32px;
+.value {
+    font-size: 40px;
     font-weight: bold;
     color: #111827;
 }
@@ -63,7 +83,7 @@ body {
 """, unsafe_allow_html=True)
 
 # =============================
-# 🚀 HEADER (LOGO GRANDE)
+# 🚀 HERO (IGUAL O DA REFERÊNCIA)
 # =============================
 st.markdown("""
 <div class="hero">
@@ -74,117 +94,57 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+# =============================
+# API
+# =============================
 API_URL = "https://totemmflex.onrender.com/interactions/"
 
-# =============================
-# BUSCAR DADOS
-# =============================
-try:
-    response = requests.get(API_URL)
-    data = response.json()
-    df = pd.DataFrame(data)
+response = requests.get(API_URL)
+data = response.json()
+df = pd.DataFrame(data)
 
-except Exception as e:
-    st.error(f"Erro ao buscar dados: {e}")
-    st.stop()
-
-# =============================
-# SEM DADOS
-# =============================
 if df.empty:
-    st.warning("Nenhum dado disponível ainda.")
+    st.warning("Sem dados ainda")
     st.stop()
 
-# =============================
-# TRATAMENTO
-# =============================
 df["data"] = pd.to_datetime(df["data"], errors="coerce")
 
 # =============================
-# KPIs (AGORA CORRETOS)
+# KPIs
 # =============================
 total = len(df)
 media = df["valor"].mean()
-toque_curto = (df["classificacao"] == "toque_curto").mean() * 100
 
-col1, col2 = st.columns(2)
+# =============================
+# GRID VISUAL (MONSTRO)
+# =============================
+st.markdown(f"""
+<div class="grid">
 
-col1.markdown(f"""
-<div class="card">
-    <div class="card-title">INTERAÇÕES</div>
-    <div class="card-value">{total}</div>
+    <div class="card">
+        <div class="title">VISITANTES</div>
+        <div class="value">{total}</div>
+    </div>
+
+    <div class="card">
+        <div class="title">ENGAJAMENTO</div>
+        <div class="value">{media:.2f}</div>
+    </div>
+
 </div>
 """, unsafe_allow_html=True)
 
-col2.markdown(f"""
-<div class="card">
-    <div class="card-title">ENGAJAMENTO MÉDIO</div>
-    <div class="card-value">{media:.2f}</div>
-</div>
-""", unsafe_allow_html=True)
-
 # =============================
-# GRÁFICO LINHA
+# GRÁFICOS
 # =============================
-st.subheader("📈 Tendência")
+st.markdown("<br>", unsafe_allow_html=True)
 
-df_time = df.copy()
-df_time["hora"] = df_time["data"].dt.hour
+st.subheader("Desempenho")
 
-grafico_linha = df_time.groupby("hora").size().reset_index(name="quantidade")
+df["hora"] = df["data"].dt.hour
+grafico = df.groupby("hora").size().reset_index(name="qtd")
 
-fig1 = px.line(
-    grafico_linha,
-    x="hora",
-    y="quantidade",
-    markers=True
-)
+fig = px.line(grafico, x="hora", y="qtd")
+fig.update_layout(template="simple_white")
 
-fig1.update_layout(template="simple_white")
-
-st.plotly_chart(fig1, use_container_width=True)
-
-# =============================
-# GRÁFICO BARRA
-# =============================
-st.subheader("📊 Distribuição")
-
-grafico_barra = df["classificacao"].value_counts().reset_index()
-grafico_barra.columns = ["classificacao", "quantidade"]
-
-fig2 = px.bar(
-    grafico_barra,
-    x="classificacao",
-    y="quantidade",
-    color="classificacao"
-)
-
-fig2.update_layout(template="simple_white")
-
-st.plotly_chart(fig2, use_container_width=True)
-
-# =============================
-# GRÁFICO PIZZA
-# =============================
-st.subheader("🥧 Comportamento")
-
-fig3 = px.pie(
-    df,
-    names="classificacao"
-)
-
-fig3.update_layout(template="simple_white")
-
-st.plotly_chart(fig3, use_container_width=True)
-
-# =============================
-# INSIGHT
-# =============================
-st.subheader("🧠 Insight Inteligente")
-
-if toque_curto > 70:
-    st.success("Interações rápidas predominam ⚡")
-elif toque_curto > 40:
-    st.info("Comportamento equilibrado 🤝")
-else:
-    st.warning("Usuários estão mais analíticos 🧠")
+st.plotly_chart(fig, use_container_width=True)
