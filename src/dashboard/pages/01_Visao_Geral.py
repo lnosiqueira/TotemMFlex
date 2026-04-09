@@ -6,36 +6,58 @@ import plotly.express as px
 st.set_page_config(layout="wide")
 
 # =============================
-# 🎨 CSS PREMIUM
+# 🎨 CSS NOVO (LIGHT PREMIUM)
 # =============================
 st.markdown("""
 <style>
 
 /* FUNDO */
 body {
-    background: linear-gradient(135deg, #0f172a, #020617);
+    background: #f5f7fb;
 }
 
-/* CONTAINER */
-.block-container {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
+/* HERO */
+.hero {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+/* LOGO */
+.logo {
+    width: 260px;
+}
+
+/* SUBTITLE */
+.subtitle {
+    color: #6b7280;
+    font-size: 18px;
+    margin-top: 10px;
 }
 
 /* CARDS */
 .card {
-    background: linear-gradient(145deg, #0f172a, #1e293b);
+    background: white;
     padding: 25px;
-    border-radius: 16px;
-    color: white;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    border-radius: 18px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
     transition: 0.3s;
 }
 
-/* HOVER */
 .card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+}
+
+/* TITULOS */
+.card-title {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.card-value {
+    font-size: 32px;
+    font-weight: bold;
+    color: #111827;
 }
 
 </style>
@@ -85,27 +107,20 @@ df["data"] = pd.to_datetime(df["data"], errors="coerce")
 # =============================
 # KPIs (CARDS)
 # =============================
-col1, col2, col3 = st.columns(3)
 
-total = len(df)
-media = df["valor"].mean()
-toque_curto = (df["classificacao"] == "toque_curto").mean() * 100
+ccol1, col2 = st.columns(2)
 
 col1.markdown(f"""
 <div class="card">
-📊 <b>Total</b><br><h2>{total}</h2>
+    <div class="card-title">VISITANTES</div>
+    <div class="card-value">{total}</div>
 </div>
 """, unsafe_allow_html=True)
 
 col2.markdown(f"""
 <div class="card">
-🧠 <b>Média Valor</b><br><h2>{media:.2f}</h2>
-</div>
-""", unsafe_allow_html=True)
-
-col3.markdown(f"""
-<div class="card">
-⚡ <b>% Toque Curto</b><br><h2>{toque_curto:.1f}%</h2>
+    <div class="card-title">MÉDIA DE INTERAÇÃO</div>
+    <div class="card-value">{media:.2f}</div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -126,7 +141,7 @@ fig1 = px.line(
     markers=True
 )
 
-fig1.update_layout(template="plotly_dark")
+fig.update_layout(template="simple_white")
 
 st.plotly_chart(fig1, use_container_width=True)
 
