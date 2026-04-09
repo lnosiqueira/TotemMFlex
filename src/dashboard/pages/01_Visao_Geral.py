@@ -110,21 +110,23 @@ st.caption("Inteligência comportamental em tempo real")
 # =============================
 # 💎 GRID
 # =============================
-st.markdown(f"""
-<div class="grid">
+scol1, col2 = st.columns(2)
 
+with col1:
+    st.markdown(f"""
     <div class="card">
         <div class="title">VISITANTES</div>
         <div class="value">{total}</div>
     </div>
+    """, unsafe_allow_html=True)
 
+with col2:
+    st.markdown(f"""
     <div class="card">
         <div class="title">ENGAJAMENTO</div>
         <div class="value">{media:.2f}</div>
     </div>
-
-</div>
-""", unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
 # =============================
 # 📊 GRÁFICO
