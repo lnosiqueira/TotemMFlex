@@ -1,7 +1,7 @@
-streamlit
-pandas
-requests
-matplotlib
-plotly
 fastapi
 uvicorn
+sqlalchemy
+pandas
+requests
+plotly
+streamlit
