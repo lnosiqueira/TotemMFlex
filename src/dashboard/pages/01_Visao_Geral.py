@@ -83,7 +83,7 @@ st.markdown("<br>", unsafe_allow_html=True)
 # ==============================
 # API
 # ==============================
-API_URL = "https://totemmflex.onrender.com/interactions/"
+API_URL = "https://totemmflex-api.onrender.com/interactions/"
 
 try:
     response = requests.get(API_URL)
