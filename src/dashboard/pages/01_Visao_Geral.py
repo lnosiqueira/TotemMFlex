@@ -102,7 +102,7 @@ st.markdown("""
 import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-logo_path = os.path.join(BASE_DIR, "..", "assets", "logo_totemmflex.png")
+logo_path = os.path.join(BASE_DIR, "..", "..", "assets", "logo_totemmflex.png")
 
 st.image(logo_path, width=300)
 st.caption("Inteligência comportamental em tempo real")
