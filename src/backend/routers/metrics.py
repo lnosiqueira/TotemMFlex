@@ -1,34 +1,24 @@
 from fastapi import APIRouter
-from src.backend.services.database import get_interactions
+from src.backend.services.database import SessionLocal
+from src.backend.services.model import Interaction
 
 router = APIRouter()
 
 @router.get("/metrics")
 def get_metrics():
-    data = get_interactions()
+    db = SessionLocal()
 
-    if not data:
-        return {"msg": "Sem dados ainda"}
+    dados = db.query(Interaction).all()
 
-    total = len(data)
+    total = len(dados)
 
-    media_valor = round(sum(d.get("valor", 0) for d in data) / total, 2)
-    media_tempo = round(sum(d.get("tempo_resposta", 0) for d in data) / total, 3)
+    media = 0
+    if total > 0:
+        media = sum(d.valor for d in dados) / total
 
-    toques_curto = sum(1 for d in data if d.get("classificacao") == "toque_curto")
-    toques_longo = sum(1 for d in data if d.get("classificacao") == "toque_longo")
+    db.close()
 
-    # 🧠 INSIGHT AUTOMÁTICO
-    if toques_longo > toques_curto:
-        insight = "Usuários estão engajando com perguntas mais longas"
-    elif toques_curto > toques_longo:
-        insight = "Usuários estão realizando interações rápidas, indicando uso direto e objetivo do sistema"
-    else:
-        insight = "Comportamento equilibrado entre curto e longo"
-
-    {
-   "total_interacoes": 20,
-   "media_valor": 0.5,
-   "toque_curto": 15,
-   "toque_longo": 5
-}
+    return {
+        "total_interacoes": total,
+        "media_valor": round(media, 2)
+    }
