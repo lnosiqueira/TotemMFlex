@@ -6,14 +6,23 @@ import plotly.express as px
 # =============================
 # CONFIGURAÇÃO DA PÁGINA
 # =============================
-st.set_page_config(
-    page_title="TotemmFlex Analytics",
-    layout="wide"
-)
+
+st.markdown("""
+<div style='text-align: center; margin-top: 20px;'>
+    <img src="src/assets/logo_totemmflex.png" width="260"/>
+</div>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+<div style='text-align: center; color: #6b7280; font-size: 18px; margin-bottom: 30px;'>
+Inteligência comportamental em tempo real
+</div>
+""", unsafe_allow_html=True)
 
 # =============================
 # 🎨 CSS – FUNDO + CARDS PREMIUM
 # =============================
+
 st.markdown("""
 <style>
 .stApp {
