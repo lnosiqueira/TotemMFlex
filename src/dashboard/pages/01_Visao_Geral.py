@@ -99,7 +99,12 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-st.image("assets/logo_totemmflex.png", width=300)
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+logo_path = os.path.join(BASE_DIR, "..", "assets", "logo_totemmflex.png")
+
+st.image(logo_path, width=300)
 st.caption("Inteligência comportamental em tempo real")
 
 # =============================
