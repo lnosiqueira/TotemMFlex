@@ -22,15 +22,13 @@ def get_metrics():
     if toques_longo > toques_curto:
         insight = "Usuários estão engajando com perguntas mais longas"
     elif toques_curto > toques_longo:
-        insight = "Interações rápidas predominam"
+        insight = "Usuários estão realizando interações rápidas, indicando uso direto e objetivo do sistema"
     else:
         insight = "Comportamento equilibrado entre curto e longo"
 
-    return {
-        "total_interacoes": total,
-        "media_valor": media_valor,
-        "media_tempo": media_tempo,
-        "toque_curto": toques_curto,
-        "toque_longo": toques_longo,
-        "insight": insight
-    }
+    {
+   "total_interacoes": 20,
+   "media_valor": 0.5,
+   "toque_curto": 15,
+   "toque_longo": 5
+}
