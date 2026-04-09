@@ -1,12 +1,18 @@
-st.markdown('<div class="title">🚀 TotemMFlex Analytics</div>', unsafe_allow_html=True)
-st.caption("Sistema inteligente que analisa comportamento em tempo real")
-
 import streamlit as st
 import requests
 import pandas as pd
 import plotly.express as px
 
 st.set_page_config(layout="wide")
+
+col1, col2 = st.columns([1, 4])
+
+with col1:
+    st.image("src/assets/logo_totemmflex.png", width=100)
+
+with col2:
+    st.markdown("<div style='margin-top:-10px'></div>", unsafe_allow_html=True)
+    st.caption("Inteligência comportamental em tempo real")
 
 API_URL = "https://totemmflex.onrender.com/interactions/"
 METRICS_URL = "https://totemmflex.onrender.com/metrics"
