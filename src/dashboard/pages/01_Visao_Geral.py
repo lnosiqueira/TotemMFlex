@@ -25,23 +25,19 @@ if st.button("⚡ Gerar interação"):
 try:
     response = requests.get(f"{API_URL}/interactions/")
     data = response.json()
-
     df = pd.DataFrame(data)
-
 except:
     st.error("Erro ao conectar API")
     st.stop()
 
 # =========================
-# TRATAMENTO
+# VALIDAÇÃO
 # =========================
 if df.empty:
     st.warning("Sem dados ainda")
     st.stop()
 
-# Garantir colunas
-if "data" in df.columns:
-    df["data"] = pd.to_datetime(df["data"], errors="coerce")
+df["data"] = pd.to_datetime(df["data"], errors="coerce")
 
 # =========================
 # MÉTRICAS
@@ -53,36 +49,53 @@ col2.metric("🧠 Média Valor", round(df["valor"].mean(), 2))
 col3.metric("⏱ Tempo Médio", "N/A")
 
 # =========================
-# GRÁFICO
+# GRÁFICO DE TEMPO
 # =========================
 st.subheader("📈 Interações ao longo do tempo")
 
-if "data" in df.columns:
-    df_group = df.groupby(df["data"].dt.strftime("%H:%M:%S")).size()
-    st.line_chart(df_group)
+df_time = df.groupby(df["data"].dt.strftime("%H:%M:%S")).size()
+st.line_chart(df_time)
+
+# =========================
+# GRÁFICO POR TIPO
+# =========================
+st.subheader("📊 Distribuição por tipo de interação")
+
+df_tipo = df.groupby("sensor_type").size()
+st.bar_chart(df_tipo)
 
 # =========================
 # TABELA
 # =========================
 st.subheader("📋 Interações")
-st.dataframe(df)
+st.dataframe(df.tail(20))
 
 # =========================
-# INSIGHT SIMPLES
+# INSIGHT INTELIGENTE
 # =========================
 st.subheader("🧠 Insight do Sistema")
 
 media = df["valor"].mean()
+total = len(df)
 
-if media > 0.7:
-    st.success("🔥 Alto engajamento detectado")
-elif media > 0.3:
-    st.info("📊 Interação moderada")
+if total < 10:
+    st.warning("Poucos dados para análise ainda")
 else:
-    st.warning("⚠ Baixo engajamento")
+    if media > 0.7:
+        st.success("🔥 Alto engajamento detectado")
+    elif media > 0.4:
+        st.info("📊 Interação moderada")
+    else:
+        st.warning("⚠ Baixo engajamento")
+
+    # 🔥 NOVO: padrão de comportamento
+    toques = df[df["sensor_type"] == "toque"]
+
+    if len(toques) > total * 0.9:
+        st.info("👆 Sistema baseado quase totalmente em toques (baixa diversidade)")
 
 # =========================
-# IA (OPCIONAL)
+# INSIGHT IA (REAL)
 # =========================
 if st.button("🤖 Gerar Insight com IA"):
     try:
@@ -91,11 +104,12 @@ if st.button("🤖 Gerar Insight com IA"):
         openai.api_key = st.secrets["OPENAI_API_KEY"]
 
         prompt = f"""
-        Analise os dados:
-        Total: {len(df)}
-        Média: {media}
+        Analise esses dados de interação de usuários:
 
-        Gere um insight simples.
+        Total de interações: {total}
+        Média de valor: {media}
+
+        Dê um insight objetivo sobre o comportamento do usuário.
         """
 
         response = openai.ChatCompletion.create(
@@ -105,5 +119,5 @@ if st.button("🤖 Gerar Insight com IA"):
 
         st.success(response.choices[0].message.content)
 
-    except:
-        st.error("Erro ao gerar insight com IA")
+    except Exception as e:
+        st.error(f"Erro IA: {e}")
