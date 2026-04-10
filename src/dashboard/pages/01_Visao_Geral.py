@@ -1,7 +1,41 @@
 import streamlit as st
 import requests
 import pandas as pd
+from openai import OpenAI
+import os
 
+# =========================
+# CONFIG IA
+# =========================
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+def gerar_insight_ia(df):
+    try:
+        resumo = df.describe().to_string()
+
+        prompt = f"""
+        Analise os dados abaixo e gere um insight de comportamento do usuário:
+
+        {resumo}
+
+        Seja direto, profissional e estratégico.
+        """
+
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "user", "content": prompt}
+            ]
+        )
+
+        return response.choices[0].message.content
+
+    except Exception as e:
+        return f"Erro IA: {str(e)}"
+
+# =========================
+# CONFIG APP
+# =========================
 API_URL = "https://totemmflex.onrender.com"
 
 st.title("🚀 TotemMFlex Analytics")
@@ -37,6 +71,7 @@ if df.empty:
     st.warning("Sem dados ainda")
     st.stop()
 
+# Garantir formato de data
 df["data"] = pd.to_datetime(df["data"], errors="coerce")
 
 # =========================
@@ -71,7 +106,7 @@ st.subheader("📋 Interações")
 st.dataframe(df.tail(20))
 
 # =========================
-# INSIGHT INTELIGENTE
+# INSIGHT SIMPLES
 # =========================
 st.subheader("🧠 Insight do Sistema")
 
@@ -88,36 +123,18 @@ else:
     else:
         st.warning("⚠ Baixo engajamento")
 
-    # 🔥 NOVO: padrão de comportamento
+    # Padrão de comportamento
     toques = df[df["sensor_type"] == "toque"]
 
     if len(toques) > total * 0.9:
         st.info("👆 Sistema baseado quase totalmente em toques (baixa diversidade)")
 
 # =========================
-# INSIGHT IA (REAL)
+# INSIGHT COM IA (REAL)
 # =========================
-if st.button("🤖 Gerar Insight com IA"):
-    try:
-        import openai
+st.subheader("🤖 Insight com IA")
 
-        openai.api_key = st.secrets["OPENAI_API_KEY"]
-
-        prompt = f"""
-        Analise esses dados de interação de usuários:
-
-        Total de interações: {total}
-        Média de valor: {media}
-
-        Dê um insight objetivo sobre o comportamento do usuário.
-        """
-
-        response = openai.ChatCompletion.create(
-            model="gpt-4o-mini",
-            messages=[{"role": "user", "content": prompt}]
-        )
-
-        st.success(response.choices[0].message.content)
-
-    except Exception as e:
-        st.error(f"Erro IA: {e}")
+if st.button("Gerar Insight Inteligente"):
+    with st.spinner("Analisando dados com IA..."):
+        insight = gerar_insight_ia(df)
+        st.success(insight)
