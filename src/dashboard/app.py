@@ -65,7 +65,7 @@ def load_metrics():
 data = load_data()
 metrics = load_metrics()
 
-df = pd.DataFrame(data)
+df = pd.DataFrame([data])
 
 if not df.empty:
     df["data"] = pd.to_datetime(df["data"])
