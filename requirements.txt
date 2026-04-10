@@ -6,3 +6,4 @@ requests
 plotly
 streamlit
 openai
+google-generativeai

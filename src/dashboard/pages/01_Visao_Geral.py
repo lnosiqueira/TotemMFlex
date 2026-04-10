@@ -1,13 +1,15 @@
 import streamlit as st
 import requests
 import pandas as pd
-from openai import OpenAI
+import google.generativeai as genai
 import os
 
 # =========================
 # CONFIG IA
 # =========================
-client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+
+model = genai.GenerativeModel("gemini-pro")
 
 def gerar_insight_ia(df):
     try:
@@ -21,14 +23,9 @@ def gerar_insight_ia(df):
         Seja direto, profissional e estratégico.
         """
 
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "user", "content": prompt}
-            ]
-        )
+        response = model.generate_content(prompt)
 
-        return response.choices[0].message.content
+        return response.text
 
     except Exception as e:
         return f"Erro IA: {str(e)}"
