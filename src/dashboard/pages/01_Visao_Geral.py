@@ -1,143 +1,73 @@
 import streamlit as st
-import pandas as pd
 import requests
-import plotly.express as px
+import pandas as pd
 
-st.set_page_config(layout="wide")
+API_URL = "https://totemmflex.onrender.com"
 
-# ==============================
-# 🎨 ESTILO GLOBAL
-# ==============================
-st.markdown("""
-<style>
+st.title("🚀 TotemMFlex Analytics")
 
-#MainMenu {visibility: hidden;}
-footer {visibility: hidden;}
-header {visibility: hidden;}
+# =========================
+# BOTÃO DE GERAR INTERAÇÃO
+# =========================
+if st.button("⚡ Gerar interação"):
+    try:
+        response = requests.post(f"{API_URL}/interactions/", json={
+            "sensor_type": "toque",
+            "valor": 0.5
+        })
+        if response.status_code == 200:
+            st.success("Interação enviada!")
+        else:
+            st.error("Erro ao enviar interação")
+    except:
+        st.error("Erro ao conectar API")
 
-.block-container {
-    padding-top: 1rem;
-    max-width: 1100px;
-}
-
-/* CENTRAL */
-.center {
-    text-align: center;
-}
-
-/* LOGO */
-.logo {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-/* SUBTITLE */
-.subtitle {
-    color: #6b7280;
-    font-size: 16px;
-    margin-top: 10px;
-}
-
-/* CARD */
-.card {
-    background: white;
-    padding: 25px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    text-align: center;
-}
-
-/* TITLE */
-.title {
-    font-size: 14px;
-    color: #6b7280;
-}
-
-/* VALUE */
-.value {
-    font-size: 36px;
-    font-weight: bold;
-    color: #111827;
-}
-
-</style>
-""", unsafe_allow_html=True)
-
-# ==============================
-# 🚀 LOGO CENTRALIZADO
-# ==============================
-st.markdown('<div class="center">', unsafe_allow_html=True)
-
-st.image("src/assets/logo_totemmflex.png", width=280)
-
-st.markdown(
-    '<div class="subtitle">Inteligência comportamental em tempo real</div>',
-    unsafe_allow_html=True
-)
-
-st.markdown('</div>', unsafe_allow_html=True)
-
-st.markdown("<br>", unsafe_allow_html=True)
-
-# ==============================
-# API
-# ==============================
-API_URL = "https://totemmflex.onrender.com/interactions/"
-
+# =========================
+# BUSCAR DADOS
+# =========================
 try:
-    response = requests.get(API_URL)
-    data = response.json()
+    metrics = requests.get(f"{API_URL}/metrics").json()
+    interactions = requests.get(f"{API_URL}/interactions").json()
 except:
     st.error("Erro ao conectar API")
     st.stop()
 
-df = pd.DataFrame([data])
-
-if df.empty:
-    st.warning("Sem dados ainda")
-    st.stop()
-
-df["data"] = pd.to_datetime(df["data"], errors="coerce")
-
-# ==============================
-# KPIs
-# ==============================
-total = len(df)
-media = df["valor"].mean()
-
-# ==============================
-# CARDS (SEM BUG)
-# ==============================
-col1, col2 = st.columns(2)
+# =========================
+# CARDS (METRICS)
+# =========================
+col1, col2, col3 = st.columns(3)
 
 with col1:
-    st.markdown(f"""
-    <div class="card">
-        <div class="title">VISITANTES</div>
-        <div class="value">{total}</div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.metric("📊 Total", metrics.get("total_interacoes", 0))
 
 with col2:
-    st.markdown(f"""
-    <div class="card">
-        <div class="title">ENGAJAMENTO</div>
-        <div class="value">{media:.2f}</div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.metric("🧠 Média Valor", metrics.get("media_valor", 0))
 
-# ==============================
-# GRÁFICO
-# ==============================
-st.markdown("<br>", unsafe_allow_html=True)
+with col3:
+    st.metric("⏱ Tempo Médio", "N/A")
 
-st.subheader("Desempenho")
+# =========================
+# DATAFRAME SEGURO
+# =========================
+if isinstance(interactions, list) and len(interactions) > 0:
+    df = pd.DataFrame(interactions)
 
-df["hora"] = df["data"].dt.hour
-grafico = df.groupby("hora").size().reset_index(name="qtd")
+    # Só trata data se existir
+    if "data" in df.columns:
+        df["data"] = pd.to_datetime(df["data"], errors="coerce")
 
-fig = px.line(grafico, x="hora", y="qtd")
-fig.update_layout(template="simple_white")
+    st.subheader("📈 Interações")
+    st.dataframe(df)
 
-st.plotly_chart(fig, use_container_width=True)
+else:
+    st.warning("Sem dados ainda")
+
+# =========================
+# INSIGHT
+# =========================
+st.subheader("🧠 Insight do Sistema")
+
+if metrics.get("total_interacoes", 0) > 0:
+    st.success("Sistema já possui dados para análise")
+else:
+    st.info("Sem insight disponível ainda")
