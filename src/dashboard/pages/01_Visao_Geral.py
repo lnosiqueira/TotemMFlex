@@ -7,7 +7,7 @@ import os
 # =========================
 # CONFIG IA
 # =========================
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 def gerar_insight_ia(df):
     try:
