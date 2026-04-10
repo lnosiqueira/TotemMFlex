@@ -65,9 +65,6 @@ def load_metrics():
 data = load_data()
 metrics = load_metrics()
 
-if "data" in df.columns:
-    df["data"] = pd.to_datetime(df["data"])
-
 if not df.empty:
     df["data"] = pd.to_datetime(df["data"])
     df["hora"] = df["data"].dt.hour
