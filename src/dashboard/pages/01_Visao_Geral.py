@@ -92,7 +92,7 @@ except:
     st.error("Erro ao conectar API")
     st.stop()
 
-df = pd.DataFrame(data)
+df = pd.DataFrame([data])
 
 if df.empty:
     st.warning("Sem dados ainda")
