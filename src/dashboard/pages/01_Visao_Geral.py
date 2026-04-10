@@ -2,14 +2,21 @@ import streamlit as st
 import requests
 import pandas as pd
 import google.generativeai as genai
-import os
 
 # =========================
-# CONFIG IA
+# CONFIG IA (SEM ERRO)
 # =========================
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+api_key = st.secrets.get("GOOGLE_API_KEY")
 
+if not api_key:
+    st.error("❌ GOOGLE_API_KEY não encontrada no Streamlit Secrets")
+    st.stop()
+
+genai.configure(api_key=api_key)
+
+# MODELO COMPATÍVEL COM SUA LIB
 model = genai.GenerativeModel("gemini-pro")
+
 
 def gerar_insight_ia(df):
     try:
@@ -29,6 +36,7 @@ def gerar_insight_ia(df):
 
     except Exception as e:
         return f"Erro IA: {str(e)}"
+
 
 # =========================
 # CONFIG APP
@@ -68,7 +76,7 @@ if df.empty:
     st.warning("Sem dados ainda")
     st.stop()
 
-# Garantir formato de data
+# Ajustar data
 df["data"] = pd.to_datetime(df["data"], errors="coerce")
 
 # =========================
@@ -81,7 +89,7 @@ col2.metric("🧠 Média Valor", round(df["valor"].mean(), 2))
 col3.metric("⏱ Tempo Médio", "N/A")
 
 # =========================
-# GRÁFICO DE TEMPO
+# GRÁFICO TEMPO
 # =========================
 st.subheader("📈 Interações ao longo do tempo")
 
@@ -89,9 +97,9 @@ df_time = df.groupby(df["data"].dt.strftime("%H:%M:%S")).size()
 st.line_chart(df_time)
 
 # =========================
-# GRÁFICO POR TIPO
+# GRÁFICO TIPO
 # =========================
-st.subheader("📊 Distribuição por tipo de interação")
+st.subheader("📊 Distribuição por tipo")
 
 df_tipo = df.groupby("sensor_type").size()
 st.bar_chart(df_tipo)
@@ -99,7 +107,7 @@ st.bar_chart(df_tipo)
 # =========================
 # TABELA
 # =========================
-st.subheader("📋 Interações")
+st.subheader("📋 Últimas interações")
 st.dataframe(df.tail(20))
 
 # =========================
@@ -111,27 +119,26 @@ media = df["valor"].mean()
 total = len(df)
 
 if total < 10:
-    st.warning("Poucos dados para análise ainda")
+    st.warning("Poucos dados ainda")
 else:
     if media > 0.7:
-        st.success("🔥 Alto engajamento detectado")
+        st.success("🔥 Alto engajamento")
     elif media > 0.4:
         st.info("📊 Interação moderada")
     else:
         st.warning("⚠ Baixo engajamento")
 
-    # Padrão de comportamento
     toques = df[df["sensor_type"] == "toque"]
 
     if len(toques) > total * 0.9:
-        st.info("👆 Sistema baseado quase totalmente em toques (baixa diversidade)")
+        st.info("👆 Sistema baseado quase só em toques (baixa diversidade)")
 
 # =========================
-# INSIGHT COM IA (REAL)
+# IA
 # =========================
 st.subheader("🤖 Insight com IA")
 
 if st.button("Gerar Insight Inteligente"):
-    with st.spinner("Analisando dados com IA..."):
+    with st.spinner("Analisando com IA..."):
         insight = gerar_insight_ia(df)
         st.success(insight)
