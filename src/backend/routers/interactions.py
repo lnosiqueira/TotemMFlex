@@ -4,25 +4,41 @@ from src.backend.services.model import Interaction
 
 router = APIRouter()
 
+# =========================
+# POST (criar)
+# =========================
 @router.post("/interactions/")
 def criar_interacao(payload: dict):
     db = SessionLocal()
 
-    try:
-        nova_interacao = Interaction(
-            sensor_type=payload.get("sensor_type"),
-            valor=payload.get("valor")
-        )
+    nova = Interaction(
+        sensor_type=payload.get("sensor_type"),
+        valor=payload.get("valor")
+    )
 
-        db.add(nova_interacao)
-        db.commit()
-        db.refresh(nova_interacao)  # 🔥 ESSENCIAL
+    db.add(nova)
+    db.commit()
+    db.close()
 
-        return {"msg": "Interação salva com sucesso"}
+    return {"msg": "ok"}
 
-    except Exception as e:
-        db.rollback()
-        return {"erro": str(e)}
 
-    finally:
-        db.close()
+# =========================
+# GET (listar)
+# =========================
+@router.get("/interactions/")
+def listar_interacoes():
+    db = SessionLocal()
+
+    dados = db.query(Interaction).all()
+
+    db.close()
+
+    return [
+        {
+            "sensor_type": d.sensor_type,
+            "valor": d.valor,
+            "data": str(d.data)
+        }
+        for d in dados
+    ]
