@@ -22,7 +22,6 @@ def criar_interacao(payload: dict):
 
     return {"msg": "ok"}
 
-
 # =========================
 # GET (listar)
 # =========================
