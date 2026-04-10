@@ -18,4 +18,4 @@ Bem-vindo ao sistema de análise comportamental em tempo real.
 - Visualizar métricas
 - Analisar comportamento
 - Gerar insights com IA
-"")
+""")
