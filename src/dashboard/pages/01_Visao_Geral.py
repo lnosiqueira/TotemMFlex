@@ -22,24 +22,21 @@ def gerar_insight_ia(df):
         resumo = df.describe().to_string()
 
         prompt = f"""
-Analise os dados abaixo e gere um insight de comportamento do usuário:
+Você é um especialista em análise de comportamento do usuário em sistemas interativos.
+
+Analise os dados abaixo e gere um insight estratégico:
 
 {resumo}
 
+Estruture sua resposta em:
+
+1. 📊 Padrão identificado
+2. 🧠 Interpretação do comportamento
+3. ⚠ Possível problema ou oportunidade
+4. 💡 Recomendação prática
+
 Seja direto, profissional e estratégico.
 """
-
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "user", "content": prompt}
-            ]
-        )
-
-        return response.choices[0].message.content
-
-    except Exception as e:
-        return f"Erro IA: {str(e)}"
 
 # =========================
 # CONFIG APP
