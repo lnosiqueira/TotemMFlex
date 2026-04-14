@@ -2,46 +2,36 @@ import requests
 import streamlit as st
 import pandas as pd
 from openai import OpenAI
-import random
 
 # =========================
-# CONFIG API KEY
+# CONFIG IA
 # =========================
-api_key = st.secrets.get("OPENAI_API_KEY")
+client = OpenAI(api_key=st.secrets.get("OPENAI_API_KEY"))
 
-if not api_key:
-    st.error("❌ API KEY não encontrada")
-    st.stop()
-
-client = OpenAI(api_key=api_key)
-
-# =========================
-# FUNÇÃO IA
-# =========================
 def gerar_insight_ia(df):
     try:
         resumo = df.describe().to_string()
 
         prompt = f"""
-Você é um especialista em análise de comportamento do usuário.
+        Você é um analista de dados especialista em comportamento do usuário.
 
-Analise os dados abaixo:
+        Analise os dados abaixo e gere:
 
-{resumo}
+        - Padrão de comportamento
+        - Possível problema ou oportunidade
+        - Recomendação prática
 
-Responda com:
+        Dados:
+        {resumo}
 
-📊 Padrão  
-🧠 Interpretação  
-⚠ Problema  
-💡 Recomendação
-
-Seja direto e estratégico.
-"""
+        Seja direto, estratégico e profissional.
+        """
 
         response = client.chat.completions.create(
             model="gpt-4o-mini",
-            messages=[{"role": "user", "content": prompt}]
+            messages=[
+                {"role": "user", "content": prompt}
+            ]
         )
 
         return response.choices[0].message.content
@@ -49,116 +39,153 @@ Seja direto e estratégico.
     except Exception as e:
         return f"Erro IA: {str(e)}"
 
+
 # =========================
 # CONFIG APP
 # =========================
 API_URL = "https://totemmflex.onrender.com"
 
-st.set_page_config(page_title="TotemMFlex", layout="wide")
+st.set_page_config(layout="wide")
 
-st.title("🚀 TotemMFlex Analytics")
+st.markdown("""
+# 🚀 TotemMFlex Analytics  
+Plataforma de análise comportamental em tempo real com IA
+""")
+
+st.divider()
 
 # =========================
-# GERAR INTERAÇÃO
+# BOTÕES PRINCIPAIS
 # =========================
-if st.button("⚡ Gerar interação"):
+col_btn1, col_btn2, col_btn3 = st.columns(3)
+
+if col_btn1.button("⚡ Simular interação"):
     try:
-        response = requests.post(
-            f"{API_URL}/interactions/",
-            json={
-                "sensor_type": random.choice(["toque", "voz", "gesto"]),
-                "valor": round(random.uniform(0.1, 1.0), 2)
-            },
-            timeout=5
-        )
+        requests.post(f"{API_URL}/interactions/", json={
+            "sensor_type": "toque",
+            "valor": 0.5
+        })
+        st.success("Interação registrada com sucesso")
+    except:
+        st.error("Erro ao enviar interação")
 
-        if response.status_code == 200:
-            st.success("✅ Interação enviada!")
-            st.rerun()
-        else:
-            st.error(f"Erro API: {response.status_code}")
+if col_btn2.button("📥 Exportar CSV"):
+    st.info("Role a página para baixar os dados")
 
-    except Exception as e:
-        st.error(f"Erro conexão: {e}")
+if col_btn3.button("🔄 Atualizar dados"):
+    st.rerun()
+
 
 # =========================
 # BUSCAR DADOS
 # =========================
 try:
-    response = requests.get(f"{API_URL}/interactions/", timeout=5)
+    response = requests.get(f"{API_URL}/interactions/")
     data = response.json()
     df = pd.DataFrame(data)
-
 except Exception as e:
     st.error(f"Erro ao conectar API: {e}")
     st.stop()
 
-# =========================
-# VALIDAÇÃO
-# =========================
 if df.empty:
     st.warning("Sem dados ainda")
     st.stop()
 
+# =========================
+# TRATAMENTO
+# =========================
 df["data"] = pd.to_datetime(df["data"], errors="coerce")
-df = df.dropna(subset=["data"])
-
-# =========================
-# MÉTRICAS
-# =========================
 df = df.sort_values("data")
-df["diff"] = df["data"].diff().dt.total_seconds()
 
+# =========================
+# FILTROS
+# =========================
+st.sidebar.header("🔎 Filtros")
+
+data_inicio = st.sidebar.date_input("Data inicial", df["data"].min())
+data_fim = st.sidebar.date_input("Data final", df["data"].max())
+
+df = df[(df["data"] >= str(data_inicio)) & (df["data"] <= str(data_fim))]
+
+# =========================
+# MÉTRICAS REAIS
+# =========================
+total = len(df)
+media = df["valor"].mean()
+
+# cálculo tempo médio
+df["diff"] = df["data"].diff().dt.total_seconds()
 tempo_medio = df["diff"].mean()
-if pd.isna(tempo_medio):
-    tempo_medio = 0
 
 col1, col2, col3 = st.columns(3)
 
-col1.metric("📊 Total", len(df))
-col2.metric("🧠 Média Valor", round(df["valor"].mean(), 2))
-col3.metric("⏱ Tempo Médio", f"{round(tempo_medio, 2)}s")
+col1.metric("📊 Total de Interações", total)
+col2.metric("🧠 Engajamento Médio", round(media, 2))
+col3.metric("⏱ Tempo Médio", f"{tempo_medio:.2f}s")
+
+st.divider()
 
 # =========================
 # GRÁFICOS
 # =========================
 st.subheader("📈 Interações ao longo do tempo")
+
 df_time = df.groupby(df["data"].dt.strftime("%H:%M:%S")).size()
 st.line_chart(df_time)
 
+st.divider()
+
 st.subheader("📊 Distribuição por tipo")
+
 df_tipo = df.groupby("sensor_type").size()
 st.bar_chart(df_tipo)
+
+st.divider()
+
+# =========================
+# DOWNLOAD
+# =========================
+st.download_button(
+    "⬇️ Baixar dados CSV",
+    df.to_csv(index=False),
+    "dados_interacoes.csv"
+)
 
 # =========================
 # TABELA
 # =========================
 st.subheader("📋 Últimas interações")
-st.dataframe(df.tail(20), use_container_width=True)
+st.dataframe(df.tail(20))
+
+st.divider()
 
 # =========================
-# INSIGHT SIMPLES
+# INSIGHT SISTEMA
 # =========================
-st.subheader("🧠 Insight do Sistema")
+st.subheader("🧠 Análise do Sistema")
 
-media = df["valor"].mean()
-
-if media > 0.7:
-    st.success("🔥 Alto engajamento")
-elif media > 0.4:
-    st.info("📊 Interação moderada")
+if total < 10:
+    st.warning("Poucos dados ainda")
 else:
-    st.warning("⚠ Baixo engajamento")
+    if media > 0.7:
+        st.success("🔥 Alto engajamento detectado")
+    elif media > 0.4:
+        st.info("📊 Engajamento moderado")
+    else:
+        st.warning("⚠ Baixo engajamento")
 
-if df["sensor_type"].nunique() == 1:
-    st.warning("👆 Baixa diversidade de interação")
+    if len(df[df["sensor_type"] == "toque"]) > total * 0.9:
+        st.info("👆 Baixa diversidade de interação")
+
+st.divider()
 
 # =========================
 # IA
 # =========================
-st.subheader("🤖 Insight com IA")
+st.subheader("🤖 Análise Inteligente com IA")
+st.caption("Insights gerados automaticamente com base no comportamento do usuário")
 
-if st.button("Gerar Insight Inteligente"):
-    with st.spinner("Analisando..."):
+if st.button("🧠 Gerar Insight Inteligente"):
+    with st.spinner("Analisando comportamento..."):
         insight = gerar_insight_ia(df)
         st.success(insight)
