@@ -61,35 +61,33 @@ st.title("🚀 TotemMFlex Analytics")
 # =========================
 if st.button("⚡ Gerar interação"):
     try:
-        requests.post(f"{API_URL}/interactions/", json={
-            "sensor_type": random.choice(["toque", "voz", "gesto"]),
-            "valor": round(random.uniform(0.1, 1.0), 2)
-        }, timeout=5)
+        response = requests.post(
+            f"{API_URL}/interactions/",
+            json={
+                "sensor_type": random.choice(["toque", "voz", "gesto"]),
+                "valor": round(random.uniform(0.1, 1.0), 2)
+            },
+            timeout=5
+        )
 
-        st.success("Interação enviada!")
-        st.rerun()
+        if response.status_code == 200:
+            st.success("Interação enviada!")
+            st.rerun()
+        else:
+            st.error(f"Erro ao enviar interação: {response.status_code}")
 
-    except:
-        st.error("Erro ao enviar interação")
+    except Exception as e:
+        st.error(f"Erro ao enviar interação: {e}")
 
 # =========================
 # BUSCAR DADOS
 # =========================
 try:
-    response = requests.post(
-    f"{API_URL}/interactions/",
-    json={
-        "sensor_type": random.choice(["toque", "voz", "gesto"]),
-        "valor": round(random.uniform(0.1, 1.0), 2)
-    },
-    timeout=5
-)
-
-if response.status_code == 200:
+    try:
+    requests.post(...)
     st.success("Interação enviada!")
-    st.rerun()
-else:
-    st.error(f"Erro ao enviar interação: {response.status_code}")
+except:
+    st.error(f"Erro: {response.status_code} - {response.text}")
 
 # =========================
 # VALIDAÇÃO
