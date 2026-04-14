@@ -13,10 +13,10 @@ if not api_key:
     st.error("❌ GOOGLE_API_KEY não encontrada no Streamlit Secrets")
     st.stop()
 
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+genai.configure(api_key=api_key)
 
 # MODELO COMPATÍVEL COM SUA LIB
-model = genai.GenerativeModel("gemini-1.5-flash-latest")
+model = genai.GenerativeModel("gemini-1.5-flash")
 
 
 def gerar_insight_ia(df):
