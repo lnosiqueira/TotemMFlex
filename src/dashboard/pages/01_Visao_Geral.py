@@ -2,24 +2,9 @@ import requests
 import streamlit as st
 import pandas as pd
 import google.generativeai as genai
+from openai import OpenAI
 
-# =========================
-# CONFIG IA
-# =========================
-
-api_key = st.secrets.get("GOOGLE_API_KEY")
-
-if not api_key:
-    st.error("❌ GOOGLE_API_KEY não encontrada no Streamlit Secrets")
-    st.stop()
-
-genai.configure(api_key=api_key)
-
-model = genai.GenerativeModel("gemini-pro")
-
-# =========================
-# FUNÇÃO IA
-# =========================
+client = OpenAI(api_key=st.secrets.get("OPENAI_API_KEY"))
 
 def gerar_insight_ia(df):
     try:
@@ -33,9 +18,14 @@ def gerar_insight_ia(df):
         Seja direto, profissional e estratégico.
         """
 
-        response = model.generate_content(prompt)
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "user", "content": prompt}
+            ]
+        )
 
-        return response.text
+        return response.choices[0].message.content
 
     except Exception as e:
         return f"Erro IA: {str(e)}"
