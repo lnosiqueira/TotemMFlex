@@ -10,7 +10,7 @@ import random
 api_key = st.secrets.get("OPENAI_API_KEY")
 
 if not api_key:
-    st.error("❌ API KEY não encontrada no Streamlit Secrets")
+    st.error("❌ API KEY não encontrada")
     st.stop()
 
 client = OpenAI(api_key=api_key)
@@ -23,20 +23,20 @@ def gerar_insight_ia(df):
         resumo = df.describe().to_string()
 
         prompt = f"""
-Você é um especialista em análise de comportamento do usuário em sistemas interativos.
+Você é um especialista em análise de comportamento do usuário.
 
-Analise os dados abaixo e gere um insight estratégico:
+Analise os dados abaixo:
 
 {resumo}
 
-Estruture sua resposta em:
+Responda com:
 
-1. 📊 Padrão identificado
-2. 🧠 Interpretação do comportamento
-3. ⚠ Possível problema ou oportunidade
-4. 💡 Recomendação prática
+📊 Padrão  
+🧠 Interpretação  
+⚠ Problema  
+💡 Recomendação
 
-Seja direto, profissional e estratégico.
+Seja direto e estratégico.
 """
 
         response = client.chat.completions.create(
@@ -53,6 +53,8 @@ Seja direto, profissional e estratégico.
 # CONFIG APP
 # =========================
 API_URL = "https://totemmflex.onrender.com"
+
+st.set_page_config(page_title="TotemMFlex", layout="wide")
 
 st.title("🚀 TotemMFlex Analytics")
 
@@ -71,23 +73,25 @@ if st.button("⚡ Gerar interação"):
         )
 
         if response.status_code == 200:
-            st.success("Interação enviada!")
+            st.success("✅ Interação enviada!")
             st.rerun()
         else:
-            st.error(f"Erro ao enviar interação: {response.status_code}")
+            st.error(f"Erro API: {response.status_code}")
 
     except Exception as e:
-        st.error(f"Erro ao enviar interação: {e}")
+        st.error(f"Erro conexão: {e}")
 
 # =========================
 # BUSCAR DADOS
 # =========================
 try:
-    try:
-    requests.post(...)
-    st.success("Interação enviada!")
-except:
-    st.error(f"Erro: {response.status_code} - {response.text}")
+    response = requests.get(f"{API_URL}/interactions/", timeout=5)
+    data = response.json()
+    df = pd.DataFrame(data)
+
+except Exception as e:
+    st.error(f"Erro ao conectar API: {e}")
+    st.stop()
 
 # =========================
 # VALIDAÇÃO
@@ -96,7 +100,6 @@ if df.empty:
     st.warning("Sem dados ainda")
     st.stop()
 
-# Ajustar data
 df["data"] = pd.to_datetime(df["data"], errors="coerce")
 df = df.dropna(subset=["data"])
 
@@ -104,10 +107,9 @@ df = df.dropna(subset=["data"])
 # MÉTRICAS
 # =========================
 df = df.sort_values("data")
-
 df["diff"] = df["data"].diff().dt.total_seconds()
-tempo_medio = df["diff"].mean()
 
+tempo_medio = df["diff"].mean()
 if pd.isna(tempo_medio):
     tempo_medio = 0
 
@@ -132,7 +134,7 @@ st.bar_chart(df_tipo)
 # TABELA
 # =========================
 st.subheader("📋 Últimas interações")
-st.dataframe(df.tail(20))
+st.dataframe(df.tail(20), use_container_width=True)
 
 # =========================
 # INSIGHT SIMPLES
@@ -140,20 +142,16 @@ st.dataframe(df.tail(20))
 st.subheader("🧠 Insight do Sistema")
 
 media = df["valor"].mean()
-total = len(df)
 
-if total < 10:
-    st.warning("Poucos dados ainda")
+if media > 0.7:
+    st.success("🔥 Alto engajamento")
+elif media > 0.4:
+    st.info("📊 Interação moderada")
 else:
-    if media > 0.7:
-        st.success("🔥 Alto engajamento")
-    elif media > 0.4:
-        st.info("📊 Interação moderada")
-    else:
-        st.warning("⚠ Baixo engajamento")
+    st.warning("⚠ Baixo engajamento")
 
-    if df["sensor_type"].nunique() == 1:
-        st.info("👆 Baixa diversidade de interação")
+if df["sensor_type"].nunique() == 1:
+    st.warning("👆 Baixa diversidade de interação")
 
 # =========================
 # IA
@@ -161,6 +159,6 @@ else:
 st.subheader("🤖 Insight com IA")
 
 if st.button("Gerar Insight Inteligente"):
-    with st.spinner("Analisando com IA..."):
+    with st.spinner("Analisando..."):
         insight = gerar_insight_ia(df)
         st.success(insight)
