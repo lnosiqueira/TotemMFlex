@@ -29,9 +29,7 @@ def gerar_insight_ia(df):
 
         response = client.chat.completions.create(
             model="gpt-4o-mini",
-            messages=[
-                {"role": "user", "content": prompt}
-            ]
+            messages=[{"role": "user", "content": prompt}]
         )
 
         return response.choices[0].message.content
@@ -59,19 +57,26 @@ st.divider()
 # =========================
 col_btn1, col_btn2, col_btn3 = st.columns(3)
 
+# 🔥 SIMULAR INTERAÇÃO (COM DEBUG REAL)
 if col_btn1.button("⚡ Simular interação"):
     try:
-        requests.post(f"{API_URL}/interactions/", json={
-            "sensor_type": "toque",
-            "valor": 0.5
-        })
-        st.success("Interação registrada com sucesso")
-    except:
-        st.error("Erro ao enviar interação")
+        response = requests.post(
+            f"{API_URL}/interactions/",
+            json={
+                "sensor_type": "toque",
+                "valor": 0.5
+            }
+        )
 
-if col_btn2.button("📥 Exportar CSV"):
-    st.info("Role a página para baixar os dados")
+        if response.status_code == 200:
+            st.success("✅ Interação registrada")
+        else:
+            st.error(f"Erro API: {response.status_code} - {response.text}")
 
+    except Exception as e:
+        st.error(f"Erro real: {e}")
+
+# 🔥 ATUALIZAR
 if col_btn3.button("🔄 Atualizar dados"):
     st.rerun()
 
@@ -81,14 +86,27 @@ if col_btn3.button("🔄 Atualizar dados"):
 # =========================
 try:
     response = requests.get(f"{API_URL}/interactions/")
+    
+    if response.status_code != 200:
+        st.error(f"Erro ao buscar dados: {response.text}")
+        st.stop()
+
     data = response.json()
     df = pd.DataFrame(data)
+
 except Exception as e:
     st.error(f"Erro ao conectar API: {e}")
     st.stop()
 
+
+# DEBUG (REMOVE DEPOIS)
+st.write("🔍 DEBUG DADOS:", df.head())
+
+# =========================
+# VALIDAÇÃO
+# =========================
 if df.empty:
-    st.warning("Sem dados ainda")
+    st.warning("⚠ Sem dados ainda - verifique API")
     st.stop()
 
 # =========================
@@ -108,14 +126,16 @@ data_fim = st.sidebar.date_input("Data final", df["data"].max())
 df = df[(df["data"] >= str(data_inicio)) & (df["data"] <= str(data_fim))]
 
 # =========================
-# MÉTRICAS REAIS
+# MÉTRICAS
 # =========================
 total = len(df)
 media = df["valor"].mean()
 
-# cálculo tempo médio
 df["diff"] = df["data"].diff().dt.total_seconds()
 tempo_medio = df["diff"].mean()
+
+if pd.isna(tempo_medio):
+    tempo_medio = 0
 
 col1, col2, col3 = st.columns(3)
 
@@ -143,12 +163,13 @@ st.bar_chart(df_tipo)
 st.divider()
 
 # =========================
-# DOWNLOAD
+# EXPORTAÇÃO REAL (FUNCIONANDO)
 # =========================
 st.download_button(
-    "⬇️ Baixar dados CSV",
-    df.to_csv(index=False),
-    "dados_interacoes.csv"
+    "📥 Baixar dados CSV",
+    data=df.to_csv(index=False),
+    file_name="dados_interacoes.csv",
+    mime="text/csv"
 )
 
 # =========================
@@ -183,7 +204,6 @@ st.divider()
 # IA
 # =========================
 st.subheader("🤖 Análise Inteligente com IA")
-st.caption("Insights gerados automaticamente com base no comportamento do usuário")
 
 if st.button("🧠 Gerar Insight Inteligente"):
     with st.spinner("Analisando comportamento..."):
