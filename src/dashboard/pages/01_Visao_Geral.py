@@ -2,9 +2,10 @@ import requests
 import streamlit as st
 import pandas as pd
 from openai import OpenAI
+import random
 
 # =========================
-# CONFIG API KEY (SEGURO)
+# CONFIG API KEY
 # =========================
 api_key = st.secrets.get("OPENAI_API_KEY")
 
@@ -40,9 +41,7 @@ Seja direto, profissional e estratégico.
 
         response = client.chat.completions.create(
             model="gpt-4o-mini",
-            messages=[
-                {"role": "user", "content": prompt}
-            ]
+            messages=[{"role": "user", "content": prompt}]
         )
 
         return response.choices[0].message.content
@@ -63,10 +62,13 @@ st.title("🚀 TotemMFlex Analytics")
 if st.button("⚡ Gerar interação"):
     try:
         requests.post(f"{API_URL}/interactions/", json={
-            "sensor_type": "toque",
-            "valor": 0.5
-        })
+            "sensor_type": random.choice(["toque", "voz", "gesto"]),
+            "valor": round(random.uniform(0.1, 1.0), 2)
+        }, timeout=5)
+
         st.success("Interação enviada!")
+        st.rerun()
+
     except:
         st.error("Erro ao enviar interação")
 
@@ -74,9 +76,10 @@ if st.button("⚡ Gerar interação"):
 # BUSCAR DADOS
 # =========================
 try:
-    response = requests.get(f"{API_URL}/interactions/")
+    response = requests.get(f"{API_URL}/interactions/", timeout=5)
     data = response.json()
     df = pd.DataFrame(data)
+
 except Exception as e:
     st.error(f"Erro ao conectar API: {e}")
     st.stop()
@@ -90,29 +93,33 @@ if df.empty:
 
 # Ajustar data
 df["data"] = pd.to_datetime(df["data"], errors="coerce")
+df = df.dropna(subset=["data"])
 
 # =========================
 # MÉTRICAS
 # =========================
+df = df.sort_values("data")
+
+df["diff"] = df["data"].diff().dt.total_seconds()
+tempo_medio = df["diff"].mean()
+
+if pd.isna(tempo_medio):
+    tempo_medio = 0
+
 col1, col2, col3 = st.columns(3)
 
 col1.metric("📊 Total", len(df))
 col2.metric("🧠 Média Valor", round(df["valor"].mean(), 2))
-col3.metric("⏱ Tempo Médio", "N/A")
+col3.metric("⏱ Tempo Médio", f"{round(tempo_medio, 2)}s")
 
 # =========================
-# GRÁFICO TEMPO
+# GRÁFICOS
 # =========================
 st.subheader("📈 Interações ao longo do tempo")
-
 df_time = df.groupby(df["data"].dt.strftime("%H:%M:%S")).size()
 st.line_chart(df_time)
 
-# =========================
-# GRÁFICO TIPO
-# =========================
 st.subheader("📊 Distribuição por tipo")
-
 df_tipo = df.groupby("sensor_type").size()
 st.bar_chart(df_tipo)
 
@@ -140,10 +147,8 @@ else:
     else:
         st.warning("⚠ Baixo engajamento")
 
-    toques = df[df["sensor_type"] == "toque"]
-
-    if len(toques) > total * 0.9:
-        st.info("👆 Sistema baseado quase só em toques (baixa diversidade)")
+    if df["sensor_type"].nunique() == 1:
+        st.info("👆 Baixa diversidade de interação")
 
 # =========================
 # IA
