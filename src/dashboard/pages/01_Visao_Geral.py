@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import google.generativeai as genai
+import requests
 
 # =========================
 # CONFIG IA
@@ -66,8 +67,8 @@ try:
     response = requests.get(f"{API_URL}/interactions/")
     data = response.json()
     df = pd.DataFrame(data)
-except:
-    st.error("Erro ao conectar API")
+except Exception as e:
+    st.error(f"Erro ao conectar API: {e}")
     st.stop()
 
 # =========================
