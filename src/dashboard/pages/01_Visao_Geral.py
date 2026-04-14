@@ -1,12 +1,11 @@
 import streamlit as st
-import requests
 import pandas as pd
 import google.generativeai as genai
-import os
 
 # =========================
-# CONFIG IA (SEM ERRO)
+# CONFIG IA
 # =========================
+
 api_key = st.secrets.get("GOOGLE_API_KEY")
 
 if not api_key:
@@ -15,9 +14,11 @@ if not api_key:
 
 genai.configure(api_key=api_key)
 
-# MODELO COMPATÍVEL COM SUA LIB
 model = genai.GenerativeModel("gemini-1.5-flash")
 
+# =========================
+# FUNÇÃO IA
+# =========================
 
 def gerar_insight_ia(df):
     try:
@@ -37,7 +38,6 @@ def gerar_insight_ia(df):
 
     except Exception as e:
         return f"Erro IA: {str(e)}"
-
 
 # =========================
 # CONFIG APP
