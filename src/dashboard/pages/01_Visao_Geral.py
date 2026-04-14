@@ -3,19 +3,31 @@ import streamlit as st
 import pandas as pd
 from openai import OpenAI
 
-client = OpenAI(api_key=st.secrets.get("OPENAI_API_KEY"))
+# =========================
+# CONFIG API KEY (SEGURO)
+# =========================
+api_key = st.secrets.get("OPENAI_API_KEY")
 
+if not api_key:
+    st.error("❌ API KEY não encontrada no Streamlit Secrets")
+    st.stop()
+
+client = OpenAI(api_key=api_key)
+
+# =========================
+# FUNÇÃO IA
+# =========================
 def gerar_insight_ia(df):
     try:
         resumo = df.describe().to_string()
 
         prompt = f"""
-        Analise os dados abaixo e gere um insight de comportamento do usuário:
+Analise os dados abaixo e gere um insight de comportamento do usuário:
 
-        {resumo}
+{resumo}
 
-        Seja direto, profissional e estratégico.
-        """
+Seja direto, profissional e estratégico.
+"""
 
         response = client.chat.completions.create(
             model="gpt-4o-mini",
