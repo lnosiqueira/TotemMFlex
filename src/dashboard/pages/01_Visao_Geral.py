@@ -60,18 +60,25 @@ col_btn1, col_btn2, col_btn3 = st.columns(3)
 # 🔥 SIMULAR INTERAÇÃO (COM DEBUG REAL)
 if col_btn1.button("⚡ Simular interação"):
     try:
+        payload = {
+            "sensor_type": "toque",
+            "valor": 0.5
+        }
+
+        st.write("📤 Enviando:", payload)
+
         response = requests.post(
             f"{API_URL}/interactions/",
-            json={
-                "sensor_type": "toque",
-                "valor": 0.5
-            }
+            json=payload
         )
+
+        st.write("📥 Status:", response.status_code)
+        st.write("📥 Resposta:", response.text)
 
         if response.status_code == 200:
             st.success("✅ Interação registrada")
         else:
-            st.error(f"Erro API: {response.status_code} - {response.text}")
+            st.error("Erro ao salvar interação")
 
     except Exception as e:
         st.error(f"Erro real: {e}")
