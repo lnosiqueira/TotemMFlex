@@ -6,4 +6,4 @@ requests
 plotly
 streamlit
 openai
-google-generativeai==0.3.2
+google-generativeai==0.8.3
