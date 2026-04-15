@@ -5,9 +5,15 @@ import os
 st.set_page_config(layout="centered")
 
 # =========================
-# ESCONDER MENU LATERAL (ANTES DO LOGIN)
+# SESSION DEFAULT
 # =========================
 if "logado" not in st.session_state:
+    st.session_state["logado"] = False
+
+# =========================
+# ESCONDER MENU LATERAL
+# =========================
+if not st.session_state["logado"]:
     st.markdown("""
         <style>
             section[data-testid="stSidebar"] {display: none;}
@@ -24,7 +30,7 @@ USERS = {
 }
 
 # =========================
-# CAMINHO DINÂMICO DA LOGO (NUNCA QUEBRA)
+# CAMINHO DA LOGO
 # =========================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 logo_path = os.path.join(BASE_DIR, "..", "assets", "logo-totemmflex.png")
@@ -32,22 +38,21 @@ logo_path = os.path.join(BASE_DIR, "..", "assets", "logo-totemmflex.png")
 # =========================
 # LOGIN
 # =========================
-if "logado" not in st.session_state or not st.session_state["logado"]:
+if not st.session_state["logado"]:
 
     col1, col2, col3 = st.columns([1,2,1])
 
     with col2:
 
-        # LOGO (COM FALLBACK)
         if os.path.exists(logo_path):
             logo = Image.open(logo_path)
-            st.image(logo, use_container_width=True)
+            st.image(logo, width=320)
+            st.markdown("<br>", unsafe_allow_html=True)
         else:
-            st.warning("Logo não encontrada. Verifique o caminho: src/assets/")
+            st.error(f"Logo não encontrada em: {logo_path}")
 
         st.markdown("<br>", unsafe_allow_html=True)
 
-        # INPUTS
         usuario = st.text_input("Usuário")
         senha = st.text_input("Senha", type="password")
 
