@@ -1,132 +1,138 @@
+import requests
 import streamlit as st
 import pandas as pd
-import requests
 from openai import OpenAI
 
 # =========================
 # CONFIG
 # =========================
-st.set_page_config(layout="wide")
-
 API_URL = "https://totemmflex.onrender.com"
 client = OpenAI(api_key=st.secrets.get("OPENAI_API_KEY"))
 
-# =========================
-# HEADER EMPRESA
-# =========================
-st.markdown("""
-<h1 style='text-align:center;'>TOTEMMFLEX ANALYTICS</h1>
-<p style='text-align:center;'>Inteligência comportamental em tempo real</p>
-""", unsafe_allow_html=True)
+plano = st.session_state.get("plano", "free")
+usuario = st.session_state.get("usuario", "desconhecido")
 
 # =========================
-# DADOS
+# HEADER
 # =========================
-response = requests.get(f"{API_URL}/interactions/")
-data = response.json()
-df = pd.DataFrame(data)
-
-if df.empty:
-    st.warning("Sem dados")
-    st.stop()
-
-df["data"] = pd.to_datetime(df["data"])
-df = df.sort_values("data")
-
-df["diff"] = df["data"].diff().dt.total_seconds()
+st.title("🚀 TotemMFlex Analytics")
+st.write(f"👤 Usuário: {usuario} | Plano: {plano.upper()}")
 
 # =========================
-# KPIs ESTILO EMPRESA
+# PERMISSÕES
 # =========================
-col1, col2, col3, col4 = st.columns(4)
+def pode_usar_premium():
+    return plano in ["premium", "dev_admin"]
 
-col1.metric("👥 Visitantes", len(df))
-col2.metric("📊 Engajamento", round(df["valor"].mean(), 2))
-col3.metric("⏱ Tempo Médio", f"{round(df['diff'].mean(),2)}s")
-col4.metric("🔥 Pico", round(df["valor"].max(), 2))
+def is_dev():
+    return plano == "dev_admin"
+
+# =========================
+# BUSCAR DADOS
+# =========================
+try:
+    response = requests.get(f"{API_URL}/interactions/", timeout=5)
+
+    if response.status_code != 200:
+        raise Exception("API fora")
+
+    data = response.json()
+    df = pd.DataFrame(data)
+
+    if df.empty:
+        raise Exception("Sem dados")
+
+except Exception as e:
+    st.warning(f"⚠ API offline — usando dados simulados ({e})")
+
+    df = pd.DataFrame({
+        "sensor_type": ["toque", "voz", "movimento", "scroll"] * 15,
+        "valor": [0.2, 0.5, 0.8, 0.3] * 15,
+        "data": pd.date_range(end=pd.Timestamp.now(), periods=60)
+    })
+
+# =========================
+# TRATAMENTO DATA
+# =========================
+df["data"] = pd.to_datetime(df["data"], errors="coerce")
+
+# =========================
+# MÉTRICAS
+# =========================
+col1, col2, col3 = st.columns(3)
+
+col1.metric("📊 Total", len(df))
+col2.metric("🧠 Média", round(df["valor"].mean(), 2))
+
+tempo_medio = df["data"].diff().dt.total_seconds().mean()
+col3.metric("⏱ Tempo Médio", f"{round(tempo_medio,2)}s")
 
 # =========================
 # GRÁFICOS
 # =========================
-col_g1, col_g2 = st.columns(2)
+st.subheader("📈 Interações no tempo")
 
-with col_g1:
-    st.subheader("📈 Interações")
-    df_time = df.groupby(df["data"].dt.strftime("%H:%M:%S")).size()
-    st.line_chart(df_time)
+df_time = df.groupby(df["data"].dt.strftime("%H:%M")).size()
+st.line_chart(df_time)
 
-with col_g2:
-    st.subheader("📊 Tipos")
-    st.bar_chart(df["sensor_type"].value_counts())
+st.subheader("📊 Distribuição")
 
-# =========================
-# INSIGHTS AUTOMÁTICOS (SEM IA)
-# =========================
-st.subheader("🧠 Insights Automáticos")
-
-col_i1, col_i2, col_i3 = st.columns(3)
-
-with col_i1:
-    if df["valor"].mean() > 0.7:
-        st.success("🔥 Alto engajamento")
-    else:
-        st.info("📊 Engajamento moderado")
-
-with col_i2:
-    if df["diff"].mean() > 3:
-        st.warning("⏱ Usuários demorando para agir")
-
-with col_i3:
-    if df["sensor_type"].value_counts().max() > len(df)*0.7:
-        st.warning("⚠ Baixa diversidade de interação")
+df_tipo = df.groupby("sensor_type").size()
+st.bar_chart(df_tipo)
 
 # =========================
-# IA MONSTRO (UPGRADE REAL)
+# IA BÁSICA
 # =========================
-def gerar_insight(df):
-    resumo = df.describe().to_string()
+def gerar_ia(df, amostra=20):
+    sample = df.tail(amostra)
+    resumo = sample.describe().to_string()
 
     prompt = f"""
-    Você é um especialista em SaaS e produto digital.
+    Analise os dados abaixo e gere insights de negócio:
 
-    Gere uma análise PROFISSIONAL com:
-
-    - Diagnóstico do comportamento do usuário
-    - O que isso significa para o negócio
-    - O maior risco
-    - A melhor oportunidade
-    - 3 ações práticas para melhorar conversão
-
-    Dados:
     {resumo}
+
+    Gere:
+    - comportamento do usuário
+    - padrão oculto
+    - recomendação estratégica
     """
 
     response = client.chat.completions.create(
         model="gpt-4o-mini",
-        messages=[{"role":"user","content":prompt}]
+        messages=[{"role": "user", "content": prompt}]
     )
 
     return response.choices[0].message.content
 
-st.subheader("🤖 IA Estratégica")
-
-if st.button("Gerar Insight Premium"):
-    with st.spinner("Analisando comportamento..."):
-        st.success(gerar_insight(df))
-
 # =========================
-# TABELA
+# IA FREE
 # =========================
-st.subheader("📋 Últimos registros")
-st.dataframe(df.tail(20))
+st.subheader("🤖 Insight IA")
+
+if st.button("Gerar Insight"):
+    st.info("Plano FREE (limitado)")
+    st.success(gerar_ia(df, 10))
 
 # =========================
-# EXPORT
+# IA PREMIUM
 # =========================
-csv = df.to_csv(index=False)
+if pode_usar_premium():
+    if st.button("🔥 Insight Premium"):
+        st.info("Plano PREMIUM ativado")
+        st.success(gerar_ia(df, 50))
 
-st.download_button(
-    "📥 Exportar CSV",
-    csv,
-    "dados.csv"
-)
+# =========================
+# DEV AREA
+# =========================
+if is_dev():
+    st.subheader("🧠 Modo Desenvolvedor")
+
+    st.write("Debug dataset:")
+    st.dataframe(df.tail(50))
+
+    st.write("📊 Estatísticas completas:")
+    st.write(df.describe())
+
+    if st.button("Gerar Insight Full"):
+        st.success(gerar_ia(df, len(df)))

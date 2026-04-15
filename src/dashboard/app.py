@@ -1,29 +1,36 @@
 import streamlit as st
 
-# Simulação de usuários (depois vira banco)
+st.set_page_config(layout="wide")
+
+# =========================
+# USERS
+# =========================
 USERS = {
     "admin": {"senha": "123", "plano": "premium"},
-    "user": {"senha": "123", "plano": "free"}
+    "user": {"senha": "123", "plano": "free"},
+    "lnosiqueira": {"senha": "lno@p0o9I*U&", "plano": "dev_admin"}
 }
 
-def login():
-    st.title("🔐 TotemMFlex Login")
+# =========================
+# LOGIN
+# =========================
+st.title("🔐 TotemMFlex Login")
 
-    user = st.text_input("Usuário")
-    senha = st.text_input("Senha", type="password")
+username = st.text_input("Usuário")
+password = st.text_input("Senha", type="password")
 
-    if st.button("Entrar"):
-        if user in USERS and USERS[user]["senha"] == senha:
-            st.session_state["user"] = user
-            st.session_state["plano"] = USERS[user]["plano"]
-            st.success("Login realizado!")
-            st.rerun()
-        else:
-            st.error("Credenciais inválidas")
+if st.button("Entrar"):
+    if username in USERS and USERS[username]["senha"] == password:
+        st.session_state["logado"] = True
+        st.session_state["usuario"] = username
+        st.session_state["plano"] = USERS[username]["plano"]
+        st.success("Login realizado com sucesso!")
+        st.rerun()
+    else:
+        st.error("Usuário ou senha inválidos")
 
-if "user" not in st.session_state:
-    login()
+# =========================
+# BLOQUEIO
+# =========================
+if "logado" not in st.session_state:
     st.stop()
-
-st.sidebar.success(f"Logado como: {st.session_state['user']}")
-st.sidebar.info(f"Plano: {st.session_state['plano']}")
