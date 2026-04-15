@@ -95,9 +95,8 @@ if not st.session_state["logado"]:
         <div class="login-box">
             <img class="logo" src="data:image/png;base64,{logo_base64}">
             <form method="post">
-                <input name="user" class="input" placeholder="Usuário">
-                <input name="pass" type="password" class="input" placeholder="Senha">
-                <button class="button">Entrar</button>
+                <input class="input" placeholder="Usuário">
+                <input class="input" placeholder="Senha">
             </form>
         </div>
     </div>
