@@ -10,7 +10,6 @@ import random
 st.set_page_config(layout="wide")
 
 API_URL = "https://totemmflex.onrender.com"
-
 client = OpenAI(api_key=st.secrets.get("OPENAI_API_KEY"))
 
 # =========================
@@ -125,24 +124,35 @@ if df.empty:
     st.warning("Sem dados")
     st.stop()
 
-# 👉 CONVERSÃO CORRETA DE DATA
+# =========================
+# TRATAMENTO DATA
+# =========================
 df["data"] = pd.to_datetime(df["data"], errors="coerce")
 
-# 👉 AJUSTE BRASIL
+# timezone Brasil
 df["data"] = df["data"].dt.tz_localize("UTC").dt.tz_convert("America/Sao_Paulo")
 
-# 👉 FILTRO FUNCIONANDO
+# =========================
+# FILTRO SEGURO
+# =========================
 if data_inicio and data_fim:
-    df = df[
+    df_filtrado = df[
         (df["data"].dt.date >= data_inicio) &
         (df["data"].dt.date <= data_fim)
     ]
 
-# 👉 TEMPO ENTRE INTERAÇÕES
+    if not df_filtrado.empty:
+        df = df_filtrado
+
+# =========================
+# TEMPO ENTRE INTERAÇÕES
+# =========================
 df = df.sort_values("data")
 df["diff"] = df["data"].diff().dt.total_seconds()
 
-tempo_medio = df["diff"].mean() if "diff" in df else 0
+tempo_medio = df["diff"].mean()
+if pd.isna(tempo_medio):
+    tempo_medio = 0
 
 # =========================
 # MÉTRICAS
@@ -161,22 +171,26 @@ with col1:
     card("Total", len(df))
 
 with col2:
-    card("Engajamento", round(df["valor"].mean(), 2))
+    media = df["valor"].mean()
+    card("Engajamento", round(media, 2) if not pd.isna(media) else 0)
 
 with col3:
     card("Tempo Médio", f"{round(tempo_medio,2)}s")
 
 with col4:
-    card("Tipo", df["sensor_type"].mode()[0])
+    tipo = df["sensor_type"].mode()
+    card("Tipo", tipo[0] if not tipo.empty else "N/A")
 
 # =========================
 # GRÁFICOS
 # =========================
 st.subheader("📈 Interações ao longo do tempo")
+
 df_time = df.groupby(df["data"].dt.strftime("%H:%M:%S")).size()
 st.line_chart(df_time)
 
 st.subheader("📊 Distribuição")
+
 df_tipo = df.groupby("sensor_type").size()
 st.bar_chart(df_tipo)
 
@@ -195,24 +209,25 @@ if total > 20:
 else:
     insights.append("Baixo volume de dados")
 
-if media > 0.7:
-    insights.append("Usuários altamente engajados")
-elif media > 0.4:
-    insights.append("Engajamento moderado")
-else:
-    insights.append("Baixo engajamento")
+if not pd.isna(media):
+    if media > 0.7:
+        insights.append("Usuários altamente engajados")
+    elif media > 0.4:
+        insights.append("Engajamento moderado")
+    else:
+        insights.append("Baixo engajamento")
 
-if len(df[df["sensor_type"] == "toque"]) > total * 0.9:
+if "sensor_type" in df and len(df[df["sensor_type"] == "toque"]) > total * 0.9:
     insights.append("Dependência de interação por toque")
 
-cols = st.columns(len(insights))
-
-for i, insight in enumerate(insights):
-    cols[i].markdown(f"""
-    <div class="insight-card">
-        {insight}
-    </div>
-    """, unsafe_allow_html=True)
+if insights:
+    cols = st.columns(len(insights))
+    for i, insight in enumerate(insights):
+        cols[i].markdown(f"""
+        <div class="insight-card">
+            {insight}
+        </div>
+        """, unsafe_allow_html=True)
 
 # =========================
 # TABELA
@@ -242,6 +257,6 @@ if st.button("Gerar Insight Premium"):
 
         st.markdown(f"""
         <div class="insight-card">
-        {insight}
+            {insight}
         </div>
         """, unsafe_allow_html=True)
