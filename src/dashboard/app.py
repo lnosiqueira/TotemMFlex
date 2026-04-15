@@ -97,6 +97,7 @@ if not st.session_state["logado"]:
             <form method="post">
                 <input class="input" placeholder="Usuário">
                 <input class="input" placeholder="Senha">
+                <button class="button">Entrar</button>
             </form>
         </div>
     </div>
