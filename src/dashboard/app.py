@@ -2,6 +2,9 @@ import streamlit as st
 from PIL import Image
 import os
 
+# =========================
+# CONFIG
+# =========================
 st.set_page_config(layout="wide")
 
 # =========================
@@ -11,14 +14,14 @@ if "logado" not in st.session_state:
     st.session_state["logado"] = False
 
 # =========================
-# ESCONDER MENU LATERAL
+# ESCONDER SIDEBAR (ANTES DO LOGIN)
 # =========================
 if not st.session_state["logado"]:
     st.markdown("""
-<style>
-section[data-testid="stSidebar"] {display: none;}
-</style>
-""", unsafe_allow_html=True)
+        <style>
+        section[data-testid="stSidebar"] {display: none;}
+        </style>
+    """, unsafe_allow_html=True)
 
 # =========================
 # USUÁRIOS
@@ -26,11 +29,11 @@ section[data-testid="stSidebar"] {display: none;}
 USERS = {
     "admin": {"senha": "123", "plano": "premium"},
     "user": {"senha": "123", "plano": "free"},
-    "lnosiqueira": {"senha": "lno@p0o9I*U&", "plano": "dev_admin"}
+    "lnosiqueira": {"senha": "fiap0316", "plano": "dev_admin"}
 }
 
 # =========================
-# CAMINHO DA LOGO
+# CAMINHO DA LOGO (ROBUSTO)
 # =========================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 logo_path = os.path.join(BASE_DIR, "..", "assets", "logo-totemmflex.png")
@@ -40,27 +43,52 @@ logo_path = os.path.join(BASE_DIR, "..", "assets", "logo-totemmflex.png")
 # =========================
 if not st.session_state["logado"]:
 
-    col1, col2, col3 = st.columns([1,4,1])
+    col1, col2, col3 = st.columns([1, 4, 1])
 
-with col2:
-    st.markdown("<div style='text-align:center'>", unsafe_allow_html=True)
-    st.image(logo, width=450)
-    st.markdown("</div>", unsafe_allow_html=True)
+    with col2:
+
+        # LOGO
+        if os.path.exists(logo_path):
+            logo = Image.open(logo_path)
+
+            st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
+            st.image(logo, width=450)
+            st.markdown("</div>", unsafe_allow_html=True)
+
         else:
             st.error(f"Logo não encontrada em: {logo_path}")
 
-        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown("<br><br>", unsafe_allow_html=True)
 
+        # CAMPOS LOGIN
         usuario = st.text_input("Usuário")
         senha = st.text_input("Senha", type="password")
 
+        # BOTÃO LOGIN
         if st.button("Entrar", use_container_width=True):
+
             if usuario in USERS and USERS[usuario]["senha"] == senha:
                 st.session_state["logado"] = True
                 st.session_state["usuario"] = usuario
                 st.session_state["plano"] = USERS[usuario]["plano"]
                 st.rerun()
+
             else:
                 st.error("Usuário ou senha inválidos")
 
     st.stop()
+
+# =========================
+# PÓS LOGIN (BASE)
+# =========================
+
+st.sidebar.success(f"Logado como: {st.session_state['usuario']}")
+st.sidebar.info(f"Plano: {st.session_state['plano']}")
+
+if st.sidebar.button("Logout"):
+    st.session_state["logado"] = False
+    st.rerun()
+
+# TELA INICIAL (DEPOIS DO LOGIN)
+st.title("🚀 TotemMFlex Analytics")
+st.write("Sistema carregado com sucesso. Próximo passo: Dashboard SaaS.")
