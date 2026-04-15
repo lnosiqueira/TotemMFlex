@@ -3,29 +3,33 @@ import streamlit as st
 import pandas as pd
 from openai import OpenAI
 
-# =========================
-# CONFIG
-# =========================
 API_URL = "https://totemmflex.onrender.com"
 client = OpenAI(api_key=st.secrets.get("OPENAI_API_KEY"))
 
-plano = st.session_state.get("plano", "free")
-usuario = st.session_state.get("usuario", "desconhecido")
+# =========================
+# BLOQUEIO
+# =========================
+if "logado" not in st.session_state:
+    st.stop()
 
-# =========================
-# HEADER
-# =========================
+usuario = st.session_state["usuario"]
+plano = st.session_state["plano"]
+
 st.title("🚀 TotemMFlex Analytics")
-st.write(f"👤 Usuário: {usuario} | Plano: {plano.upper()}")
+st.write(f"👤 {usuario} | Plano: {plano}")
 
 # =========================
-# PERMISSÕES
+# BOTÃO INTERAÇÃO (VOLTOU)
 # =========================
-def pode_usar_premium():
-    return plano in ["premium", "dev_admin"]
-
-def is_dev():
-    return plano == "dev_admin"
+if st.button("⚡ Simular interação"):
+    try:
+        requests.post(f"{API_URL}/interactions/", json={
+            "sensor_type": "toque",
+            "valor": 0.5
+        })
+        st.success("Interação enviada!")
+    except Exception as e:
+        st.error(f"Erro ao enviar: {e}")
 
 # =========================
 # BUSCAR DADOS
@@ -39,63 +43,52 @@ try:
     data = response.json()
     df = pd.DataFrame(data)
 
-    if df.empty:
-        raise Exception("Sem dados")
-
 except Exception as e:
-    st.warning(f"⚠ API offline — usando dados simulados ({e})")
-
-    df = pd.DataFrame({
-        "sensor_type": ["toque", "voz", "movimento", "scroll"] * 15,
-        "valor": [0.2, 0.5, 0.8, 0.3] * 15,
-        "data": pd.date_range(end=pd.Timestamp.now(), periods=60)
-    })
+    st.error(f"Erro API: {e}")
+    st.stop()
 
 # =========================
 # TRATAMENTO DATA
 # =========================
-df["data"] = pd.to_datetime(df["data"], errors="coerce")
+df["data"] = pd.to_datetime(df["data"])
 
 # =========================
 # MÉTRICAS
 # =========================
 col1, col2, col3 = st.columns(3)
 
-col1.metric("📊 Total", len(df))
-col2.metric("🧠 Média", round(df["valor"].mean(), 2))
+col1.metric("Total", len(df))
+col2.metric("Média", round(df["valor"].mean(), 2))
 
-tempo_medio = df["data"].diff().dt.total_seconds().mean()
-col3.metric("⏱ Tempo Médio", f"{round(tempo_medio,2)}s")
+tempo = df["data"].diff().dt.total_seconds().mean()
+col3.metric("Tempo Médio", f"{round(tempo,2)}s")
 
 # =========================
 # GRÁFICOS
 # =========================
-st.subheader("📈 Interações no tempo")
+st.subheader("Interações")
 
-df_time = df.groupby(df["data"].dt.strftime("%H:%M")).size()
+df_time = df.groupby(df["data"].dt.strftime("%H:%M:%S")).size()
 st.line_chart(df_time)
-
-st.subheader("📊 Distribuição")
 
 df_tipo = df.groupby("sensor_type").size()
 st.bar_chart(df_tipo)
 
 # =========================
-# IA BÁSICA
+# IA
 # =========================
-def gerar_ia(df, amostra=20):
-    sample = df.tail(amostra)
-    resumo = sample.describe().to_string()
+def gerar_ia(df, n=20):
+    resumo = df.tail(n).describe().to_string()
 
     prompt = f"""
-    Analise os dados abaixo e gere insights de negócio:
+    Analise os dados:
 
     {resumo}
 
     Gere:
-    - comportamento do usuário
-    - padrão oculto
-    - recomendação estratégica
+    - comportamento
+    - padrão
+    - recomendação
     """
 
     response = client.chat.completions.create(
@@ -105,34 +98,15 @@ def gerar_ia(df, amostra=20):
 
     return response.choices[0].message.content
 
-# =========================
-# IA FREE
-# =========================
-st.subheader("🤖 Insight IA")
+st.subheader("🤖 IA")
 
 if st.button("Gerar Insight"):
-    st.info("Plano FREE (limitado)")
     st.success(gerar_ia(df, 10))
 
-# =========================
-# IA PREMIUM
-# =========================
-if pode_usar_premium():
+if plano in ["premium", "dev_admin"]:
     if st.button("🔥 Insight Premium"):
-        st.info("Plano PREMIUM ativado")
         st.success(gerar_ia(df, 50))
 
-# =========================
-# DEV AREA
-# =========================
-if is_dev():
-    st.subheader("🧠 Modo Desenvolvedor")
-
-    st.write("Debug dataset:")
-    st.dataframe(df.tail(50))
-
-    st.write("📊 Estatísticas completas:")
-    st.write(df.describe())
-
-    if st.button("Gerar Insight Full"):
+if plano == "dev_admin":
+    if st.button("🧠 Insight Full"):
         st.success(gerar_ia(df, len(df)))
