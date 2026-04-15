@@ -1,21 +1,27 @@
 import streamlit as st
-from PIL import Image
 import os
+import base64
 
-st.set_page_config(layout="centered")
+st.set_page_config(layout="wide")
 
 # =========================
-# ESCONDER MENU LATERAL
+# SESSION
 # =========================
 if "logado" not in st.session_state:
+    st.session_state["logado"] = False
+
+# =========================
+# ESCONDER SIDEBAR
+# =========================
+if not st.session_state["logado"]:
     st.markdown("""
         <style>
-            section[data-testid="stSidebar"] {display: none;}
+        section[data-testid="stSidebar"] {display: none;}
         </style>
     """, unsafe_allow_html=True)
 
 # =========================
-# USUÁRIOS
+# USERS
 # =========================
 USERS = {
     "admin": {"senha": "123", "plano": "premium"},
@@ -24,68 +30,103 @@ USERS = {
 }
 
 # =========================
-# CAMINHO DA LOGO
+# LOGO PATH
 # =========================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 logo_path = os.path.join(BASE_DIR, "..", "assets", "logo-totemmflex.png")
 
 # =========================
-# CONTROLE VISUAL SENHA
+# LOGIN UI ESTILO SaaS
 # =========================
-if "show_pass" not in st.session_state:
-    st.session_state["show_pass"] = False
+if not st.session_state["logado"]:
 
-# =========================
-# LOGIN
-# =========================
-if "logado" not in st.session_state or not st.session_state["logado"]:
+    with open(logo_path, "rb") as f:
+    logo_base64 = base64.b64encode(f.read()).decode()
 
-    col1, col2, col3 = st.columns([1,4,1])
+    st.markdown(f"""
+    <style>
+    body {{
+        background-color: #f5f6fa;
+    }}
 
-    with col2:
+    .login-container {{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 90vh;
+    }}
 
-        # LOGO
-        if os.path.exists(logo_path):
-            logo = Image.open(logo_path)
-            st.image(logo, use_container_width=True)
+    .login-box {{
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0px 10px 30px rgba(0,0,0,0.1);
+        width: 400px;
+        text-align: center;
+    }}
+
+    .logo {{
+        width: 200px;
+        margin-bottom: 20px;
+    }}
+
+    .input {{
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+    }}
+
+    .button {{
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
+        border: none;
+        background: linear-gradient(90deg, #007bff, #00c6ff);
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 10px;
+    }}
+    </style>
+
+    <div class="login-container">
+        <div class="login-box">
+            <img class="logo" src="data:image/png;base64,{logo_base64}">
+            <form method="post">
+                <input class="input" placeholder="Usuário">
+                <input class="input" placeholder="Senha">
+                <button class="button">Entrar</button>
+            </form>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # INPUTS STREAMLIT (LÓGICA REAL)
+    usuario = st.text_input("Usuário", key="user_hidden", label_visibility="collapsed")
+    senha = st.text_input("Senha", type="password", key="pass_hidden", label_visibility="collapsed")
+
+    if st.button("Entrar", use_container_width=True):
+        if usuario in USERS and USERS[usuario]["senha"] == senha:
+            st.session_state["logado"] = True
+            st.session_state["usuario"] = usuario
+            st.session_state["plano"] = USERS[usuario]["plano"]
+            st.rerun()
         else:
-            st.error(f"Logo não encontrada: {logo_path}")
-
-        st.markdown("<br>", unsafe_allow_html=True)
-
-        # USUÁRIO
-        usuario = st.text_input(
-            "Usuário",
-            placeholder="Usuário",
-            label_visibility="collapsed"
-        )
-
-        # SENHA COM OLHO
-        col_pass, col_eye = st.columns([10,1])
-
-        with col_pass:
-            senha = st.text_input(
-                "Senha",
-                type="default" if st.session_state["show_pass"] else "password",
-                placeholder="Senha",
-                label_visibility="collapsed"
-            )
-
-        with col_eye:
-            if st.button("👁️"):
-                st.session_state["show_pass"] = not st.session_state["show_pass"]
-                st.rerun()
-
-        st.markdown("<br>", unsafe_allow_html=True)
-
-        # BOTÃO LOGIN
-        if st.button("Entrar", use_container_width=True):
-            if usuario in USERS and USERS[usuario]["senha"] == senha:
-                st.session_state["logado"] = True
-                st.session_state["usuario"] = usuario
-                st.session_state["plano"] = USERS[usuario]["plano"]
-                st.rerun()
-            else:
-                st.error("Usuário ou senha inválidos")
+            st.error("Usuário ou senha inválidos")
 
     st.stop()
+
+# =========================
+# PÓS LOGIN
+# =========================
+st.sidebar.success(f"Usuário: {st.session_state['usuario']}")
+st.sidebar.info(f"Plano: {st.session_state['plano']}")
+
+if st.sidebar.button("Logout"):
+    st.session_state["logado"] = False
+    st.rerun()
+
+st.title("🚀 TotemMFlex Analytics")
+st.write("Agora sim você tem uma tela nível SaaS de verdade.")
