@@ -1,112 +1,44 @@
-import requests
 import streamlit as st
 import pandas as pd
-from openai import OpenAI
+import requests
 import random
+from openai import OpenAI
 
 # =========================
 # CONFIG
 # =========================
-st.set_page_config(layout="wide")
-
 API_URL = "https://totemmflex.onrender.com"
+
 client = OpenAI(api_key=st.secrets.get("OPENAI_API_KEY"))
 
+st.set_page_config(layout="wide")
+
 # =========================
-# ESTILO PREMIUM
+# HEADER ESTILO EMPRESA
 # =========================
 st.markdown("""
-<style>
-.metric-card {
-    background: #111827;
-    padding: 20px;
-    border-radius: 12px;
-    text-align: center;
-    color: white;
-}
-.metric-title {
-    font-size: 14px;
-    opacity: 0.7;
-}
-.metric-value {
-    font-size: 28px;
-    font-weight: bold;
-}
-.insight-card {
-    background: #1f2937;
-    padding: 15px;
-    border-radius: 10px;
-    color: white;
-}
-</style>
+<h1 style='text-align:center;'>🚀 TotemMFlex Analytics</h1>
+<p style='text-align:center;'>Inteligência comportamental em tempo real</p>
 """, unsafe_allow_html=True)
-
-# =========================
-# IA
-# =========================
-def gerar_insight_ia(df):
-    try:
-        resumo = df.describe().to_string()
-
-        prompt = f"""
-Você é um analista de produto SaaS.
-
-Analise os dados e entregue:
-
-1. O que está acontecendo
-2. Problema principal
-3. Oportunidade
-4. Recomendação prática
-
-Dados:
-{resumo}
-"""
-
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[{"role": "user", "content": prompt}]
-        )
-
-        return response.choices[0].message.content
-
-    except Exception as e:
-        return f"Erro IA: {str(e)}"
-
-# =========================
-# SIDEBAR
-# =========================
-st.sidebar.title("🔎 Filtros")
-
-data_inicio = st.sidebar.date_input("Data inicial")
-data_fim = st.sidebar.date_input("Data final")
-
-if st.sidebar.button("🔄 Atualizar"):
-    st.rerun()
-
-# =========================
-# HEADER
-# =========================
-st.title("🚀 TotemMFlex Analytics")
-st.caption("Plataforma SaaS de análise comportamental com IA")
 
 # =========================
 # BOTÕES
 # =========================
-col1, col2 = st.columns(2)
+col_btn1, col_btn2 = st.columns(2)
 
-with col1:
-    if st.button("⚡ Simular interação"):
+with col_btn1:
+    if st.button("⚡ Simular Interação"):
         try:
             requests.post(f"{API_URL}/interactions/", json={
-                "sensor_type": "toque",
-                "valor": round(random.uniform(0.1, 1.0), 2)
+                "sensor_type": random.choice(["toque","voz","movimento","scroll"]),
+                "valor": round(random.uniform(0.1,1),2)
             })
-            st.success("Interação registrada")
+            st.success("Interação enviada!")
         except:
-            st.error("Erro ao enviar interação")
+            st.error("Erro ao enviar")
 
-with col2:
-    if st.button("🔄 Recarregar"):
+with col_btn2:
+    if st.button("🔄 Atualizar"):
         st.rerun()
 
 # =========================
@@ -116,70 +48,40 @@ try:
     response = requests.get(f"{API_URL}/interactions/")
     data = response.json()
     df = pd.DataFrame(data)
-except Exception as e:
-    st.error(f"Erro ao conectar API: {e}")
+except:
+    st.error("Erro API")
     st.stop()
 
 if df.empty:
     st.warning("Sem dados")
     st.stop()
 
-# =========================
-# TRATAMENTO DATA
-# =========================
-df["data"] = pd.to_datetime(df["data"], errors="coerce")
-
-# timezone Brasil
-df["data"] = df["data"].dt.tz_localize("UTC").dt.tz_convert("America/Sao_Paulo")
-
-# =========================
-# FILTRO SEGURO
-# =========================
-if data_inicio and data_fim:
-    df_filtrado = df[
-        (df["data"].dt.date >= data_inicio) &
-        (df["data"].dt.date <= data_fim)
-    ]
-
-    if not df_filtrado.empty:
-        df = df_filtrado
-
-# =========================
-# TEMPO ENTRE INTERAÇÕES
-# =========================
+df["data"] = pd.to_datetime(df["data"])
 df = df.sort_values("data")
+
+# =========================
+# MÉTRICAS AVANÇADAS
+# =========================
 df["diff"] = df["data"].diff().dt.total_seconds()
 
+total = len(df)
+media = df["valor"].mean()
 tempo_medio = df["diff"].mean()
-if pd.isna(tempo_medio):
-    tempo_medio = 0
 
-# =========================
-# MÉTRICAS
-# =========================
 col1, col2, col3, col4 = st.columns(4)
 
-def card(title, value):
-    st.markdown(f"""
-    <div class="metric-card">
-        <div class="metric-title">{title}</div>
-        <div class="metric-value">{value}</div>
-    </div>
-    """, unsafe_allow_html=True)
+col1.metric("👥 Interações", total)
+col2.metric("📊 Engajamento", round(media,2))
+col3.metric("⏱ Tempo Médio", f"{round(tempo_medio,2)}s")
+col4.metric("🔥 Pico Valor", round(df["valor"].max(),2))
 
-with col1:
-    card("Total", len(df))
-
-with col2:
-    media = df["valor"].mean()
-    card("Engajamento", round(media, 2) if not pd.isna(media) else 0)
-
-with col3:
-    card("Tempo Médio", f"{round(tempo_medio,2)}s")
-
-with col4:
-    tipo = df["sensor_type"].mode()
-    card("Tipo", tipo[0] if not tipo.empty else "N/A")
+# =========================
+# ALERTAS INTELIGENTES
+# =========================
+if tempo_medio > 3:
+    st.error("⚠ Usuários demorando para interagir")
+elif tempo_medio < 1:
+    st.success("🔥 Interação rápida")
 
 # =========================
 # GRÁFICOS
@@ -189,51 +91,57 @@ st.subheader("📈 Interações ao longo do tempo")
 df_time = df.groupby(df["data"].dt.strftime("%H:%M:%S")).size()
 st.line_chart(df_time)
 
-st.subheader("📊 Distribuição")
+col_g1, col_g2 = st.columns(2)
 
-df_tipo = df.groupby("sensor_type").size()
-st.bar_chart(df_tipo)
+with col_g1:
+    st.subheader("📊 Distribuição")
+    st.bar_chart(df["sensor_type"].value_counts())
+
+with col_g2:
+    st.subheader("📊 Engajamento")
+    st.line_chart(df["valor"])
 
 # =========================
-# INSIGHTS AUTOMÁTICOS
+# IA PREMIUM
 # =========================
-st.subheader("🧠 Insights Inteligentes")
+def gerar_insight(df):
+    resumo = df.describe().to_string()
 
-media = df["valor"].mean()
-total = len(df)
+    prompt = f"""
+    Você é um especialista em SaaS e comportamento do usuário.
 
-insights = []
+    Analise os dados e entregue:
 
-if total > 20:
-    insights.append("Alta atividade no sistema")
-else:
-    insights.append("Baixo volume de dados")
+    - Insight estratégico
+    - Risco
+    - Oportunidade
+    - Recomendação prática
 
-if not pd.isna(media):
-    if media > 0.7:
-        insights.append("Usuários altamente engajados")
-    elif media > 0.4:
-        insights.append("Engajamento moderado")
-    else:
-        insights.append("Baixo engajamento")
+    Dados:
+    {resumo}
+    """
 
-if "sensor_type" in df and len(df[df["sensor_type"] == "toque"]) > total * 0.9:
-    insights.append("Dependência de interação por toque")
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role":"user","content":prompt}]
+    )
 
-if insights:
-    cols = st.columns(len(insights))
-    for i, insight in enumerate(insights):
-        cols[i].markdown(f"""
-        <div class="insight-card">
-            {insight}
-        </div>
-        """, unsafe_allow_html=True)
+    return response.choices[0].message.content
+
+st.subheader("🤖 IA Estratégica")
+
+if st.session_state.get("plano") == "free":
+    st.warning("Plano FREE: insight básico limitado")
+
+if st.button("Gerar Insight Premium"):
+    with st.spinner("Analisando..."):
+        st.success(gerar_insight(df))
 
 # =========================
 # TABELA
 # =========================
-st.subheader("📋 Últimas interações")
-st.dataframe(df.tail(20), use_container_width=True)
+st.subheader("📋 Últimos dados")
+st.dataframe(df.tail(20))
 
 # =========================
 # EXPORT
@@ -243,20 +151,6 @@ csv = df.to_csv(index=False)
 st.download_button(
     "📥 Baixar CSV",
     csv,
-    "dados.csv"
+    "dados.csv",
+    "text/csv"
 )
-
-# =========================
-# IA PREMIUM
-# =========================
-st.subheader("🤖 IA Estratégica")
-
-if st.button("Gerar Insight Premium"):
-    with st.spinner("Analisando dados..."):
-        insight = gerar_insight_ia(df)
-
-        st.markdown(f"""
-        <div class="insight-card">
-            {insight}
-        </div>
-        """, unsafe_allow_html=True)

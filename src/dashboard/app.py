@@ -1,21 +1,29 @@
 import streamlit as st
 
-st.set_page_config(
-    page_title="TotemMFlex Analytics",
-    page_icon="🚀",
-    layout="wide"
-)
+# Simulação de usuários (depois vira banco)
+USERS = {
+    "admin": {"senha": "123", "plano": "premium"},
+    "user": {"senha": "123", "plano": "free"}
+}
 
-st.title("🚀 TotemMFlex Analytics")
+def login():
+    st.title("🔐 TotemMFlex Login")
 
-st.markdown("""
-Bem-vindo ao sistema de análise comportamental em tempo real.
+    user = st.text_input("Usuário")
+    senha = st.text_input("Senha", type="password")
 
-👉 Use o menu lateral para acessar os dados.
+    if st.button("Entrar"):
+        if user in USERS and USERS[user]["senha"] == senha:
+            st.session_state["user"] = user
+            st.session_state["plano"] = USERS[user]["plano"]
+            st.success("Login realizado!")
+            st.rerun()
+        else:
+            st.error("Credenciais inválidas")
 
-### O que você pode fazer:
-- Gerar interações
-- Visualizar métricas
-- Analisar comportamento
-- Gerar insights com IA
-""")
+if "user" not in st.session_state:
+    login()
+    st.stop()
+
+st.sidebar.success(f"Logado como: {st.session_state['user']}")
+st.sidebar.info(f"Plano: {st.session_state['plano']}")
