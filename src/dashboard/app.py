@@ -1,5 +1,7 @@
 import streamlit as st
+from PIL import image
 import os
+import base64
 
 st.set_page_config(layout="wide")
 
@@ -40,7 +42,7 @@ logo_path = os.path.join(BASE_DIR, "..", "assets", "logo-totemmflex.png")
 if not st.session_state["logado"]:
 
     with open(logo_path, "rb") as f:
-        logo_base64 = f.read().encode("base64").decode()
+    logo_base64 = base64.b64encode(f.read()).decode()
 
     st.markdown(f"""
     <style>
