@@ -1,10 +1,11 @@
 import streamlit as st
 from PIL import Image
+import os
 
 st.set_page_config(layout="centered")
 
 # =========================
-# ESCONDER MENU LATERAL
+# ESCONDER MENU LATERAL (ANTES DO LOGIN)
 # =========================
 if "logado" not in st.session_state:
     st.markdown("""
@@ -23,16 +24,26 @@ USERS = {
 }
 
 # =========================
-# LOGIN SCREEN
+# CAMINHO DINÂMICO DA LOGO (NUNCA QUEBRA)
+# =========================
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+logo_path = os.path.join(BASE_DIR, "..", "assets", "logo-totemmflex.png")
+
+# =========================
+# LOGIN
 # =========================
 if "logado" not in st.session_state or not st.session_state["logado"]:
 
     col1, col2, col3 = st.columns([1,2,1])
 
     with col2:
-        # LOGO
-        logo = Image.open("src/assets/logo-totemmflex.png")
-        st.image(logo, use_container_width=True)
+
+        # LOGO (COM FALLBACK)
+        if os.path.exists(logo_path):
+            logo = Image.open(logo_path)
+            st.image(logo, use_container_width=True)
+        else:
+            st.warning("Logo não encontrada. Verifique o caminho: src/assets/")
 
         st.markdown("<br>", unsafe_allow_html=True)
 
