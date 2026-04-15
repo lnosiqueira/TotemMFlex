@@ -31,7 +31,7 @@ if "logado" not in st.session_state or not st.session_state["logado"]:
 
     with col2:
         # LOGO
-        logo = Image.open("src/assets/logo.png")
+        logo = Image.open("src/assets/logo-totemmflex.png")
         st.image(logo, use_container_width=True)
 
         st.markdown("<br>", unsafe_allow_html=True)
