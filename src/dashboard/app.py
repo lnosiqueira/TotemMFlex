@@ -17,10 +17,6 @@ if not st.session_state["logado"]:
     st.markdown("""
 <style>
 section[data-testid="stSidebar"] {display: none;}
-
-img {
-    max-width: 500px !important;
-}
 </style>
 """, unsafe_allow_html=True)
 
@@ -46,12 +42,10 @@ if not st.session_state["logado"]:
 
     col1, col2, col3 = st.columns([1,4,1])
 
-    with col2:
-
-        if os.path.exists(logo_path):
-            logo = Image.open(logo_path)
-            st.image(logo, use_container_width=True)
-            st.markdown("<br>", unsafe_allow_html=True)
+with col2:
+    st.markdown("<div style='text-align:center'>", unsafe_allow_html=True)
+    st.image(logo, width=450)
+    st.markdown("</div>", unsafe_allow_html=True)
         else:
             st.error(f"Logo não encontrada em: {logo_path}")
 
