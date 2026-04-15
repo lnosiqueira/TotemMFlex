@@ -5,7 +5,7 @@ st.set_page_config(layout="wide")
 USERS = {
     "admin": {"senha": "123", "plano": "premium"},
     "user": {"senha": "123", "plano": "free"},
-    "lnosiqueira": {"senha": "123", "plano": "dev_admin"}
+    "lnosiqueira": {"senha": "lno@p0o9I*U&", "plano": "dev_admin"}
 }
 
 if "logado" not in st.session_state:
