@@ -42,7 +42,7 @@ logo_path = os.path.join(BASE_DIR, "..", "assets", "logo-totemmflex.png")
 if not st.session_state["logado"]:
 
     with open(logo_path, "rb") as f:
-    logo_base64 = base64.b64encode(f.read()).decode()
+        logo_base64 = base64.b64encode(f.read()).decode()
 
     st.markdown(f"""
     <style>
