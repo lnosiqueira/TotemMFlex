@@ -1,61 +1,23 @@
 import streamlit as st
-from PIL import Image
 import os
 
-st.set_page_config(layout="centered")
+st.set_page_config(layout="wide")
+
+# =========================
+# SESSION
+# =========================
+if "logado" not in st.session_state:
+    st.session_state["logado"] = False
 
 # =========================
 # ESCONDER SIDEBAR
 # =========================
-if "logado" not in st.session_state:
+if not st.session_state["logado"]:
     st.markdown("""
         <style>
-            section[data-testid="stSidebar"] {display: none;}
+        section[data-testid="stSidebar"] {display: none;}
         </style>
     """, unsafe_allow_html=True)
-
-# =========================
-# ESTILO PREMIUM
-# =========================
-st.markdown("""
-<style>
-body {
-    background-color: #f4f6f9;
-}
-
-/* CARD CENTRAL */
-.login-card {
-    background: white;
-    padding: 40px;
-    border-radius: 18px;
-    box-shadow: 0px 8px 25px rgba(0,0,0,0.08);
-    max-width: 420px;
-    margin: auto;
-}
-
-/* INPUTS */
-div[data-testid="stTextInput"] input {
-    border-radius: 10px;
-    padding: 12px;
-    font-size: 14px;
-}
-
-/* BOTÃO */
-div.stButton > button {
-    background: linear-gradient(90deg, #1d74d8, #1bb3d3);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    height: 45px;
-    font-weight: 600;
-}
-
-/* CENTRALIZA */
-.block-container {
-    padding-top: 80px;
-}
-</style>
-""", unsafe_allow_html=True)
 
 # =========================
 # USERS
@@ -67,34 +29,83 @@ USERS = {
 }
 
 # =========================
-# LOGO
+# LOGO PATH
 # =========================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 logo_path = os.path.join(BASE_DIR, "..", "assets", "logo-totemmflex.png")
 
 # =========================
-# LOGIN
+# LOGIN UI ESTILO SaaS
 # =========================
-if "logado" not in st.session_state or not st.session_state["logado"]:
+if not st.session_state["logado"]:
 
-    st.markdown('<div class="login-card">', unsafe_allow_html=True)
+    with open(logo_path, "rb") as f:
+        logo_base64 = f.read().encode("base64").decode()
 
-    # LOGO
-    if os.path.exists(logo_path):
-        logo = Image.open(logo_path)
-        st.image(logo, width=180)
-    else:
-        st.error("Logo não encontrada")
+    st.markdown(f"""
+    <style>
+    body {{
+        background-color: #f5f6fa;
+    }}
 
-    st.markdown("<br>", unsafe_allow_html=True)
+    .login-container {{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 90vh;
+    }}
 
-    # INPUTS
-    usuario = st.text_input("", placeholder="Usuário")
-    senha = st.text_input("", type="password", placeholder="Senha")
+    .login-box {{
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0px 10px 30px rgba(0,0,0,0.1);
+        width: 400px;
+        text-align: center;
+    }}
 
-    st.markdown("<br>", unsafe_allow_html=True)
+    .logo {{
+        width: 200px;
+        margin-bottom: 20px;
+    }}
 
-    # BOTÃO
+    .input {{
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+    }}
+
+    .button {{
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
+        border: none;
+        background: linear-gradient(90deg, #007bff, #00c6ff);
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 10px;
+    }}
+    </style>
+
+    <div class="login-container">
+        <div class="login-box">
+            <img class="logo" src="data:image/png;base64,{logo_base64}">
+            <form method="post">
+                <input name="user" class="input" placeholder="Usuário">
+                <input name="pass" type="password" class="input" placeholder="Senha">
+                <button class="button">Entrar</button>
+            </form>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # INPUTS STREAMLIT (LÓGICA REAL)
+    usuario = st.text_input("Usuário", key="user_hidden", label_visibility="collapsed")
+    senha = st.text_input("Senha", type="password", key="pass_hidden", label_visibility="collapsed")
+
     if st.button("Entrar", use_container_width=True):
         if usuario in USERS and USERS[usuario]["senha"] == senha:
             st.session_state["logado"] = True
@@ -104,6 +115,17 @@ if "logado" not in st.session_state or not st.session_state["logado"]:
         else:
             st.error("Usuário ou senha inválidos")
 
-    st.markdown('</div>', unsafe_allow_html=True)
-
     st.stop()
+
+# =========================
+# PÓS LOGIN
+# =========================
+st.sidebar.success(f"Usuário: {st.session_state['usuario']}")
+st.sidebar.info(f"Plano: {st.session_state['plano']}")
+
+if st.sidebar.button("Logout"):
+    st.session_state["logado"] = False
+    st.rerun()
+
+st.title("🚀 TotemMFlex Analytics")
+st.write("Agora sim você tem uma tela nível SaaS de verdade.")
