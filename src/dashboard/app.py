@@ -26,7 +26,7 @@ if not st.session_state["logado"]:
 USERS = {
     "admin": {"senha": "123", "plano": "premium"},
     "user": {"senha": "123", "plano": "free"},
-    "lnosiqueira": {"senha": "fiap0316", "plano": "dev_admin"}
+    "lnosiqueira": {"senha": "lno0316", "plano": "dev_admin"}
 }
 
 # =========================
