@@ -22,7 +22,7 @@ plano = st.session_state["plano"]
 # =========================
 # HEADER
 # =========================
-st.title("🚀 TotemMFlex Analytics")
+st.title("TotemMFlex Analytics")
 st.write(f"👤 {usuario} | Plano: {plano}")
 
 # =========================
