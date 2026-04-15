@@ -2,7 +2,7 @@ import streamlit as st
 from PIL import Image
 import os
 
-st.set_page_config(layout="centered")
+st.set_page_config(layout="wide")
 
 # =========================
 # SESSION DEFAULT
@@ -15,10 +15,14 @@ if "logado" not in st.session_state:
 # =========================
 if not st.session_state["logado"]:
     st.markdown("""
-        <style>
-            section[data-testid="stSidebar"] {display: none;}
-        </style>
-    """, unsafe_allow_html=True)
+<style>
+section[data-testid="stSidebar"] {display: none;}
+
+img {
+    max-width: 500px !important;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # =========================
 # USUÁRIOS
@@ -26,7 +30,7 @@ if not st.session_state["logado"]:
 USERS = {
     "admin": {"senha": "123", "plano": "premium"},
     "user": {"senha": "123", "plano": "free"},
-    "lnosiqueira": {"senha": "fiap0316", "plano": "dev_admin"}
+    "lnosiqueira": {"senha": "lno@p0o9I*U&", "plano": "dev_admin"}
 }
 
 # =========================
@@ -40,13 +44,13 @@ logo_path = os.path.join(BASE_DIR, "..", "assets", "logo-totemmflex.png")
 # =========================
 if not st.session_state["logado"]:
 
-    col1, col2, col3 = st.columns([1,2,1])
+    col1, col2, col3 = st.columns([1,4,1])
 
     with col2:
 
         if os.path.exists(logo_path):
             logo = Image.open(logo_path)
-            st.image(logo, width=320)
+            st.image(logo, use_container_width=True)
             st.markdown("<br>", unsafe_allow_html=True)
         else:
             st.error(f"Logo não encontrada em: {logo_path}")
