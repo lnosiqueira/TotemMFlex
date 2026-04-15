@@ -2,6 +2,7 @@ import requests
 import streamlit as st
 import pandas as pd
 from openai import OpenAI
+import random
 
 # =========================
 # CONFIG
@@ -9,6 +10,7 @@ from openai import OpenAI
 st.set_page_config(layout="wide")
 
 API_URL = "https://totemmflex.onrender.com"
+
 client = OpenAI(api_key=st.secrets.get("OPENAI_API_KEY"))
 
 # =========================
@@ -44,26 +46,32 @@ st.markdown("""
 # IA
 # =========================
 def gerar_insight_ia(df):
-    resumo = df.describe().to_string()
+    try:
+        resumo = df.describe().to_string()
 
-    prompt = f"""
-Você é um especialista em comportamento do usuário.
+        prompt = f"""
+Você é um analista de produto SaaS.
 
-Gere:
-- Resumo
-- Insight estratégico
-- Recomendação
+Analise os dados e entregue:
+
+1. O que está acontecendo
+2. Problema principal
+3. Oportunidade
+4. Recomendação prática
 
 Dados:
 {resumo}
 """
 
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[{"role": "user", "content": prompt}]
-    )
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": prompt}]
+        )
 
-    return response.choices[0].message.content
+        return response.choices[0].message.content
+
+    except Exception as e:
+        return f"Erro IA: {str(e)}"
 
 # =========================
 # SIDEBAR
@@ -89,11 +97,14 @@ col1, col2 = st.columns(2)
 
 with col1:
     if st.button("⚡ Simular interação"):
-        requests.post(f"{API_URL}/interactions/", json={
-            "sensor_type": "toque",
-            "valor": 0.5
-        })
-        st.success("Interação registrada")
+        try:
+            requests.post(f"{API_URL}/interactions/", json={
+                "sensor_type": "toque",
+                "valor": round(random.uniform(0.1, 1.0), 2)
+            })
+            st.success("Interação registrada")
+        except:
+            st.error("Erro ao enviar interação")
 
 with col2:
     if st.button("🔄 Recarregar"):
@@ -102,22 +113,39 @@ with col2:
 # =========================
 # DADOS
 # =========================
-response = requests.get(f"{API_URL}/interactions/")
-data = response.json()
-df = pd.DataFrame(data)
+try:
+    response = requests.get(f"{API_URL}/interactions/")
+    data = response.json()
+    df = pd.DataFrame(data)
+except Exception as e:
+    st.error(f"Erro ao conectar API: {e}")
+    st.stop()
 
 if df.empty:
     st.warning("Sem dados")
     st.stop()
 
-df["data"] = pd.to_datetime(df["data"])
-df = df.sort_values("data")
+# 👉 CONVERSÃO CORRETA DE DATA
+df["data"] = pd.to_datetime(df["data"], errors="coerce")
 
+# 👉 AJUSTE BRASIL
+df["data"] = df["data"].dt.tz_localize("UTC").dt.tz_convert("America/Sao_Paulo")
+
+# 👉 FILTRO FUNCIONANDO
+if data_inicio and data_fim:
+    df = df[
+        (df["data"].dt.date >= data_inicio) &
+        (df["data"].dt.date <= data_fim)
+    ]
+
+# 👉 TEMPO ENTRE INTERAÇÕES
+df = df.sort_values("data")
 df["diff"] = df["data"].diff().dt.total_seconds()
-tempo_medio = df["diff"].mean()
+
+tempo_medio = df["diff"].mean() if "diff" in df else 0
 
 # =========================
-# MÉTRICAS PREMIUM
+# MÉTRICAS
 # =========================
 col1, col2, col3, col4 = st.columns(4)
 
