@@ -22,7 +22,7 @@ st.markdown(hide_menu, unsafe_allow_html=True)
 USERS = {
     "admin": {"senha": "123", "plano": "premium"},
     "user": {"senha": "123", "plano": "free"},
-    "lnosiqueira": {"senha": "fiap0316", "plano": "dev_admin"}
+    "lnosiqueira": {"senha": ,"lno@p0o9I*U&", "plano": "dev_admin"}
     "paulo": {"senha": "totem123", "plano": "dev_admin"}
     "math": {"senha": "totem123", "plano": "dev_admin"}
     "fred": {"senha": "fiap123", "plano": "dev_admin"}
