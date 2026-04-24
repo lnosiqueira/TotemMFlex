@@ -130,13 +130,31 @@ Evite termos técnicos de estatística.
 
 st.subheader("🤖 Insight IA")
 
+# NORMAL
 if st.button("Gerar Insight"):
-    st.success(gerar_ia(df, 10))
+    try:
+        resultado = gerar_ia(df, 10)
+        st.success(resultado)
+    except Exception as e:
+        st.warning("IA temporariamente indisponível")
+        st.write("Usuários apresentam variação de comportamento. Recomenda-se padronizar a experiência.")
 
+# PREMIUM
 if plano in ["premium", "dev_admin"]:
     if st.button("🔥 Insight Premium"):
-        st.success(gerar_ia(df, 50))
+        try:
+            resultado = gerar_ia(df, 50)
+            st.success(resultado)
+        except Exception as e:
+            st.warning("IA Premium indisponível")
+            st.write("Análise avançada indisponível no momento.")
 
+# FULL (DEV)
 if plano == "dev_admin":
     if st.button("🧠 Insight Full"):
-        st.success(gerar_ia(df, len(df)))
+        try:
+            resultado = gerar_ia(df, len(df))
+            st.success(resultado)
+        except Exception as e:
+            st.warning("IA Full indisponível")
+            st.write("Erro ao processar grande volume de dados.")
