@@ -2,6 +2,7 @@ import streamlit as st
 import requests
 import pandas as pd
 from openai import OpenAI
+import random
 
 # =========================
 # BLOQUEIO (OBRIGATÓRIO)
