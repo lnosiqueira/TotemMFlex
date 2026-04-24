@@ -104,21 +104,21 @@ def gerar_ia(df, n=20):
     resumo = df.tail(n).describe().to_string()
 
     prompt = f"""
-    Você é um especialista em comportamento de usuários em interfaces interativas.
+    Você é um especialista em UX e análise de comportamento de usuários em sistemas interativos (totens digitais).
 
-    Analise de dados abaixo
+    Analise os dados abaixo:
 
     {resumo}
 
-    Responda de forma objetiva e prática:
+Responda de forma direta e estratégica:
 
-1. O que os usuários estão fazendo?
-2. Existe algum comportamento estranho?
-3. Qual problema isso pode indicar no totem?
-4. Qual melhoria prática você sugere?
+1. O que está acontecendo com os usuários?
+2. Qual é o principal problema identificado?
+3. Qual impacto isso pode causar no negócio/uso do totem?
+4. Qual ação prática deve ser tomada imediatamente?
 
-Não fale de estatística técnica (como quartil ou desvio padrão).
-Foque em comportamento e decisão.
+Seja crítico, objetivo e fale como um consultor experiente.
+Evite termos técnicos de estatística.
 """
 
     response = client.chat.completions.create(
