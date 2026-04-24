@@ -104,15 +104,22 @@ def gerar_ia(df, n=20):
     resumo = df.tail(n).describe().to_string()
 
     prompt = f"""
-    Analise os dados abaixo:
+    Você é um especialista em comportamento de usuários em interfaces interativas.
+
+    Analise de dados abaixo
 
     {resumo}
 
-    Gere:
-    - comportamento
-    - padrão oculto
-    - recomendação
-    """
+    Responda de forma objetiva e prática:
+
+1. O que os usuários estão fazendo?
+2. Existe algum comportamento estranho?
+3. Qual problema isso pode indicar no totem?
+4. Qual melhoria prática você sugere?
+
+Não fale de estatística técnica (como quartil ou desvio padrão).
+Foque em comportamento e decisão.
+"""
 
     response = client.chat.completions.create(
         model="gpt-4o-mini",
