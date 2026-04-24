@@ -30,15 +30,22 @@ st.write(f"👤 {usuario} | Plano: {plano}")
 # =========================
 if st.button("⚡ Simular interação"):
     try:
+        tipos = ["toque", "scroll", "clique", "inatividade"]
+
         r = requests.post(
             f"{API_URL}/interactions/",
-            json={"sensor_type": "toque", "valor": 0.5},
+            json={
+                "sensor_type": random.choice(tipos),
+                "valor": round(random.uniform(0.1, 1.0), 2)
+            },
             timeout=5
         )
+
         if r.status_code == 200:
             st.success("Interação enviada!")
         else:
             st.error(f"Erro API: {r.status_code}")
+
     except Exception as e:
         st.error(f"Erro conexão: {e}")
 
